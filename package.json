@@ -5,6 +5,7 @@
   "description": "LUMEN ARCANA — Telegram Mini App on Cloudflare Workers with webhook bot integration.",
   "type": "module",
   "scripts": {
+    "postinstall": "node scripts/prepare-cloudflare.mjs",
     "prepare:cloudflare": "node scripts/prepare-cloudflare.mjs",
     "dev": "npm run prepare:cloudflare && wrangler dev",
     "deploy": "npm run prepare:cloudflare && wrangler deploy",
