@@ -5,7 +5,7 @@
   "compatibility_date": "2026-09-10",
   "compatibility_flags": ["nodejs_compat"],
   "assets": {
-    "directory": "./.cloudflare-app/public",
+    "directory": "./public",
     "binding": "ASSETS"
   },
   "vars": {
