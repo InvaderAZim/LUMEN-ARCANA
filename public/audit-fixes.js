@@ -27,19 +27,31 @@ function patchPersonalGreeting(){
   const name=String(prefs.displayName||'').trim();
   if(!name)return;
   const h=document.querySelector('#app .top h1');
-  if(h&&h.textContent.trim().startsWith('Привіт,'))h.textContent=`Привіт, ${name} ✦`;
+  if(!h||!h.textContent.trim().startsWith('Привіт,'))return;
+  const desired=`Привіт, ${name} ✦`;
+  if(h.textContent!==desired)h.textContent=desired;
 }
 
 function applyDensity(){
   const prefs=safeJson('la_profile_prefs',{});
-  document.body.dataset.density=prefs.density==='compact'?'compact':'comfortable';
+  const desired=prefs.density==='compact'?'compact':'comfortable';
+  if(document.body.dataset.density!==desired)document.body.dataset.density=desired;
 }
 
 normalizeHistoryIds();
 applyDensity();
 patchPersonalGreeting();
 
-new MutationObserver(()=>{patchPersonalGreeting();applyDensity()}).observe(document.querySelector('#app')||document.body,{childList:true,subtree:true});
+let greetingPatchQueued=false;
+new MutationObserver(()=>{
+  if(greetingPatchQueued)return;
+  greetingPatchQueued=true;
+  queueMicrotask(()=>{
+    greetingPatchQueued=false;
+    patchPersonalGreeting();
+    applyDensity();
+  });
+}).observe(document.querySelector('#app')||document.body,{childList:true,subtree:true});
 
 document.addEventListener('click',e=>{
   if(e.target.closest?.('#save'))setTimeout(normalizeHistoryIds,0);
