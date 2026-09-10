@@ -1,21 +1,18 @@
 {
   "name": "lumen-arcana",
-  "version": "2.1.0-cloudflare",
+  "version": "2.1.1-cloudflare",
   "private": true,
   "description": "LUMEN ARCANA — Telegram Mini App on Cloudflare Workers with webhook bot integration.",
   "type": "module",
   "scripts": {
-    "postinstall": "node scripts/prepare-cloudflare.mjs",
-    "prepare:cloudflare": "node scripts/prepare-cloudflare.mjs",
-    "dev": "npm run prepare:cloudflare && wrangler dev",
-    "deploy": "npm run prepare:cloudflare && wrangler deploy",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
     "test": "node --test",
     "legacy:start": "node server.js",
     "legacy:bot": "node bot.js"
   },
   "engines": { "node": ">=20" },
   "devDependencies": {
-    "adm-zip": "^0.5.16",
     "wrangler": "^4.0.0"
   },
   "license": "UNLICENSED"
