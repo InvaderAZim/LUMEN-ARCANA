@@ -26,3 +26,17 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 @keyframes pageIn{from{opacity:0;transform:translateY(14px) scale(.992)}to{opacity:1;transform:none}}@keyframes cardReveal{from{opacity:0;transform:perspective(800px) rotateY(24deg) translateY(24px) scale(.94)}to{opacity:1;transform:none}}@keyframes moonPulse{50%{transform:scale(1.045);filter:drop-shadow(0 0 38px rgba(239,212,139,.42))}}@keyframes lumenSweep{0%,35%{background-position:100% 0}70%,100%{background-position:-100% 0}}@keyframes splashIn{from{opacity:0;transform:scale(.84);filter:blur(8px)}to{opacity:1;transform:none;filter:none}}@keyframes splashOut{to{opacity:0;visibility:hidden}}
 @media(max-width:720px){.hero-premium{grid-template-columns:1fr!important;min-height:auto}.arcana-mark{min-height:230px!important}.quick-grid button{min-height:118px!important}.tarot:hover,.deck-card:hover{transform:none}}@media(max-width:480px){.top h1{font-size:3rem!important}.hero-premium{padding:20px!important}.hero-copy h2{font-size:2.45rem!important}.quick-grid{gap:10px!important}.quick-grid button{padding:17px!important;min-height:110px!important}.seal{width:54px!important;height:54px!important;min-width:54px!important}.mini-card{width:82px!important;height:124px!important}#lumen-splash .splash-seal{width:118px;height:118px;font-size:4rem}}
 @media(prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+
+/* HOME MENU MOTION — ported from legacy rise transition */
+.page > .top{animation:legacyMenuRise .38s cubic-bezier(.2,.72,.2,1) both}
+.hero-premium{animation:legacyMenuRise .46s .06s cubic-bezier(.2,.72,.2,1) both}
+.quick-grid>button{animation:legacyMenuRise .42s cubic-bezier(.2,.72,.2,1) both}
+.quick-grid>button:nth-child(1){animation-delay:.12s}.quick-grid>button:nth-child(2){animation-delay:.17s}.quick-grid>button:nth-child(3){animation-delay:.22s}.quick-grid>button:nth-child(4){animation-delay:.27s}.quick-grid>button:nth-child(5){animation-delay:.32s}.quick-grid>button:nth-child(6){animation-delay:.37s}
+.day-card{animation:legacyMenuRise .48s .42s cubic-bezier(.2,.72,.2,1) both}
+.bottom-nav{animation:legacyNavRise .48s .22s cubic-bezier(.2,.72,.2,1) both}
+.nav-btn{transition:transform .18s ease,background .22s ease,color .22s ease,box-shadow .22s ease!important}
+.nav-btn:active{transform:translateY(-2px) scale(.96)}
+@keyframes legacyMenuRise{from{opacity:0;transform:translateY(18px) scale(.985);filter:blur(2px)}to{opacity:1;transform:translateY(0) scale(1);filter:none}}
+@keyframes legacyNavRise{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+@media(prefers-reduced-motion:reduce){.page>.top,.hero-premium,.quick-grid>button,.day-card,.bottom-nav{animation:none!important}}
