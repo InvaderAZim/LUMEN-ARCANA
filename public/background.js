@@ -1,9 +1,8 @@
-// LUMEN ARCANA — lightweight chaotic particle background.
-// Pure canvas renderer: no DOM observers and no click interception.
+// LUMEN ARCANA — clearly visible chaotic particle field.
+// Canvas only: no click handlers, no MutationObserver, no app DOM rewrites.
 (() => {
   const host = document.querySelector('.stars');
-  if (!host || host.dataset.particlesReady === '1') return;
-  host.dataset.particlesReady = '1';
+  if (!host) return;
   host.replaceChildren();
 
   const canvas = document.createElement('canvas');
@@ -13,106 +12,111 @@
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) return;
 
-  let width = 1;
-  let height = 1;
-  let dpr = 1;
-  let raf = 0;
+  let w = 1, h = 1, dpr = 1, raf = 0, last = performance.now();
   let particles = [];
-  let last = performance.now();
 
-  const reducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false;
-  const particleCount = () => {
-    const area = window.innerWidth * window.innerHeight;
-    const base = Math.round(area / 15000);
-    return Math.max(42, Math.min(reducedMotion ? 62 : 96, base));
-  };
+  const rand = (a, b) => a + Math.random() * (b - a);
+  const countForScreen = () => Math.max(85, Math.min(150, Math.round((innerWidth * innerHeight) / 6500)));
 
-  const rand = (min, max) => min + Math.random() * (max - min);
+  function newVelocity(min = 9, max = 30) {
+    const a = rand(0, Math.PI * 2);
+    const s = rand(min, max);
+    return { x: Math.cos(a) * s, y: Math.sin(a) * s };
+  }
 
   function makeParticle() {
-    const angle = rand(0, Math.PI * 2);
-    const speed = rand(reducedMotion ? 0.035 : 0.055, reducedMotion ? 0.11 : 0.22);
+    const v = newVelocity();
+    const bright = Math.random() < 0.18;
     return {
-      x: rand(0, width),
-      y: rand(0, height),
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
-      radius: rand(0.65, 1.75),
-      alpha: rand(0.20, 0.68),
-      pulse: rand(0, Math.PI * 2),
-      pulseSpeed: rand(0.0007, 0.0022),
-      driftAt: rand(280, 1300)
+      x: rand(0, w), y: rand(0, h),
+      vx: v.x, vy: v.y,
+      tx: v.x, ty: v.y,
+      r: bright ? rand(1.7, 2.7) : rand(0.9, 1.7),
+      alpha: bright ? rand(0.62, 0.92) : rand(0.28, 0.64),
+      phase: rand(0, Math.PI * 2),
+      phaseSpeed: rand(1.2, 3.1),
+      steerIn: rand(0.35, 1.8),
+      bright
     };
   }
 
   function resize() {
-    width = Math.max(1, window.innerWidth);
-    height = Math.max(1, window.innerHeight);
-    dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-
-    canvas.width = Math.round(width * dpr);
-    canvas.height = Math.round(height * dpr);
-    canvas.style.width = `${width}px`;
-    canvas.style.height = `${height}px`;
+    w = Math.max(1, innerWidth);
+    h = Math.max(1, innerHeight);
+    dpr = Math.max(1, Math.min(2, devicePixelRatio || 1));
+    canvas.width = Math.round(w * dpr);
+    canvas.height = Math.round(h * dpr);
+    canvas.style.width = `${w}px`;
+    canvas.style.height = `${h}px`;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const wanted = particleCount();
+    const wanted = countForScreen();
     if (particles.length > wanted) particles.length = wanted;
     while (particles.length < wanted) particles.push(makeParticle());
   }
 
-  function redirect(p) {
-    const angle = Math.atan2(p.vy, p.vx) + rand(-0.72, 0.72);
-    const speed = Math.max(
-      reducedMotion ? 0.035 : 0.055,
-      Math.min(reducedMotion ? 0.12 : 0.24, Math.hypot(p.vx, p.vy) * rand(0.82, 1.18))
-    );
-    p.vx = Math.cos(angle) * speed;
-    p.vy = Math.sin(angle) * speed;
-    p.driftAt = rand(280, 1300);
+  function chooseDirection(p) {
+    const v = newVelocity(p.bright ? 12 : 8, p.bright ? 34 : 28);
+    p.tx = v.x;
+    p.ty = v.y;
+    p.steerIn = rand(0.35, 1.8);
   }
 
-  function tick(now) {
-    const dt = Math.min(34, Math.max(0, now - last));
+  function frame(now) {
+    const dt = Math.min(0.034, Math.max(0.001, (now - last) / 1000));
     last = now;
-    ctx.clearRect(0, 0, width, height);
+    ctx.clearRect(0, 0, w, h);
 
     for (const p of particles) {
-      p.driftAt -= dt;
-      if (p.driftAt <= 0) redirect(p);
+      p.steerIn -= dt;
+      if (p.steerIn <= 0) chooseDirection(p);
 
+      // Smooth random steering gives a real wandering trajectory instead of straight-line drift.
+      const turn = 1 - Math.pow(0.035, dt);
+      p.vx += (p.tx - p.vx) * turn;
+      p.vy += (p.ty - p.vy) * turn;
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-      p.pulse += p.pulseSpeed * dt;
+      p.phase += p.phaseSpeed * dt;
 
-      if (p.x < -8) p.x = width + 8;
-      else if (p.x > width + 8) p.x = -8;
-      if (p.y < -8) p.y = height + 8;
-      else if (p.y > height + 8) p.y = -8;
+      if (p.x < -12) p.x = w + 12;
+      else if (p.x > w + 12) p.x = -12;
+      if (p.y < -12) p.y = h + 12;
+      else if (p.y > h + 12) p.y = -12;
 
-      const glow = 0.13 * Math.sin(p.pulse);
-      const alpha = Math.max(0.08, Math.min(0.82, p.alpha + glow));
+      const pulse = 0.12 * Math.sin(p.phase);
+      const a = Math.max(0.16, Math.min(1, p.alpha + pulse));
 
+      // A short translucent tail makes movement visible even on high-density mobile screens.
       ctx.beginPath();
-      ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(239,212,139,${alpha})`;
-      ctx.fill();
+      ctx.moveTo(p.x, p.y);
+      ctx.lineTo(p.x - p.vx * 0.16, p.y - p.vy * 0.16);
+      ctx.strokeStyle = `rgba(239,212,139,${a * 0.18})`;
+      ctx.lineWidth = Math.max(0.5, p.r * 0.45);
+      ctx.stroke();
 
-      if (p.radius > 1.2) {
+      if (p.bright) {
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.radius * 3.2, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(239,212,139,${alpha * 0.035})`;
+        ctx.arc(p.x, p.y, p.r * 4.3, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(239,212,139,${a * 0.065})`;
         ctx.fill();
       }
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = p.bright
+        ? `rgba(255,240,196,${a})`
+        : `rgba(239,212,139,${a})`;
+      ctx.fill();
     }
 
-    raf = requestAnimationFrame(tick);
+    raf = requestAnimationFrame(frame);
   }
 
   let resizeTimer = 0;
-  window.addEventListener('resize', () => {
+  addEventListener('resize', () => {
     clearTimeout(resizeTimer);
-    resizeTimer = setTimeout(resize, 120);
+    resizeTimer = setTimeout(resize, 100);
   }, { passive: true });
 
   document.addEventListener('visibilitychange', () => {
@@ -121,10 +125,10 @@
       raf = 0;
     } else if (!raf) {
       last = performance.now();
-      raf = requestAnimationFrame(tick);
+      raf = requestAnimationFrame(frame);
     }
   });
 
   resize();
-  raf = requestAnimationFrame(tick);
+  raf = requestAnimationFrame(frame);
 })();
