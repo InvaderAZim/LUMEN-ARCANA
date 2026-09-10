@@ -1,15 +1,21 @@
 {
   "name": "lumen-arcana",
-  "version": "2.0.0-beta",
+  "version": "2.1.0-cloudflare",
   "private": true,
-  "description": "LUMEN ARCANA v2 — backward-compatible Telegram Mini App for reflective tarot spreads, journal and Academy.",
+  "description": "LUMEN ARCANA — Telegram Mini App on Cloudflare Workers with webhook bot integration.",
   "type": "module",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node --watch server.js",
-    "bot": "node bot.js",
-    "test": "node --test"
+    "prepare:cloudflare": "node scripts/prepare-cloudflare.mjs",
+    "dev": "npm run prepare:cloudflare && wrangler dev",
+    "deploy": "npm run prepare:cloudflare && wrangler deploy",
+    "test": "node --test",
+    "legacy:start": "node server.js",
+    "legacy:bot": "node bot.js"
   },
   "engines": { "node": ">=20" },
+  "devDependencies": {
+    "adm-zip": "^0.5.16",
+    "wrangler": "^4.0.0"
+  },
   "license": "UNLICENSED"
 }
