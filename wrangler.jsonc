@@ -10,7 +10,6 @@
   },
   "vars": {
     "BETA_CODES": "LUMEN-BETA",
-    "OPENAI_MODEL": "gpt-5.6-luna",
-    "WEB_APP_URL": "https://lumen-arcana.kraplenii.workers.dev/"
+    "OPENAI_MODEL": "gpt-5.6-luna"
   }
 }
