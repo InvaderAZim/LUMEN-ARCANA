@@ -353,3 +353,147 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
   .premium-panel>h2,
   .empty-state h2{font-size:1.55rem!important}
 }
+
+
+/* FULLSCREEN UI FIX — safe areas, scroll region, compact type */
+:root{
+  --tg-safe-top:0px;
+  --tg-safe-bottom:0px;
+  --nav-space:108px;
+}
+html,body{
+  width:100%;
+  height:100%;
+  min-height:100%;
+  overflow:hidden!important;
+}
+body{
+  min-height:100dvh!important;
+}
+#app{
+  position:fixed;
+  inset:0 0 calc(var(--nav-space) + var(--tg-safe-bottom)) 0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior-y:contain;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  z-index:1;
+}
+#app::-webkit-scrollbar{display:none}
+.page{
+  min-height:100%;
+  padding:
+    calc(var(--tg-safe-top) + 18px)
+    14px
+    26px!important;
+}
+.top{
+  align-items:flex-start!important;
+  gap:12px!important;
+}
+.top>div:first-child{
+  min-width:0;
+  flex:1 1 auto;
+}
+.top h1{
+  font-size:clamp(1.95rem,6vw,3.65rem)!important;
+  line-height:1.02!important;
+  overflow-wrap:anywhere;
+}
+.hero-copy h2{
+  font-size:clamp(1.9rem,4.4vw,3.25rem)!important;
+  line-height:1.04!important;
+}
+.day-card h3{
+  font-size:1.72rem!important;
+}
+.seal{
+  flex:0 0 auto!important;
+}
+.bottom-nav{
+  bottom:max(7px,var(--tg-safe-bottom))!important;
+}
+.nav-btn{
+  color:#aaa398!important;
+}
+.nav-btn b{
+  opacity:.92;
+}
+.nav-btn span{
+  color:currentColor!important;
+  opacity:.92;
+}
+.nav-btn.active{
+  color:#f7dc8d!important;
+}
+.toast{
+  bottom:calc(var(--nav-space) + var(--tg-safe-bottom) + 8px)!important;
+}
+
+@media(max-width:560px){
+  :root{--nav-space:96px}
+  .page{
+    padding:
+      calc(var(--tg-safe-top) + 14px)
+      10px
+      22px!important;
+  }
+  .top{
+    padding-top:0!important;
+    padding-bottom:16px!important;
+  }
+  .brandline{
+    font-size:.61rem!important;
+    letter-spacing:.16em!important;
+  }
+  .brandline span{
+    margin-left:5px!important;
+    font-size:.58rem!important;
+  }
+  .top h1{
+    font-size:2rem!important;
+    line-height:1.02!important;
+    margin:.28rem 0 .12rem!important;
+  }
+  .top p{
+    font-size:.86rem!important;
+    line-height:1.35!important;
+  }
+  .seal{
+    width:46px!important;
+    height:46px!important;
+    min-width:46px!important;
+    font-size:1.35rem!important;
+  }
+  .hero-premium{
+    padding:18px!important;
+    border-radius:25px!important;
+  }
+  .hero-copy h2{
+    font-size:1.82rem!important;
+    line-height:1.06!important;
+  }
+  .hero-copy p{
+    font-size:.93rem!important;
+  }
+  .day-card h3{
+    font-size:1.55rem!important;
+  }
+  .nav-btn{
+    color:#aaa59c!important;
+  }
+  .nav-btn.active{
+    color:#ffe39a!important;
+  }
+}
+
+@media(max-width:390px){
+  .top h1{font-size:1.85rem!important}
+  .hero-copy h2{font-size:1.7rem!important}
+}
+
+/* In Telegram fullscreen, keep the header clear of native controls. */
+html[data-tg-fullscreen] .page{
+  padding-top:calc(var(--tg-safe-top) + 16px)!important;
+}
