@@ -29,17 +29,25 @@ function syncTelegramInsets(){
 }
 syncTelegramInsets();
 
-try{
-  tg?.expand?.();
-  if(typeof tg?.requestFullscreen==='function')tg.requestFullscreen();
-}catch(e){
-  console.warn('Telegram fullscreen request failed',e);
-  try{tg?.expand?.()}catch{}
+function enterTelegramFullscreen(){
+  if(!tg)return;
+  try{tg.expand?.()}catch{}
+  try{tg.disableVerticalSwipes?.()}catch{}
+  if(!tg.isFullscreen&&typeof tg.requestFullscreen==='function'){
+    try{tg.requestFullscreen()}catch(e){console.warn('Telegram fullscreen request failed',e)}
+  }
 }
+
+enterTelegramFullscreen();
+requestAnimationFrame(enterTelegramFullscreen);
+setTimeout(enterTelegramFullscreen,120);
+setTimeout(enterTelegramFullscreen,500);
 
 tg?.onEvent?.('safeAreaChanged',syncTelegramInsets);
 tg?.onEvent?.('contentSafeAreaChanged',syncTelegramInsets);
-tg?.onEvent?.('fullscreenChanged',syncTelegramInsets);
+tg?.onEvent?.('fullscreenChanged',()=>{syncTelegramInsets();if(!tg?.isFullscreen)setTimeout(enterTelegramFullscreen,80)});
+tg?.onEvent?.('viewportChanged',()=>{syncTelegramInsets();if(!tg?.isFullscreen)setTimeout(enterTelegramFullscreen,80)});
+tg?.onEvent?.('fullscreenFailed',()=>{try{tg?.expand?.()}catch{};syncTelegramInsets()});
 requestAnimationFrame(syncTelegramInsets);
 setTimeout(syncTelegramInsets,120);
 setTimeout(syncTelegramInsets,500);
