@@ -7,11 +7,11 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "node --test",
-    "legacy:start": "node server.js",
-    "legacy:bot": "node bot.js"
+    "test": "node --test"
   },
-  "engines": { "node": ">=20" },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "wrangler": "^4.0.0"
   },
