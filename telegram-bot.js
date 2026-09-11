@@ -231,6 +231,6 @@ export async function handleTelegramSetup(request, env) {
 }
 
 export async function handleTelegramRepair(env) {
-  const result = await configureTelegramBot(env);
+  const result = await configureTelegramBot(env, { force: true });
   return json(result, result.ok ? 200 : 502);
 }
