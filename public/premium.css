@@ -323,3 +323,33 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
     animation:none!important;
   }
 }
+
+
+/* TYPOGRAPHY TUNE — slightly smaller display sizes */
+.top h1{
+  font-size:clamp(2.25rem,7.4vw,4.5rem)!important;
+}
+.hero-copy h2{
+  font-size:clamp(2.1rem,5vw,3.8rem)!important;
+  line-height:1.02!important;
+}
+.day-card h3{
+  font-size:1.95rem!important;
+}
+.panel-row h2,
+.result-head h2,
+.drawing h2,
+.premium-panel>h2,
+.empty-state h2{
+  font-size:1.72rem!important;
+}
+@media(max-width:480px){
+  .top h1{font-size:2.5rem!important}
+  .hero-copy h2{font-size:2.05rem!important}
+  .day-card h3{font-size:1.72rem!important}
+  .panel-row h2,
+  .result-head h2,
+  .drawing h2,
+  .premium-panel>h2,
+  .empty-state h2{font-size:1.55rem!important}
+}
