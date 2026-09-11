@@ -1,5 +1,23 @@
 const tg=window.Telegram?.WebApp;
 tg?.ready?.();
+
+function syncTelegramInsets(){
+  const root=document.documentElement;
+  const safe=tg?.safeAreaInset||{};
+  const content=tg?.contentSafeAreaInset||{};
+  const fullscreen=!!tg?.isFullscreen;
+  const top=Math.max(
+    Number(content.top)||0,
+    Number(safe.top)||0,
+    fullscreen?88:0
+  );
+  const bottom=Math.max(Number(content.bottom)||0,Number(safe.bottom)||0,0);
+  root.style.setProperty('--tg-safe-top',top+'px');
+  root.style.setProperty('--tg-safe-bottom',bottom+'px');
+  root.toggleAttribute('data-tg-fullscreen',fullscreen);
+}
+syncTelegramInsets();
+
 try{
   tg?.expand?.();
   if(typeof tg?.requestFullscreen==='function')tg.requestFullscreen();
@@ -7,6 +25,12 @@ try{
   console.warn('Telegram fullscreen request failed',e);
   try{tg?.expand?.()}catch{}
 }
+
+tg?.onEvent?.('safeAreaChanged',syncTelegramInsets);
+tg?.onEvent?.('contentSafeAreaChanged',syncTelegramInsets);
+tg?.onEvent?.('fullscreenChanged',syncTelegramInsets);
+setTimeout(syncTelegramInsets,120);
+setTimeout(syncTelegramInsets,500);
 const app=document.querySelector('#app'),nav=document.querySelector('#bottom-nav'),toast=document.querySelector('#toast');
 const CARDS=['Дурень','Маг','Верховна Жриця','Імператриця','Імператор','Ієрофант','Закохані','Колісниця','Сила','Відлюдник','Колесо Фортуни','Справедливість','Повішений','Смерть','Помірність','Диявол','Вежа','Зірка','Місяць','Сонце','Суд','Світ'];
 const SPREADS=[['conflict','Ясність після конфлікту',5,'Що приховано у напрузі й що повертає контроль'],['closure','Завершення старої історії',4,'Що варто відпустити, а що забрати із собою'],['new_relationship','Готовність до нових стосунків',4,'Межі, очікування та відкритість'],['distance','Близькість на відстані',4,'Контакт, довіра й реалістичні кроки'],['career_choice','Два професійні напрями',5,'Ресурси, ризики та наступний крок'],['work_resources','Робота і власні ресурси',4,'Де ти сильніший, ніж здається'],['month','Місяць уваги до себе',5,'Головні теми найближчих тижнів'],['week','Підсумок тижня',3,'Що завершити, що помітити, куди рухатись']];
