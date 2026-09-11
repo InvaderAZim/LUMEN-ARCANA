@@ -154,3 +154,172 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
   .nav-btn span{font-size:.54rem!important}
   .nav-btn b{font-size:1.05rem!important}
 }
+
+
+/* GOLD SHINE MOTION — premium shimmer layer */
+.primary,
+.day-card,
+.premium-panel,
+.result-premium,
+.profile-card,
+.premium-strip,
+.nav-btn.active{
+  position:relative!important;
+  overflow:hidden!important;
+  isolation:isolate;
+}
+.primary:after,
+.day-card:after,
+.premium-panel:after,
+.result-premium:after,
+.profile-card:after,
+.premium-strip:after,
+.nav-btn.active:after{
+  content:""!important;
+  position:absolute!important;
+  top:-45%!important;
+  bottom:-45%!important;
+  left:-55%!important;
+  width:34%!important;
+  height:auto!important;
+  border:0!important;
+  border-radius:0!important;
+  pointer-events:none!important;
+  z-index:4!important;
+  opacity:0;
+  transform:skewX(-18deg);
+  background:linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255,244,204,.03) 22%,
+    rgba(255,234,164,.30) 48%,
+    rgba(255,250,222,.64) 54%,
+    rgba(255,224,137,.18) 66%,
+    transparent 100%
+  )!important;
+  filter:blur(.5px);
+  animation:lumenGoldSweep 5.8s cubic-bezier(.22,.65,.28,1) infinite;
+}
+.primary:after{animation-duration:3.8s;opacity:.78}
+.nav-btn.active:after{animation-duration:4.6s}
+.day-card:after{animation-delay:.7s}
+.premium-panel:after{animation-delay:1.4s}
+.result-premium:after{animation-delay:.9s}
+.profile-card:after{animation-delay:1.8s}
+.premium-strip:after{animation-delay:2.2s}
+
+.hero-premium{
+  animation:
+    legacyMenuRise .46s .06s cubic-bezier(.2,.72,.2,1) both,
+    lumenHeroGlow 5.5s 1s ease-in-out infinite!important;
+}
+.arcana-mark{
+  animation:lumenEmblemGlow 4s ease-in-out infinite;
+}
+.arcana-mark strong{
+  animation:
+    moonPulse 4.5s ease-in-out infinite,
+    lumenGlyphShine 2.8s ease-in-out infinite!important;
+}
+.seal{
+  animation:lumenSealGleam 3.6s ease-in-out infinite;
+}
+.brandline span{
+  background:
+    linear-gradient(105deg,
+      rgba(239,212,139,.12) 0%,
+      rgba(239,212,139,.20) 28%,
+      rgba(255,246,211,.48) 48%,
+      rgba(239,212,139,.14) 66%,
+      rgba(184,137,50,.08) 100%)!important;
+  background-size:240% 100%!important;
+  animation:lumenBadgeShine 4.2s ease-in-out infinite;
+}
+.tarot,
+.deck-card,
+.mini-card{
+  animation-name:cardReveal,lumenCardGlow;
+  animation-duration:.65s,4.8s;
+  animation-timing-function:cubic-bezier(.18,.8,.2,1),ease-in-out;
+  animation-fill-mode:both,both;
+  animation-iteration-count:1,infinite;
+}
+.deck-card{animation-delay:0s,.35s}
+.mini-card{animation-delay:0s,.75s}
+
+.bottom-nav{
+  animation:
+    legacyNavRise .48s .22s cubic-bezier(.2,.72,.2,1) both,
+    lumenNavGlow 6s 1s ease-in-out infinite!important;
+}
+
+@keyframes lumenGoldSweep{
+  0%,12%{left:-55%;opacity:0}
+  18%{opacity:.12}
+  38%{opacity:.86}
+  55%{left:130%;opacity:.22}
+  58%,100%{left:130%;opacity:0}
+}
+@keyframes lumenHeroGlow{
+  0%,100%{
+    box-shadow:0 28px 90px rgba(0,0,0,.68),inset 0 1px 0 rgba(255,244,210,.05)
+  }
+  50%{
+    box-shadow:0 30px 96px rgba(0,0,0,.72),0 0 34px rgba(239,212,139,.12),inset 0 1px 0 rgba(255,248,220,.15)
+  }
+}
+@keyframes lumenEmblemGlow{
+  0%,100%{
+    box-shadow:inset 0 0 72px rgba(239,212,139,.08),0 30px 80px rgba(0,0,0,.55)
+  }
+  50%{
+    box-shadow:inset 0 0 88px rgba(255,226,148,.17),0 30px 82px rgba(0,0,0,.58),0 0 38px rgba(239,212,139,.16)
+  }
+}
+@keyframes lumenGlyphShine{
+  0%,100%{
+    color:#f4dc98;
+    text-shadow:0 0 8px rgba(255,225,145,.10)
+  }
+  45%{
+    color:#fff7d8;
+    text-shadow:0 0 10px rgba(255,248,212,.78),0 0 28px rgba(239,212,139,.45),0 0 52px rgba(184,137,50,.25)
+  }
+}
+@keyframes lumenSealGleam{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.22);box-shadow:0 0 82px rgba(239,212,139,.23),inset 0 0 32px rgba(255,238,185,.14)}
+}
+@keyframes lumenBadgeShine{
+  0%,25%{background-position:110% 0}
+  65%,100%{background-position:-110% 0}
+}
+@keyframes lumenCardGlow{
+  0%,100%{filter:brightness(1)}
+  50%{filter:brightness(1.08);box-shadow:0 24px 62px rgba(0,0,0,.68),0 0 22px rgba(239,212,139,.10),inset 0 0 38px rgba(239,212,139,.075)}
+}
+@keyframes lumenNavGlow{
+  0%,100%{
+    border-color:rgba(229,200,125,.40);
+    box-shadow:0 18px 55px rgba(0,0,0,.78),0 0 0 1px rgba(166,127,50,.06),inset 0 1px 0 rgba(255,238,187,.04)
+  }
+  50%{
+    border-color:rgba(239,212,139,.62);
+    box-shadow:0 18px 58px rgba(0,0,0,.80),0 0 28px rgba(239,212,139,.10),inset 0 1px 0 rgba(255,244,205,.10)
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  .primary:after,
+  .day-card:after,
+  .premium-panel:after,
+  .result-premium:after,
+  .profile-card:after,
+  .premium-strip:after,
+  .nav-btn.active:after{
+    animation:none!important;
+    display:none!important;
+  }
+  .hero-premium,.arcana-mark,.arcana-mark strong,.seal,.brandline span,.tarot,.deck-card,.mini-card,.bottom-nav{
+    animation:none!important;
+  }
+}
