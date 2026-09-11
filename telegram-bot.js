@@ -1,5 +1,7 @@
 const APP_ORIGIN = "https://lumen-arcana.kraplenii.workers.dev";
 export const TELEGRAM_APP_URL = APP_ORIGIN + "/";
+export const TELEGRAM_FRESH_PATH = "/telegram/fresh";
+export const TELEGRAM_LAUNCH_URL = APP_ORIGIN + TELEGRAM_FRESH_PATH;
 export const TELEGRAM_WEBHOOK_PATH = "/telegram/webhook";
 
 const encoder = new TextEncoder();
@@ -35,7 +37,7 @@ function appKeyboard(language = "uk") {
   return {
     inline_keyboard: [[{
       text: language === "uk" ? "Відкрити LUMEN ARCANA ✦" : "Open LUMEN ARCANA ✦",
-      web_app: { url: TELEGRAM_APP_URL }
+      web_app: { url: TELEGRAM_LAUNCH_URL }
     }]]
   };
 }
@@ -44,7 +46,7 @@ function menuButton() {
   return {
     type: "web_app",
     text: "LUMEN ARCANA",
-    web_app: { url: TELEGRAM_APP_URL }
+    web_app: { url: TELEGRAM_LAUNCH_URL }
   };
 }
 
@@ -203,6 +205,7 @@ export async function configureTelegramBot(env, { force = false } = {}) {
       ok: true,
       configured: true,
       appUrl: TELEGRAM_APP_URL,
+      launchUrl: TELEGRAM_LAUNCH_URL,
       webhookUrl,
       webhookChanged: force || info?.url !== webhookUrl
     };
@@ -266,6 +269,7 @@ export async function handleTelegramStatus(env) {
       },
       expected: {
         appUrl: TELEGRAM_APP_URL,
+        launchUrl: TELEGRAM_LAUNCH_URL,
         webhookUrl: APP_ORIGIN + TELEGRAM_WEBHOOK_PATH
       }
     });
@@ -276,4 +280,20 @@ export async function handleTelegramStatus(env) {
       error: String(error?.message || error)
     }, 502);
   }
+}
+
+export function handleTelegramFresh() {
+  const target = TELEGRAM_APP_URL + "?fresh=" + Date.now();
+  const html = "<!doctype html><html lang=\"uk\"><head><meta charset=\"utf-8\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta http-equiv=\"cache-control\" content=\"no-store\"><title>LUMEN ARCANA</title><style>html,body{margin:0;min-height:100%;background:#050505;color:#d8c08a;font-family:system-ui,-apple-system,sans-serif}body{display:grid;place-items:center}main{text-align:center;padding:24px}strong{display:block;letter-spacing:.16em;font-size:18px}small{display:block;margin-top:10px;color:#aaa}</style></head><body><main><strong>LUMEN ARCANA</strong><small>Оновлюємо застосунок…</small></main><script>(async()=>{try{if(\"serviceWorker\" in navigator){const regs=await navigator.serviceWorker.getRegistrations();await Promise.all(regs.map(r=>r.unregister()));}if(\"caches\" in window){const keys=await caches.keys();await Promise.all(keys.map(k=>caches.delete(k)));}}catch(e){}location.replace(" + JSON.stringify(target) + ");})();<\/script></body></html>";
+  return new Response(html, {
+    status: 200,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "no-store, no-cache, must-revalidate, max-age=0",
+      "pragma": "no-cache",
+      "expires": "0",
+      "x-content-type-options": "nosniff",
+      "referrer-policy": "no-referrer"
+    }
+  });
 }
