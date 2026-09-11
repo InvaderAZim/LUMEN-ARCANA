@@ -234,3 +234,46 @@ export async function handleTelegramRepair(env) {
   const result = await configureTelegramBot(env, { force: true });
   return json(result, result.ok ? 200 : 502);
 }
+
+
+export async function handleTelegramStatus(env) {
+  if (!env.TELEGRAM_BOT_TOKEN) {
+    return json({ ok: false, configured: false, reason: "missing_bot_token" }, 503);
+  }
+
+  try {
+    const [me, webhook] = await Promise.all([
+      telegram(env, "getMe", {}),
+      telegram(env, "getWebhookInfo", {})
+    ]);
+
+    return json({
+      ok: true,
+      configured: true,
+      bot: {
+        id: me?.id ?? null,
+        username: me?.username ?? null,
+        firstName: me?.first_name ?? null
+      },
+      webhook: {
+        url: webhook?.url || "",
+        hasCustomCertificate: !!webhook?.has_custom_certificate,
+        pendingUpdateCount: Number(webhook?.pending_update_count || 0),
+        lastErrorDate: webhook?.last_error_date || null,
+        lastErrorMessage: webhook?.last_error_message || null,
+        maxConnections: webhook?.max_connections || null,
+        allowedUpdates: webhook?.allowed_updates || []
+      },
+      expected: {
+        appUrl: TELEGRAM_APP_URL,
+        webhookUrl: APP_ORIGIN + TELEGRAM_WEBHOOK_PATH
+      }
+    });
+  } catch (error) {
+    return json({
+      ok: false,
+      configured: true,
+      error: String(error?.message || error)
+    }, 502);
+  }
+}
