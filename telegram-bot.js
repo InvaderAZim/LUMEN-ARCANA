@@ -111,8 +111,8 @@ async function onApp(message, env, language) {
 
 async function onPremium(message, env, language) {
   const text = language === "uk"
-    ? "✦ Premium Beta\n\nУ поточній beta-версії Premium доступний усім користувачам без оплати та без пробного таймера. Ніяких 7 днів або 50 Stars зараз немає."
-    : "✦ Premium Beta\n\nIn the current beta, Premium is available to everyone for free with no trial timer. There is no 7-day or 50 Stars flow.";
+    ? "✦ Premium Beta\n\nУ поточній beta-версії всі Premium-функції LUMEN ARCANA доступні користувачам без оплати."
+    : "✦ Premium Beta\n\nIn the current beta, all LUMEN ARCANA Premium features are available to users for free.";
   await reply(message.chat.id, text, env, appKeyboard(language));
 }
 
