@@ -1,4 +1,12 @@
-const tg=window.Telegram?.WebApp;tg?.ready?.();tg?.expand?.();
+const tg=window.Telegram?.WebApp;
+tg?.ready?.();
+try{
+  tg?.expand?.();
+  if(typeof tg?.requestFullscreen==='function')tg.requestFullscreen();
+}catch(e){
+  console.warn('Telegram fullscreen request failed',e);
+  try{tg?.expand?.()}catch{}
+}
 const app=document.querySelector('#app'),nav=document.querySelector('#bottom-nav'),toast=document.querySelector('#toast');
 const CARDS=['Дурень','Маг','Верховна Жриця','Імператриця','Імператор','Ієрофант','Закохані','Колісниця','Сила','Відлюдник','Колесо Фортуни','Справедливість','Повішений','Смерть','Помірність','Диявол','Вежа','Зірка','Місяць','Сонце','Суд','Світ'];
 const SPREADS=[['conflict','Ясність після конфлікту',5,'Що приховано у напрузі й що повертає контроль'],['closure','Завершення старої історії',4,'Що варто відпустити, а що забрати із собою'],['new_relationship','Готовність до нових стосунків',4,'Межі, очікування та відкритість'],['distance','Близькість на відстані',4,'Контакт, довіра й реалістичні кроки'],['career_choice','Два професійні напрями',5,'Ресурси, ризики та наступний крок'],['work_resources','Робота і власні ресурси',4,'Де ти сильніший, ніж здається'],['month','Місяць уваги до себе',5,'Головні теми найближчих тижнів'],['week','Підсумок тижня',3,'Що завершити, що помітити, куди рухатись']];
