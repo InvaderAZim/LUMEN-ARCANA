@@ -497,3 +497,65 @@ body{
 html[data-tg-fullscreen] .page{
   padding-top:calc(var(--tg-safe-top) + 16px)!important;
 }
+
+
+/* SCROLL FIX 12 — native page scrolling for Telegram Android */
+html{
+  height:auto!important;
+  min-height:100%!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+}
+body{
+  height:auto!important;
+  min-height:100dvh!important;
+  overflow-x:hidden!important;
+  overflow-y:auto!important;
+  overscroll-behavior-y:auto!important;
+  -webkit-overflow-scrolling:touch;
+  touch-action:pan-y!important;
+}
+#app{
+  position:relative!important;
+  inset:auto!important;
+  width:100%!important;
+  min-height:100dvh!important;
+  height:auto!important;
+  overflow:visible!important;
+  overscroll-behavior:initial!important;
+  -webkit-overflow-scrolling:auto!important;
+  touch-action:pan-y!important;
+  z-index:1;
+}
+.page{
+  min-height:100dvh!important;
+  height:auto!important;
+  overflow:visible!important;
+  padding-bottom:calc(var(--nav-space) + var(--tg-safe-bottom) + 28px)!important;
+  touch-action:pan-y!important;
+}
+#content{
+  overflow:visible!important;
+  touch-action:pan-y!important;
+}
+.stars,
+.stars canvas,
+body:before,
+#lumen-splash{
+  touch-action:none!important;
+}
+.stars,
+.stars canvas,
+body:before{
+  pointer-events:none!important;
+}
+.bottom-nav{
+  position:fixed!important;
+  z-index:1000!important;
+}
+@media(max-width:560px){
+  .page{
+    padding-bottom:calc(var(--nav-space) + var(--tg-safe-bottom) + 24px)!important;
+  }
+}
