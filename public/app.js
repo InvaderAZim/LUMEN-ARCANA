@@ -2,25 +2,36 @@ const tg=window.Telegram?.WebApp;
 tg?.ready?.();
 
 const LUMEN_EMBLEM_SVG=`<svg class="lumen-emblem-svg" viewBox="0 0 240 240" role="img" aria-label="LUMEN ARCANA">
-  <g class="emblem-orbit-ring" fill="none" stroke="currentColor" stroke-width="1.6" opacity=".78">
-    <circle cx="120" cy="120" r="102"/>
-    <path d="M120 18v14M120 208v14M18 120h14M208 120h14"/>
-    <circle cx="120" cy="18" r="3.5" fill="currentColor" stroke="none"/>
-    <circle cx="222" cy="120" r="3.5" fill="currentColor" stroke="none"/>
-    <circle cx="120" cy="222" r="3.5" fill="currentColor" stroke="none"/>
-    <circle cx="18" cy="120" r="3.5" fill="currentColor" stroke="none"/>
+  <defs>
+    <radialGradient id="lgold" cx="50%" cy="50%" r="62%">
+      <stop offset="0" stop-color="#fff7cf"/>
+      <stop offset=".42" stop-color="#f2d47d"/>
+      <stop offset="1" stop-color="#b9852f"/>
+    </radialGradient>
+  </defs>
+  <g class="emblem-orbit-ring" fill="none" stroke="currentColor" stroke-width="1.35" opacity=".8">
+    <circle cx="120" cy="120" r="103"/>
+    <circle cx="120" cy="120" r="91" opacity=".42"/>
+    <circle cx="120" cy="17" r="3.2" fill="currentColor" stroke="none"/>
+    <circle cx="223" cy="120" r="3.2" fill="currentColor" stroke="none"/>
+    <circle cx="120" cy="223" r="3.2" fill="currentColor" stroke="none"/>
+    <circle cx="17" cy="120" r="3.2" fill="currentColor" stroke="none"/>
   </g>
-  <g class="emblem-ornament-ring" fill="none" stroke="currentColor" stroke-width="2" opacity=".92">
-    <path d="M120 29c-6 8-7 13 0 20 7-7 6-12 0-20Zm0 182c-6-8-7-13 0-20 7 7 6 12 0 20Z"/>
-    <path d="M29 120c8-6 13-7 20 0-7 7-12 6-20 0Zm182 0c-8-6-13-7-20 0 7 7 12 6 20 0Z"/>
-    <path d="M64 50c10-6 20-8 31-7M176 50c-10-6-20-8-31-7M64 190c10 6 20 8 31 7M176 190c-10 6-20 8-31 7"/>
+  <g class="emblem-ornament-ring" fill="none" stroke="currentColor" stroke-width="1.8" opacity=".96">
+    <path d="M120 26c-5 8-5 13 0 19 5-6 5-11 0-19Zm0 188c-5-8-5-13 0-19-5 6-5 11 0 19Z"/>
+    <path d="M26 120c8-5 13-5 19 0-6 5-11 5-19 0Zm188 0c-8-5-13-5-19 0 6 5 11 5 19 0Z"/>
+    <path d="M53 49c10-9 22-14 36-16M187 49c-10-9-22-14-36-16M53 191c10 9 22 14 36 16M187 191c-10 9-22 14-36 16"/>
+    <path d="M45 73c4 2 7 5 9 9M195 73c-4 2-7 5-9 9M45 167c4-2 7-5 9-9M195 167c-4-2-7-5-9-9"/>
   </g>
-  <path class="emblem-crescent" d="M153 58c-31 8-53 34-53 66 0 31 22 58 53 66-9 5-20 8-31 8-42 0-76-34-76-76s34-76 76-76c11 0 22 2 31 7Z" fill="currentColor"/>
-  <g class="emblem-star" fill="currentColor">
-    <path d="m144 120 9-3 3-9 3 9 9 3-9 3-3 9-3-9-9-3Z"/>
-    <path d="m156 120 18-4 4-18 4 18 18 4-18 4-4 18-4-18-18-4Z" opacity=".92"/>
+  <path class="emblem-crescent" d="M158 52c-35 5-61 34-61 70 0 36 26 65 61 70-11 7-24 11-38 11-46 0-83-37-83-83s37-83 83-83c14 0 27 4 38 11-3 1-7 2-10 4Z" fill="url(#lgold)"/>
+  <g class="emblem-star" fill="url(#lgold)">
+    <path d="M171 82l5 25 21-14-14 21 25 5-25 5 14 21-21-14-5 25-5-25-21 14 14-21-25-5 25-5-14-21 21 14 5-25Z"/>
+    <circle cx="171" cy="119" r="4.5"/>
   </g>
-  <circle cx="178" cy="120" r="2.2" fill="currentColor"/>
+  <g fill="currentColor" opacity=".92">
+    <circle cx="69" cy="91" r="2.5"/><circle cx="76" cy="72" r="1.7"/><circle cx="84" cy="60" r="1.3"/>
+    <circle cx="70" cy="148" r="2.2"/><circle cx="79" cy="166" r="1.6"/>
+  </g>
 </svg>`;
 
 function lumenEmblemMarkup(extraClass=""){
