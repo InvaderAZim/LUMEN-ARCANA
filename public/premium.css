@@ -657,3 +657,58 @@ body:before{
 @media(prefers-reduced-motion:reduce){
   .lumen-orbit,.lumen-emblem-svg .emblem-orbit-ring,.lumen-emblem-svg .emblem-ornament-ring,.lumen-emblem-svg .emblem-star,.lumen-emblem-svg .emblem-crescent,.arcana-mark .hero-emblem,.arcana-mark .hero-emblem:before{animation:none!important}
 }
+
+
+/* ORBIT LIGHT v15 — brighter moving perimeter spark */
+.lumen-orbit{
+  padding:1.6px!important;
+  background:
+    conic-gradient(
+      from var(--lumen-orbit-angle),
+      transparent 0deg 286deg,
+      rgba(255,214,103,.06) 295deg,
+      rgba(255,220,118,.30) 306deg,
+      rgba(255,238,171,.76) 318deg,
+      rgba(255,255,238,1) 327deg,
+      #ffd660 333deg,
+      rgba(255,206,76,.92) 338deg,
+      rgba(255,230,145,.38) 347deg,
+      transparent 360deg
+    )!important;
+  filter:
+    drop-shadow(0 0 3px rgba(255,255,230,.95))
+    drop-shadow(0 0 8px rgba(255,218,105,.82))
+    drop-shadow(0 0 16px rgba(217,159,39,.40))!important;
+  animation-duration:4.2s!important;
+}
+.hero-premium>.lumen-orbit{animation-duration:4.6s!important}
+.day-card>.lumen-orbit{animation-duration:5.1s!important}
+.quick-grid button>.lumen-orbit,.settings-grid article>.lumen-orbit,.reading-cards article>.lumen-orbit{animation-duration:6s!important}
+.bottom-nav>.lumen-orbit{animation-duration:6.6s!important}
+
+/* Keep the main navigation permanently pinned above Telegram safe area. */
+:root{--main-menu-gap:8px;--main-menu-height:92px}
+.bottom-nav{
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  bottom:calc(var(--tg-safe-bottom) + var(--main-menu-gap))!important;
+  transform:translateX(-50%)!important;
+  width:min(940px,calc(100% - 14px))!important;
+  min-height:var(--main-menu-height)!important;
+  margin:0!important;
+  z-index:2147483000!important;
+  isolation:isolate!important;
+  will-change:transform;
+}
+.page{
+  padding-bottom:calc(var(--main-menu-height) + var(--tg-safe-bottom) + 34px)!important;
+}
+.toast{
+  bottom:calc(var(--main-menu-height) + var(--tg-safe-bottom) + 20px)!important;
+}
+@media(max-width:560px){
+  :root{--main-menu-gap:5px;--main-menu-height:84px}
+  .bottom-nav{width:calc(100% - 10px)!important}
+  .page{padding-bottom:calc(var(--main-menu-height) + var(--tg-safe-bottom) + 30px)!important}
+}
