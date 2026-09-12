@@ -559,3 +559,101 @@ body:before{
     padding-bottom:calc(var(--nav-space) + var(--tg-safe-bottom) + 24px)!important;
   }
 }
+
+
+/* ORBITING CONTOUR LIGHT + ANIMATED LUNAR EMBLEM */
+@property --lumen-orbit-angle{
+  syntax:"<angle>";
+  inherits:false;
+  initial-value:0deg;
+}
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item,.quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav,.arcana-mark{
+  position:relative!important;
+}
+.lumen-orbit{
+  --lumen-orbit-angle:0deg;
+  position:absolute;
+  inset:-1px;
+  border-radius:inherit;
+  padding:1.35px;
+  pointer-events:none;
+  z-index:12;
+  background:
+    conic-gradient(
+      from var(--lumen-orbit-angle),
+      transparent 0deg 280deg,
+      rgba(239,212,139,.08) 292deg,
+      rgba(255,224,128,.48) 309deg,
+      rgba(255,250,221,.98) 326deg,
+      #ffd96f 337deg,
+      rgba(239,212,139,.14) 350deg,
+      transparent 360deg
+    );
+  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  -webkit-mask-composite:xor;
+  mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);
+  mask-composite:exclude;
+  filter:drop-shadow(0 0 5px rgba(255,218,112,.72)) drop-shadow(0 0 11px rgba(239,186,67,.28));
+  animation:lumenOrbitTrace 4.8s linear infinite;
+}
+.quick-grid button .lumen-orbit,.settings-grid article .lumen-orbit,.reading-cards article .lumen-orbit{animation-duration:6.4s;opacity:.78}
+.bottom-nav>.lumen-orbit{animation-duration:7.2s}
+.arcana-mark>.lumen-orbit{animation-duration:5.6s}
+.hero-premium>.lumen-orbit{animation-duration:5.2s}
+.day-card>.lumen-orbit:nth-child(1){animation-delay:-1.3s}
+.profile-card>.lumen-orbit:nth-child(1){animation-delay:-2.1s}
+
+.lumen-emblem{
+  display:grid;
+  place-items:center;
+  color:#f1d37b;
+  filter:drop-shadow(0 0 8px rgba(255,225,130,.36));
+}
+.lumen-emblem-svg{display:block;width:100%;height:100%;overflow:visible}
+.seal{overflow:visible!important;padding:7px!important}
+.seal .lumen-emblem{width:100%;height:100%}
+.arcana-mark.lumen-emblem-card{
+  display:flex!important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:13px;
+  overflow:hidden;
+}
+.arcana-mark .hero-emblem{
+  width:min(76%,280px);
+  aspect-ratio:1;
+  color:#f3d47e;
+  filter:drop-shadow(0 0 12px rgba(255,230,145,.48)) drop-shadow(0 0 34px rgba(201,145,42,.26));
+  animation:lumenEmblemFloat 5.5s ease-in-out infinite;
+}
+.arcana-mark .hero-emblem:before{
+  content:"";
+  position:absolute;
+  width:58%;
+  aspect-ratio:1;
+  border-radius:50%;
+  background:radial-gradient(circle,rgba(255,222,119,.22),rgba(219,168,55,.08) 42%,transparent 72%);
+  filter:blur(10px);
+  animation:lumenCoreBreath 3.8s ease-in-out infinite;
+}
+.lumen-emblem-svg .emblem-orbit-ring{transform-origin:120px 120px;animation:lumenRingSpin 18s linear infinite}
+.lumen-emblem-svg .emblem-ornament-ring{transform-origin:120px 120px;animation:lumenRingSpinReverse 28s linear infinite}
+.lumen-emblem-svg .emblem-star{transform-origin:178px 120px;animation:lumenStarPulse 2.4s ease-in-out infinite}
+.lumen-emblem-svg .emblem-crescent{animation:lumenCrescentGlow 3.7s ease-in-out infinite}
+
+@keyframes lumenOrbitTrace{to{--lumen-orbit-angle:360deg}}
+@keyframes lumenRingSpin{to{transform:rotate(360deg)}}
+@keyframes lumenRingSpinReverse{to{transform:rotate(-360deg)}}
+@keyframes lumenStarPulse{0%,100%{transform:scale(.86);opacity:.76}45%{transform:scale(1.12);opacity:1;filter:drop-shadow(0 0 8px #fff2bb)}}
+@keyframes lumenCrescentGlow{0%,100%{opacity:.88;filter:drop-shadow(0 0 5px rgba(255,214,100,.22))}50%{opacity:1;filter:drop-shadow(0 0 14px rgba(255,229,147,.72))}}
+@keyframes lumenEmblemFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-5px) scale(1.018)}}
+@keyframes lumenCoreBreath{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.08)}}
+
+@media(max-width:480px){
+  .lumen-orbit{padding:1px;filter:drop-shadow(0 0 4px rgba(255,218,112,.64))}
+  .arcana-mark .hero-emblem{width:min(72%,220px)}
+}
+@media(prefers-reduced-motion:reduce){
+  .lumen-orbit,.lumen-emblem-svg .emblem-orbit-ring,.lumen-emblem-svg .emblem-ornament-ring,.lumen-emblem-svg .emblem-star,.lumen-emblem-svg .emblem-crescent,.arcana-mark .hero-emblem,.arcana-mark .hero-emblem:before{animation:none!important}
+}
