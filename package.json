@@ -17,6 +17,7 @@
   },
   "license": "UNLICENSED",
   "dependencies": {
-    "astronomy-engine": "^2.1.19"
+    "astronomy-engine": "^2.1.19",
+    "@photostructure/tz-lookup": "^11.6.1"
   }
 }
