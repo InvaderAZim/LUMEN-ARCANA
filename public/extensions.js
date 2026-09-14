@@ -9,7 +9,8 @@ const flashX=t=>{if(!toast)return;toast.textContent=t;toast.classList.add('show'
 const shellX=(title,sub,icon='☾')=>{app.innerHTML=`<main class="page"><header class="top"><div><div class="brandline">LUMEN ARCANA <span>BETA · PREMIUM</span></div><h1>${escX(title)}</h1>${sub?`<p>${escX(sub)}</p>`:''}</div><div class="seal">${icon}</div></header><div id="content"></div></main>`;return app.querySelector('#content')};
 function activeNav(route){nav?.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.r===route))}
 function uidX(){return crypto?.randomUUID?.()||`la_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,9)}`}
-function normalizeHistory(){const h=parseX(HKEY,[]);if(!Array.isArray(h))return[];let changed=false;for(const x of h){if(!x.id){x.id=uidX();changed=true}}if(changed)localStorage.setItem(HKEY,JSON.stringify(h));return h}
+function legacyHistoryIdX(x,i){return `${x?.createdAt||''}|${x?.title||''}|${x?.question||''}|${i}`}
+function normalizeHistory(){const h=parseX(HKEY,[]);if(!Array.isArray(h))return[];const f=parseX(FKEY,[]),mapped=new Map();let changed=false;for(let i=0;i<h.length;i++){const x=h[i]||{};if(!x.id){x.id=uidX();h[i]=x;changed=true}mapped.set(legacyHistoryIdX(x,i),x.id)}if(changed)localStorage.setItem(HKEY,JSON.stringify(h));if(Array.isArray(f)&&f.length){const next=[...new Set(f.map(id=>mapped.get(id)||id).filter(Boolean))];if(JSON.stringify(next)!==JSON.stringify(f))localStorage.setItem(FKEY,JSON.stringify(next))}return h}
 normalizeHistory();
 
 // ---------- Moon ----------
