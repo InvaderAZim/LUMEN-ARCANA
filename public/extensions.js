@@ -90,6 +90,14 @@ function ascendantX(jd,lat,lon){const theta=normX(gmstX(jd)+lon)*R,phi=lat*R,eps
 function aspectsX(pos){const keys=Object.keys(pos),defs=[['З’єднання',0,8],['Секстиль',60,5],['Квадрат',90,7],['Трин',120,7],['Опозиція',180,8]],rows=[];for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++){let d=Math.abs(pos[keys[i]]-pos[keys[j]]);if(d>180)d=360-d;for(const [name,target,orb] of defs)if(Math.abs(d-target)<=orb){rows.push({a:keys[i],b:keys[j],name,orb:Math.abs(d-target)});break}}return rows.sort((a,b)=>a.orb-b.orb).slice(0,12)}
 function zpX(v){v=normX(v);const i=Math.floor(v/30);return{name:Z[i][0],glyph:Z[i][1],degree:v-i*30}}
 const NATAL_TZ_PENDING_X=new Set();
+const NATAL_TEST_PREFILL_X=new URLSearchParams(location.search).get('natalTest')==='1';
+if(NATAL_TEST_PREFILL_X){
+  const current=parseX(NKEY,{});
+  if(!current?.date){
+    localStorage.setItem(NKEY,JSON.stringify({date:'1988-08-03',time:'21:30',place:'Korosten',utcOffset:'',lat:'50.95',lon:'28.64',houseSystem:'placidus'}));
+  }
+  localStorage.setItem('la_natal_view','classic');
+}
 const timezoneTokenX=p=>[p?.date||'',p?.time||'',p?.lat||'',p?.lon||''].join('|');
 function birthX(p){const token=timezoneTokenX(p);if(p?.timezoneToken===token&&p?.utcIso){const d=new Date(p.utcIso);if(Number.isFinite(d.getTime()))return d}if(!p.date||!p.time||p.utcOffset===''||p.utcOffset==null)return null;const[y,m,d]=p.date.split('-').map(Number),[hh,mm]=p.time.split(':').map(Number),off=Number(p.utcOffset);if(!Number.isFinite(off))return null;return new Date(Date.UTC(y,m-1,d,hh-off,mm||0))}
 async function resolveTimezoneX(p){const token=timezoneTokenX(p);if(!p?.date||!p?.time||p?.lat===''||p?.lon===''||NATAL_TZ_PENDING_X.has(token))return;const lat=Number(p.lat),lon=Number(p.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon)||Math.abs(lat)>90||Math.abs(lon)>180)return;NATAL_TZ_PENDING_X.add(token);try{const r=await fetch('/api/natal/timezone',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({date:p.date,time:p.time,lat,lon})}),j=await r.json();if(r.ok&&j?.ok&&j?.utc&&j?.timeZone&&Number.isFinite(Number(j.offsetHours))){const current=parseX(NKEY,{});if(timezoneTokenX(current)===token){const next={...current,utcOffset:String(Number(j.offsetHours)),timezone:j.timeZone,utcIso:j.utc,timezoneToken:token};localStorage.setItem(NKEY,JSON.stringify(next));natalX()}}else flashX('Не вдалося автоматично визначити історичний UTC')}catch{flashX('Не вдалося автоматично визначити історичний UTC')}finally{NATAL_TZ_PENDING_X.delete(token)}}
