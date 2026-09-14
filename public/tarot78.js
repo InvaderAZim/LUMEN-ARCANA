@@ -80,3 +80,4 @@ setTimeout(applyPersonalization78,0);
 window.LUMEN_RENDER_DECK78=renderDeck78;
 window.LUMEN_TAROT78=TAROT78;
 window.LUMEN_PERSONAL=personal78;
+window.LUMEN_REFRESH_TAROT_UI?.();
