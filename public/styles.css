@@ -6,3 +6,13 @@
 .classic-chart-meta strong{font-size:.96rem}.classic-chart-meta span{font-size:.72rem;color:#555}
 .classic-natal-svg{display:block;width:min(100%,760px);min-width:320px;height:auto;margin:auto;background:#fff}
 @media(max-width:480px){.classic-chart-shell{padding:7px;border-radius:14px}.classic-chart-meta{align-items:flex-start;flex-direction:column;gap:2px}.natal-view-switch{display:grid;grid-template-columns:1fr 1fr}}
+
+/* CLASSIC NATAL POSITIONS v35 */
+.classic-positions{margin:14px 0;background:#fff;color:#111;border:1px solid #cfcfcf;border-radius:18px;padding:14px}
+.classic-positions-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:10px}
+.classic-positions-head small{font-size:.68rem;letter-spacing:.12em;color:#777}.classic-positions-head h3{margin:2px 0 0;font-size:1.05rem}.classic-positions-head span{font-size:.72rem;color:#666}
+.classic-table-wrap{overflow-x:auto}.classic-natal-table{width:100%;border-collapse:collapse;min-width:520px;font-size:.82rem}
+.classic-natal-table th,.classic-natal-table td{border:1px solid #d5d5d5;padding:8px 9px;text-align:left;white-space:nowrap}
+.classic-natal-table th{background:#f2f2f2;font-size:.7rem;text-transform:uppercase;letter-spacing:.05em}
+.classic-natal-table tbody tr:nth-child(even){background:#fafafa}.classic-angle-row{background:#f5f5f5!important}.classic-obj{font-family:serif;font-size:1.05rem;font-weight:700}
+@media(max-width:480px){.classic-positions{padding:9px;border-radius:14px}.classic-positions-head{align-items:flex-start;flex-direction:column;gap:2px}.classic-natal-table{min-width:470px;font-size:.76rem}.classic-natal-table th,.classic-natal-table td{padding:7px}}
