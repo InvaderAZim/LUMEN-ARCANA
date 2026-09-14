@@ -64,17 +64,48 @@ function ascensionalDifferenceX(lon,lat,eps){
   if(!Number.isFinite(x)||Math.abs(x)>1)return null;
   return Math.asin(x)*D
 }
-function placidusCuspX(lst,lat,eps,fraction,direction){
-  let ra=normX(lst+direction*90*fraction),lon=eclipticFromRaX(ra,eps);
-  for(let i=0;i<30;i++){
-    const ad=ascensionalDifferenceX(lon,lat,eps);
-    if(ad==null)return null;
-    const targetRa=normX(lst+direction*(90*fraction+ad*fraction)),next=eclipticFromRaX(targetRa,eps);
-    let diff=normX(next-lon);if(diff>180)diff-=360;
-    lon=normX(next);
-    if(Math.abs(diff)<1e-7)return lon
+function signedAngleX(v){const x=normX(v);return x>180?x-360:x}
+function placidusResidualX(lon,lst,lat,eps,fraction,direction){
+  const ad=ascensionalDifferenceX(lon,lat,eps);
+  if(ad==null)return null;
+  const targetRa=normX(lst+direction*(90*fraction+ad*fraction));
+  return signedAngleX(eclipticFromRaX(targetRa,eps)-lon)
+}
+function placidusBracketRootX(lo,hi,lst,lat,eps,fraction,direction){
+  let flo=placidusResidualX(normX(lo),lst,lat,eps,fraction,direction),fhi=placidusResidualX(normX(hi),lst,lat,eps,fraction,direction);
+  if(flo==null||fhi==null||flo*fhi>0)return null;
+  for(let i=0;i<60;i++){
+    const mid=(lo+hi)/2,fm=placidusResidualX(normX(mid),lst,lat,eps,fraction,direction);
+    if(fm==null)return null;
+    if(Math.abs(fm)<1e-10)return normX(mid);
+    if(flo*fm<=0){hi=mid;fhi=fm}else{lo=mid;flo=fm}
   }
-  return null
+  return normX((lo+hi)/2)
+}
+function placidusCuspX(lst,lat,eps,fraction,direction){
+  const seed=eclipticFromRaX(normX(lst+direction*90*fraction),eps);
+  let lon=seed;
+  for(let i=0;i<40;i++){
+    const r=placidusResidualX(lon,lst,lat,eps,fraction,direction);
+    if(r==null)break;
+    if(Math.abs(r)<1e-8)return normX(lon);
+    lon=normX(lon+r*.65)
+  }
+  const roots=[],step=.5;
+  let prevX=0,prevR=placidusResidualX(0,lst,lat,eps,fraction,direction);
+  for(let x=step;x<=360;x+=step){
+    const xx=x===360?0:x,r=placidusResidualX(xx,lst,lat,eps,fraction,direction);
+    if(prevR!=null&&r!=null&&Math.abs(prevR)<180&&Math.abs(r)<180){
+      if(Math.abs(prevR)<1e-9)roots.push(normX(prevX));
+      else if(prevR*r<0&&Math.abs(prevR-r)<180){
+        const root=placidusBracketRootX(prevX,x,lst,lat,eps,fraction,direction);
+        if(root!=null)roots.push(root)
+      }
+    }
+    prevX=x;prevR=r
+  }
+  if(!roots.length)return null;
+  return roots.reduce((best,v)=>Math.abs(signedAngleX(v-seed))<Math.abs(signedAngleX(best-seed))?v:best,roots[0])
 }
 function placidusHouseCuspsX(jd,lat,lon,asc,mc){
   if(!Number.isFinite(jd)||!Number.isFinite(lat)||!Number.isFinite(lon)||asc==null||mc==null)return null;
