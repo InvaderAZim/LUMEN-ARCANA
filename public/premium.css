@@ -822,3 +822,16 @@ body:before{
   #lumen-splash .splash-emblem:after,
   #lumen-splash p{animation:none!important}
 }
+
+
+/* HOME HERO v17 — large emblem panel removed */
+.hero-premium.home-hero{
+  grid-template-columns:1fr!important;
+  min-height:auto!important;
+}
+.hero-premium.home-hero .hero-copy{
+  max-width:760px;
+}
+@media(max-width:720px){
+  .hero-premium.home-hero{grid-template-columns:1fr!important}
+}
