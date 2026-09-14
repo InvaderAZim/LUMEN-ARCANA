@@ -194,7 +194,7 @@ function classicWheelX(pos,asc=null,mc=null,houses=[],houseMeta=null){
     houses.forEach((v,i)=>{
       const edge=point(v,zInner),isAngle=i===0||i===3||i===6||i===9;
       houseLines+=`<line x1="${cx}" y1="${cy}" x2="${edge.x.toFixed(1)}" y2="${edge.y.toFixed(1)}" stroke="#555" stroke-width="${isAngle?2.1:.9}"/>`;
-      const mid=point(normX(v+15),houseR);
+      const next=houses[(i+1)%12],span=normX(next-v),midLon=normX(v+span/2),mid=point(midLon,houseR);
       houseLabels+=`<text x="${mid.x.toFixed(1)}" y="${mid.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#555">${i+1}</text>`;
     });
     const ascP=point(asc,outer),dcP=point(normX(asc+180),outer);
