@@ -33,8 +33,38 @@ const ORB={Mercury:{N:[48.3313,3.24587e-5],i:[7.0047,5e-8],w:[29.1241,1.01444e-5
 function kp(M,e){let q=M+e*D*sinX(M)*(1+e*cosX(M));for(let i=0;i<5;i++)q=q-(q-e*D*sinX(q)-M)/(1-e*cosX(q));return q}
 function orbitX(el,d){const N=normX(el.N[0]+el.N[1]*d),ii=el.i[0]+el.i[1]*d,w=normX(el.w[0]+el.w[1]*d),a=el.a[0]+el.a[1]*d,e=el.e[0]+el.e[1]*d,M=normX(el.M[0]+el.M[1]*d),E=kp(M,e),xv=a*(cosX(E)-e),yv=a*Math.sqrt(1-e*e)*sinX(E),v=atanX(yv,xv),rr=Math.hypot(xv,yv),vw=normX(v+w);return{x:rr*(cosX(N)*cosX(vw)-sinX(N)*sinX(vw)*cosX(ii)),y:rr*(sinX(N)*cosX(vw)+cosX(N)*sinX(vw)*cosX(ii)),r:rr}}
 function sunX(jd){const T=(jd-2451545)/36525,L=normX(280.46646+36000.76983*T+.0003032*T*T),M=normX(357.52911+35999.05029*T-.0001537*T*T),C=(1.914602-.004817*T-.000014*T*T)*sinX(M)+(.019993-.000101*T)*sinX(2*M)+.000289*sinX(3*M);return normX(L+C)}
-function moonLonX(jd){const T=(jd-2451545)/36525,L=normX(218.3164477+481267.88123421*T),DD=normX(297.8501921+445267.1114034*T),M=normX(357.5291092+35999.0502909*T),MP=normX(134.9633964+477198.8675055*T),F=normX(93.272095+483202.0175233*T);return normX(L+6.289*sinX(MP)+1.274*sinX(2*DD-MP)+.658*sinX(2*DD)+.214*sinX(2*MP)-.186*sinX(M)-.114*sinX(2*F))}
-function planetsX(jd){const d=jd-2451543.5,s=sunX(jd),er=orbitX({N:[0,0],i:[0,0],w:[282.9404,4.70935e-5],a:[1,0],e:[.016709,-1.151e-9],M:[356.047,.9856002585]},d).r,xs=er*cosX(s),ys=er*sinX(s),o={Sun:s,Moon:moonLonX(jd)};for(const [k,e] of Object.entries(ORB)){const p=orbitX(e,d);o[k]=atanX(p.y+ys,p.x+xs)}return o}
+const EARTH_ORB_X={N:[0,0],i:[0,0],w:[282.9404,4.70935e-5],a:[1,0],e:[.016709,-1.151e-9],M:[356.047,.9856002585]};
+const MOON_ORB_X={N:[125.1228,-.0529538083],i:[5.1454,0],w:[318.0634,.1643573223],a:[60.2666,0],e:[.0549,0],M:[115.3654,13.0649929509]};
+const elemX=(p,d)=>normX(p[0]+p[1]*d);
+function moonLonX(jd){
+  const d=jd-2451543.5,p=orbitX(MOON_ORB_X,d),Nm=elemX(MOON_ORB_X.N,d),wm=elemX(MOON_ORB_X.w,d),Mm=elemX(MOON_ORB_X.M,d),ws=elemX(EARTH_ORB_X.w,d),Ms=elemX(EARTH_ORB_X.M,d),Ls=normX(Ms+ws),Lm=normX(Mm+wm+Nm),DD=normX(Lm-Ls),F=normX(Lm-Nm);
+  let lon=atanX(p.y,p.x);
+  lon+=-1.274*sinX(Mm-2*DD)+.658*sinX(2*DD)-.186*sinX(Ms)-.059*sinX(2*Mm-2*DD)-.057*sinX(Mm-2*DD+Ms)+.053*sinX(Mm+2*DD)+.046*sinX(2*DD-Ms)+.041*sinX(Mm-Ms)-.035*sinX(DD)-.031*sinX(Mm+Ms)-.015*sinX(2*F-2*DD)+.011*sinX(Mm-4*DD);
+  return normX(lon)
+}
+function plutoHelioX(d){
+  const S=normX(50.03+.033459652*d),P=normX(238.95+.003968789*d);
+  const lon=normX(238.9508+.00400703*d-19.799*sinX(P)+19.848*cosX(P)+.897*sinX(2*P)-4.956*cosX(2*P)+.610*sinX(3*P)+1.211*cosX(3*P)-.341*sinX(4*P)-.190*cosX(4*P)+.128*sinX(5*P)-.034*cosX(5*P)-.038*sinX(6*P)+.031*cosX(6*P)+.020*sinX(S-P)-.010*cosX(S-P));
+  const lat=-3.9082-5.453*sinX(P)-14.975*cosX(P)+3.527*sinX(2*P)+1.673*cosX(2*P)-1.051*sinX(3*P)+.328*cosX(3*P)+.179*sinX(4*P)-.292*cosX(4*P)+.019*sinX(5*P)+.100*cosX(5*P)-.031*sinX(6*P)-.026*cosX(6*P)+.011*cosX(S-P);
+  const r=40.72+6.68*sinX(P)+6.90*cosX(P)-1.18*sinX(2*P)-.03*cosX(2*P)+.15*sinX(3*P)-.14*cosX(3*P);
+  return{x:r*cosX(lon)*cosX(lat),y:r*sinX(lon)*cosX(lat)}
+}
+function outerPerturbLonX(k,lon,d){
+  const Mj=elemX(ORB.Jupiter.M,d),Ms=elemX(ORB.Saturn.M,d),Mu=elemX(ORB.Uranus.M,d);
+  if(k==='Jupiter')lon+=-.332*sinX(2*Mj-5*Ms-67.6)-.056*sinX(2*Mj-2*Ms+21)+.042*sinX(3*Mj-5*Ms+21)-.036*sinX(Mj-2*Ms)+.022*cosX(Mj-Ms)+.023*sinX(2*Mj-3*Ms+52)-.016*sinX(Mj-5*Ms-69);
+  else if(k==='Saturn')lon+=.812*sinX(2*Mj-5*Ms-67.6)-.229*cosX(2*Mj-4*Ms-2)+.119*sinX(Mj-2*Ms-3)+.046*sinX(2*Mj-6*Ms-69)+.014*sinX(Mj-3*Ms+32);
+  else if(k==='Uranus')lon+=.040*sinX(Ms-2*Mu+6)+.035*sinX(Ms-3*Mu+33)-.015*sinX(Mj-Mu+20);
+  return normX(lon)
+}
+function planetsX(jd){
+  const d=jd-2451543.5,s=sunX(jd),earth=orbitX(EARTH_ORB_X,d),er=earth.r,xs=er*cosX(s),ys=er*sinX(s),o={Sun:s,Moon:moonLonX(jd)};
+  for(const [k,e] of Object.entries(ORB)){
+    if(k==='Pluto'){const p=plutoHelioX(d);o[k]=atanX(p.y+ys,p.x+xs);continue}
+    const p=orbitX(e,d),rho=Math.hypot(p.x,p.y),lon=outerPerturbLonX(k,atanX(p.y,p.x),d);
+    o[k]=atanX(rho*sinX(lon)+ys,rho*cosX(lon)+xs)
+  }
+  return o
+}
 function gmstX(jd){const T=(jd-2451545)/36525;return normX(280.46061837+360.98564736629*(jd-2451545)+.000387933*T*T-T*T*T/38710000)}
 function ascendantX(jd,lat,lon){const theta=normX(gmstX(jd)+lon)*R,phi=lat*R,eps=(23.439291-.0130042*((jd-2451545)/36525))*R;return normX(Math.atan2(-Math.cos(theta),Math.sin(theta)*Math.cos(eps)+Math.tan(phi)*Math.sin(eps))*D+180)}
 function aspectsX(pos){const keys=Object.keys(pos),defs=[['З’єднання',0,8],['Секстиль',60,5],['Квадрат',90,7],['Трин',120,7],['Опозиція',180,8]],rows=[];for(let i=0;i<keys.length;i++)for(let j=i+1;j<keys.length;j++){let d=Math.abs(pos[keys[i]]-pos[keys[j]]);if(d>180)d=360-d;for(const [name,target,orb] of defs)if(Math.abs(d-target)<=orb){rows.push({a:keys[i],b:keys[j],name,orb:Math.abs(d-target)});break}}return rows.sort((a,b)=>a.orb-b.orb).slice(0,12)}
