@@ -178,8 +178,14 @@ function classicAspectMatrixX(pos){
 }
 
 function classicWheelX(pos,asc=null,mc=null,houses=[],houseMeta=null){
-  const cx=360,cy=360,outer=330,zInner=278,planetR=246,houseR=190,aspectR=116,rot=asc==null?0:asc;
+  const cx=360,cy=360,outer=330,zInner=278,planetR=246,houseR=160,aspectR=116,rot=asc==null?0:asc;
   const point=(lon,r)=>{const a=(180-(lon-rot))*R;return{x:cx+r*Math.cos(a),y:cy+r*Math.sin(a)}};
+  const angularSep=(a,b)=>{let d=Math.abs(normX(a-b));return d>180?360-d:d};
+  const axisTag=(lon,label)=>{
+    const p=point(lon,outer-12),a=(180-(lon-rot))*R,dx=Math.cos(a);
+    const anchor=dx>.28?'end':dx<-.28?'start':'middle';
+    return `<text x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="${anchor}" dominant-baseline="middle" font-size="14" font-weight="800" fill="#111" style="paint-order:stroke;stroke:#fff;stroke-width:5px;stroke-linejoin:round">${label}</text>`
+  };
   let ticks='',signBounds='',signLabels='',houseLines='',houseLabels='',planetMarks='',aspectLines='',axes='';
   for(let d=0;d<360;d++){
     const p1=point(d,outer),len=d%30===0?24:d%10===0?15:d%5===0?10:5,p2=point(d,outer-len);
@@ -194,15 +200,16 @@ function classicWheelX(pos,asc=null,mc=null,houses=[],houseMeta=null){
     houses.forEach((v,i)=>{
       const edge=point(v,zInner),isAngle=i===0||i===3||i===6||i===9;
       houseLines+=`<line x1="${cx}" y1="${cy}" x2="${edge.x.toFixed(1)}" y2="${edge.y.toFixed(1)}" stroke="#555" stroke-width="${isAngle?2.1:.9}"/>`;
-      const next=houses[(i+1)%12],span=normX(next-v),midLon=normX(v+span/2),mid=point(midLon,houseR);
-      houseLabels+=`<text x="${mid.x.toFixed(1)}" y="${mid.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#555">${i+1}</text>`;
+      const next=houses[(i+1)%12],span=normX(next-v),midLon=normX(v+span/2);
+      const labelR=span<6?(i%2?142:176):span<10?(i%2?150:170):houseR,mid=point(midLon,labelR);
+      houseLabels+=`<text x="${mid.x.toFixed(1)}" y="${mid.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="13" font-weight="700" fill="#555" style="paint-order:stroke;stroke:#fff;stroke-width:4px;stroke-linejoin:round">${i+1}</text>`;
     });
     const ascP=point(asc,outer),dcP=point(normX(asc+180),outer);
-    axes+=`<line x1="${cx}" y1="${cy}" x2="${ascP.x.toFixed(1)}" y2="${ascP.y.toFixed(1)}" stroke="#111" stroke-width="3"/><line x1="${cx}" y1="${cy}" x2="${dcP.x.toFixed(1)}" y2="${dcP.y.toFixed(1)}" stroke="#111" stroke-width="3"/><text x="${(ascP.x+18).toFixed(1)}" y="${(ascP.y-8).toFixed(1)}" font-size="14" font-weight="700" fill="#111">AC</text><text x="${(dcP.x-36).toFixed(1)}" y="${(dcP.y-8).toFixed(1)}" font-size="14" font-weight="700" fill="#111">DC</text>`;
+    axes+=`<line x1="${cx}" y1="${cy}" x2="${ascP.x.toFixed(1)}" y2="${ascP.y.toFixed(1)}" stroke="#111" stroke-width="3"/><line x1="${cx}" y1="${cy}" x2="${dcP.x.toFixed(1)}" y2="${dcP.y.toFixed(1)}" stroke="#111" stroke-width="3"/>${axisTag(asc,'AC')}${axisTag(normX(asc+180),'DC')}`;
   }
   if(mc!=null){
     const mcP=point(mc,outer),icP=point(normX(mc+180),outer);
-    axes+=`<line x1="${cx}" y1="${cy}" x2="${mcP.x.toFixed(1)}" y2="${mcP.y.toFixed(1)}" stroke="#333" stroke-width="3"/><line x1="${cx}" y1="${cy}" x2="${icP.x.toFixed(1)}" y2="${icP.y.toFixed(1)}" stroke="#333" stroke-width="3"/><text x="${(mcP.x+8).toFixed(1)}" y="${(mcP.y+18).toFixed(1)}" font-size="14" font-weight="700" fill="#111">MC</text><text x="${(icP.x+8).toFixed(1)}" y="${(icP.y-10).toFixed(1)}" font-size="14" font-weight="700" fill="#111">IC</text>`;
+    axes+=`<line x1="${cx}" y1="${cy}" x2="${mcP.x.toFixed(1)}" y2="${mcP.y.toFixed(1)}" stroke="#333" stroke-width="3"/><line x1="${cx}" y1="${cy}" x2="${icP.x.toFixed(1)}" y2="${icP.y.toFixed(1)}" stroke="#333" stroke-width="3"/>${axisTag(mc,'MC')}${axisTag(normX(mc+180),'IC')}`;
   }
   const defs=[['З’єднання',0,8],['Секстиль',60,5],['Квадрат',90,7],['Трин',120,7],['Опозиція',180,8]];
   const keys=Object.keys(pos);
@@ -222,8 +229,9 @@ function classicWheelX(pos,asc=null,mc=null,houses=[],houseMeta=null){
   const entries=Object.entries(pos).sort((a,b)=>a[1]-b[1]);
   entries.forEach(([k,v],i)=>{
     let track=planetR;
-    const prev=entries[(i-1+entries.length)%entries.length],sep=prev?Math.min(normX(v-prev[1]),normX(prev[1]-v)):99;
-    if(sep<6)track-=22*(i%3);
+    const prev=entries[(i-1+entries.length)%entries.length],next=entries[(i+1)%entries.length];
+    const sep=Math.min(prev?angularSep(v,prev[1]):99,next?angularSep(v,next[1]):99);
+    if(sep<6)track=[246,224,206][i%3];
     const p=point(v,track),z=zpX(v),deg=Math.floor(z.degree),min=Math.round((z.degree-deg)*60);
     planetMarks+=`<g><text x="${p.x.toFixed(1)}" y="${p.y.toFixed(1)}" text-anchor="middle" dominant-baseline="middle" font-size="22" font-family="serif" font-weight="700" fill="${classicPlanetColorX(k)}">${PM[k][1]}</text><text x="${p.x.toFixed(1)}" y="${(p.y+16).toFixed(1)}" text-anchor="middle" font-size="9" fill="${classicPlanetColorX(k)}">${deg}°${String(min).padStart(2,'0')}′</text></g>`;
   });
