@@ -835,3 +835,70 @@ body:before{
 @media(max-width:720px){
   .hero-premium.home-hero{grid-template-columns:1fr!important}
 }
+
+
+/* PERFORMANCE v18 — Telegram WebView optimization */
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item,
+.quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.primary:after,
+.day-card:after,
+.premium-panel:after,
+.result-premium:after,
+.profile-card:after,
+.premium-strip:after,
+.nav-btn.active:after{
+  animation:none!important;
+  opacity:0!important;
+}
+.hero-premium{
+  animation:legacyMenuRise .36s .03s cubic-bezier(.2,.72,.2,1) both!important;
+}
+.bottom-nav{
+  animation:legacyNavRise .38s .12s cubic-bezier(.2,.72,.2,1) both!important;
+}
+.arcana-mark,.seal{
+  animation:none!important;
+}
+.tarot{
+  animation:cardReveal .42s cubic-bezier(.18,.8,.2,1) both!important;
+}
+.deck-card,.mini-card{
+  animation:none!important;
+}
+.deck-card:hover,.tarot:hover{
+  filter:none!important;
+}
+.quick-grid button>.lumen-orbit,
+.settings-grid article>.lumen-orbit,
+.reading-cards article>.lumen-orbit,
+.lesson>.lumen-orbit,
+.journal-item>.lumen-orbit,
+.empty-state>.lumen-orbit,
+.arcana-mark>.lumen-orbit,
+.drawing>.lumen-orbit{
+  display:none!important;
+}
+.deck-grid>article,
+.lesson,
+.journal-item,
+.reading-cards article{
+  content-visibility:auto;
+  contain-intrinsic-size:240px;
+}
+.quick-grid button,
+.settings-grid article{
+  contain:layout paint;
+}
+@media(max-width:560px){
+  .lumen-orbit{
+    filter:drop-shadow(0 0 3px rgba(255,218,112,.58))!important;
+  }
+}
+
+/* Splash remains branded but exits sooner. */
+#lumen-splash{
+  animation:splashOut .45s ease .82s forwards!important;
+}
