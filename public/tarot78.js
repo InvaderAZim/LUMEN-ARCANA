@@ -77,5 +77,6 @@ document.addEventListener('error',e=>{
   if(fallback)fallback.style.display='grid';
 },true);
 setTimeout(applyPersonalization78,0);
+window.LUMEN_RENDER_DECK78=renderDeck78;
 window.LUMEN_TAROT78=TAROT78;
 window.LUMEN_PERSONAL=personal78;
