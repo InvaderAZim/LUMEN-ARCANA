@@ -42,7 +42,7 @@ function decorateLumen(){
   document.querySelectorAll('.seal').forEach(el=>{
     if(!el.querySelector('.lumen-emblem'))el.innerHTML=lumenEmblemMarkup('seal-emblem');
   });
-  document.querySelectorAll('.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item,.quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav,.arcana-mark').forEach(el=>{
+  document.querySelectorAll('.hero-premium,.day-card,.premium-panel,.result-premium,.profile-card,.premium-strip,.bottom-nav').forEach(el=>{
     if(!el.querySelector(':scope > .lumen-orbit')){
       const orbit=document.createElement('i');
       orbit.className='lumen-orbit';
@@ -52,7 +52,6 @@ function decorateLumen(){
   });
 }
 window.LUMEN_DECORATE=decorateLumen;
-document.addEventListener('click',()=>setTimeout(decorateLumen,0),true);
 
 function syncTelegramInsets(){
   const root=document.documentElement;
