@@ -45,15 +45,63 @@ function mcX(jd,lon){const theta=normX(gmstX(jd)+lon)*R,eps=(23.439291-.0130042*
 const classicPlanetColorX=k=>({Sun:'#e02020',Moon:'#1d4ed8',Mercury:'#159447',Venus:'#159447',Mars:'#e02020',Jupiter:'#e02020',Saturn:'#222',Uranus:'#159447',Neptune:'#1d4ed8',Pluto:'#1d4ed8'}[k]||'#111');
 
 const HOUSE_SYSTEMS_X={equal:'Equal House',placidus:'Placidus'};
+const PLACIDUS_ENGINE_ENABLED_X=false;
 function equalHouseCuspsX(asc){return asc==null?[]:Array.from({length:12},(_,i)=>normX(asc+i*30))}
-function placidusHouseCuspsX(jd,lat,lon,asc,mc){return null}
+function meanObliquityX(jd){
+  const T=(jd-2451545)/36525;
+  return 23.439291111-.013004167*T-.000000164*T*T+.000000504*T*T*T
+}
+function localSiderealX(jd,lon){return normX(gmstX(jd)+lon)}
+function eclipticFromRaX(ra,eps){
+  const a=ra*R,e=eps*R;
+  return normX(Math.atan2(Math.sin(a)/Math.cos(e),Math.cos(a))*D)
+}
+function declinationFromLonX(lon,eps){
+  return Math.asin(Math.sin(eps*R)*Math.sin(lon*R))*D
+}
+function ascensionalDifferenceX(lon,lat,eps){
+  const dec=declinationFromLonX(lon,eps),x=Math.tan(lat*R)*Math.tan(dec*R);
+  if(!Number.isFinite(x)||Math.abs(x)>1)return null;
+  return Math.asin(x)*D
+}
+function placidusCuspX(lst,lat,eps,fraction,direction){
+  let ra=normX(lst+direction*90*fraction),lon=eclipticFromRaX(ra,eps);
+  for(let i=0;i<30;i++){
+    const ad=ascensionalDifferenceX(lon,lat,eps);
+    if(ad==null)return null;
+    const targetRa=normX(lst+direction*(90*fraction+ad*fraction)),next=eclipticFromRaX(targetRa,eps);
+    let diff=normX(next-lon);if(diff>180)diff-=360;
+    lon=normX(next);
+    if(Math.abs(diff)<1e-7)return lon
+  }
+  return null
+}
+function placidusHouseCuspsX(jd,lat,lon,asc,mc){
+  if(!Number.isFinite(jd)||!Number.isFinite(lat)||!Number.isFinite(lon)||asc==null||mc==null)return null;
+  const eps=meanObliquityX(jd),lst=localSiderealX(jd,lon);
+  const h11=placidusCuspX(lst,lat,eps,1/3,+1),h12=placidusCuspX(lst,lat,eps,2/3,+1),h9=placidusCuspX(lst,lat,eps,1/3,-1),h8=placidusCuspX(lst,lat,eps,2/3,-1);
+  if([h8,h9,h11,h12].some(v=>v==null))return null;
+  return[
+    normX(asc),normX(h8+180),normX(h9+180),normX(mc+180),normX(h11+180),normX(h12+180),
+    normX(asc+180),normX(h8),normX(h9),normX(mc),normX(h11),normX(h12)
+  ]
+}
+function validHouseCuspsX(cusps){
+  if(!Array.isArray(cusps)||cusps.length!==12||cusps.some(v=>!Number.isFinite(v)))return false;
+  for(let i=0;i<6;i++){
+    const opposite=normX(cusps[i]+180);
+    let d=Math.abs(normX(cusps[i+6]-opposite));if(d>180)d=360-d;
+    if(d>.001)return false
+  }
+  return true
+}
 function resolveHouseSystemX(requested,jd,lat,lon,asc,mc){
   const system=requested==='placidus'?'placidus':'equal';
   if(asc==null)return{requested:system,used:system,cusps:[],fallback:false};
   if(system==='placidus'){
-    const cusps=placidusHouseCuspsX(jd,lat,lon,asc,mc);
-    if(Array.isArray(cusps)&&cusps.length===12)return{requested:'placidus',used:'placidus',cusps,fallback:false};
-    return{requested:'placidus',used:'equal',cusps:equalHouseCuspsX(asc),fallback:true};
+    const cusps=PLACIDUS_ENGINE_ENABLED_X?placidusHouseCuspsX(jd,lat,lon,asc,mc):null;
+    if(validHouseCuspsX(cusps))return{requested:'placidus',used:'placidus',cusps,fallback:false};
+    return{requested:'placidus',used:'equal',cusps:equalHouseCuspsX(asc),fallback:true,reason:'placidus-validation-pending'};
   }
   return{requested:'equal',used:'equal',cusps:equalHouseCuspsX(asc),fallback:false};
 }
