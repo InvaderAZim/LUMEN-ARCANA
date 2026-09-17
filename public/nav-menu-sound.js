@@ -9,7 +9,10 @@
   buttonSound.playsInline=true;
   buttonSound.volume=0.52;
 
+  const soundEnabled=()=>localStorage.getItem('la_sound_enabled')!=='0';
+
   function play(sound){
+    if(!soundEnabled())return;
     try{
       sound.pause();
       sound.currentTime=0;
@@ -41,6 +44,10 @@
     if(event.key!=='Enter'&&event.key!==' ')return;
     handle(event.target);
   },true);
+
+  window.addEventListener('lumen:sound-change',event=>{
+    if(event.detail?.enabled===false){navSound.pause();buttonSound.pause()}
+  });
 
   window.LUMEN_NAV_SOUND=navSound;
   window.LUMEN_BUTTON_SOUND=buttonSound;
