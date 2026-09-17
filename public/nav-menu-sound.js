@@ -1,15 +1,27 @@
 (()=>{
+  const NAV_BASE_VOLUME=0.58;
+  const BUTTON_BASE_VOLUME=0.52;
+
   const navSound=new Audio('/nav-menu-sound.mp3?v=20260917nav62');
   navSound.preload='auto';
   navSound.playsInline=true;
-  navSound.volume=0.58;
 
   const buttonSound=new Audio('/button-sound.mp3?v=20260917btn63');
   buttonSound.preload='auto';
   buttonSound.playsInline=true;
-  buttonSound.volume=0.52;
 
   const soundEnabled=()=>localStorage.getItem('la_sound_enabled')!=='0';
+  const volumeLevel=()=>{
+    const raw=localStorage.getItem('la_sound_volume');
+    const value=raw===null?100:Number(raw);
+    return Number.isFinite(value)?Math.max(0,Math.min(100,value))/100:1;
+  };
+  const applyVolume=()=>{
+    const level=volumeLevel();
+    navSound.volume=NAV_BASE_VOLUME*level;
+    buttonSound.volume=BUTTON_BASE_VOLUME*level;
+  };
+  applyVolume();
 
   function play(sound){
     if(!soundEnabled())return;
@@ -46,6 +58,7 @@
   },true);
 
   window.addEventListener('lumen:sound-change',event=>{
+    applyVolume();
     if(event.detail?.enabled===false){navSound.pause();buttonSound.pause()}
   });
 

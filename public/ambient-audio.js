@@ -1,11 +1,19 @@
 (()=>{
+  const BASE_VOLUME=0.14;
   const ambient=new Audio('/ambient-mystic-forest.mp3?v=20260917ambient60');
   ambient.preload='auto';
   ambient.loop=true;
   ambient.playsInline=true;
-  ambient.volume=0.14;
 
   const soundEnabled=()=>localStorage.getItem('la_sound_enabled')!=='0';
+  const volumeLevel=()=>{
+    const raw=localStorage.getItem('la_sound_volume');
+    const value=raw===null?100:Number(raw);
+    return Number.isFinite(value)?Math.max(0,Math.min(100,value))/100:1;
+  };
+  const applyVolume=()=>{ambient.volume=BASE_VOLUME*volumeLevel()};
+  applyVolume();
+
   let started=false;
   let trying=false;
   let startTimer=null;
@@ -52,6 +60,7 @@
   });
 
   window.addEventListener('lumen:sound-change',event=>{
+    applyVolume();
     const on=event.detail?.enabled!==false;
     if(!on){
       if(startTimer){clearTimeout(startTimer);startTimer=null}
