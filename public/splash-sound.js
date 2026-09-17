@@ -4,6 +4,7 @@
   audio.playsInline=true;
   audio.volume=0.8;
 
+  const soundEnabled=()=>localStorage.getItem('la_sound_enabled')!=='0';
   let played=false;
   let trying=false;
 
@@ -14,7 +15,7 @@
   }
 
   async function tryPlay(){
-    if(played||trying)return played;
+    if(!soundEnabled()||played||trying)return played;
     trying=true;
     try{
       audio.currentTime=0;
@@ -32,13 +33,20 @@
 
   function onFirstInteraction(){void tryPlay()}
 
-  document.addEventListener('pointerdown',onFirstInteraction,true);
-  document.addEventListener('touchstart',onFirstInteraction,true);
-  document.addEventListener('keydown',onFirstInteraction,true);
+  if(soundEnabled()){
+    document.addEventListener('pointerdown',onFirstInteraction,true);
+    document.addEventListener('touchstart',onFirstInteraction,true);
+    document.addEventListener('keydown',onFirstInteraction,true);
 
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',()=>void tryPlay(),{once:true});
-  }else{
-    void tryPlay();
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',()=>void tryPlay(),{once:true});
+    }else{
+      void tryPlay();
+    }
   }
+
+  window.addEventListener('lumen:sound-change',event=>{
+    if(event.detail?.enabled===false){audio.pause();cleanupFallback()}
+  });
+  window.LUMEN_SPLASH_SOUND=audio;
 })();
