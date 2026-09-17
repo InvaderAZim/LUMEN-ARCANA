@@ -1,14 +1,21 @@
 :root{--blue-strong:#68b8ff;--blue-deep:#123552;--blue-glow:#4aa8ff55}
-body{background:radial-gradient(circle at 88% 2%,#2b83d34a 0,transparent 34%),radial-gradient(circle at 14% 24%,#163c5f30 0,transparent 28%),radial-gradient(circle at 50% -20%,#242015 0,#101820 34%,#080808 74%)!important}
-.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item{border-color:#68b8ff38!important;background:linear-gradient(145deg,#171a1fee,#0d1116ee)!important;box-shadow:0 22px 70px #0008,0 0 48px #2b8bd12a!important}
-.settings-grid article,.quick-grid button,.reading-cards article,.spread{border-color:#68b8ff32!important;background:linear-gradient(145deg,#111820cc,#0c0f13cc)!important}
-.quick-grid button:hover,.ghost:hover,.spread:hover{border-color:#68b8ff78!important;background:#17324a66!important;box-shadow:0 0 24px #4ba8f32b!important}
-.seal{border-color:#68b8ff40!important;background:radial-gradient(circle,#2b271d 0,#102033 46%,#0e0e0e 75%)!important;box-shadow:0 0 45px #dcb75c17,0 0 42px #4aa8ff35!important}
-.arcana-mark{background:radial-gradient(circle at 50% 35%,#332f24 0,#173552 42%,#10161d 72%)!important;border-color:#68b8ff38!important}
-.bottom-nav{background:linear-gradient(180deg,#0b1219f2,#090b0eef)!important;border-color:#68b8ff46!important;box-shadow:0 18px 50px #000a,0 0 38px #479de53d!important}
-.nav-btn{color:#97a8b8}.nav-btn.active{color:#e9f5ff!important;background:linear-gradient(145deg,#173b5b88,#e5c87d10)!important;box-shadow:inset 0 0 0 1px #68b8ff55,0 0 24px #58aaf538!important}.nav-btn.active b{color:#78c4ff!important}
-.day-card{background:linear-gradient(135deg,#17140fee 0,#111923ee 58%,#0a1219ee 100%)!important}
-.day-card .mini-card{border-color:#68b8ff5c!important;background:linear-gradient(155deg,#2d2a20 0,#10243a 48%,#0d1116 100%)!important;box-shadow:0 15px 35px #0007,0 0 30px #4ba8f334!important}
-.day-card .lumen-day-visual,.day-card .day-card-visual{filter:drop-shadow(0 0 18px #4aa8ff50)!important}
-.ghost{border-color:#68b8ff35!important;background:#11202d80!important}.synthesis,.practice{background:linear-gradient(145deg,#e5c87d08,#1737544a)!important;border-color:#68b8ff2f!important}
-.toast{background:#0f1b26!important;color:#eef7ff!important;border-color:#68b8ff55!important;box-shadow:0 12px 32px #0008,0 0 30px #4da6f540!important}
+body{background:radial-gradient(circle at 88% 2%,#2b83d34d 0,transparent 34%),radial-gradient(circle at 14% 24%,#163c5f36 0,transparent 28%),radial-gradient(circle at 50% -20%,#101820 0,#0b1117 38%,#080808 76%)!important}
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item{border-color:#68b8ff42!important;background:linear-gradient(145deg,#151c24ee,#0c1117ee)!important;box-shadow:0 22px 70px #0008,0 0 46px #2b8bd12b!important}
+.settings-grid article,.quick-grid button,.reading-cards article,.spread{border-color:#68b8ff38!important;background:linear-gradient(145deg,#111b25dd,#0b1015dd)!important}
+.quick-grid button:hover,.ghost:hover,.spread:hover{border-color:#68b8ff78!important;background:#17324a70!important;box-shadow:0 0 24px #4ba8f32b!important}
+.bottom-nav{background:linear-gradient(180deg,#0b1620f4,#080d12f2)!important;border-color:#68b8ff52!important;box-shadow:0 18px 50px #000a,0 0 38px #479de544!important}
+.nav-btn{color:#93a8ba}.nav-btn.active{color:#e9f5ff!important;background:#153650cc!important;box-shadow:inset 0 0 0 1px #68b8ff60,0 0 24px #58aaf540!important}.nav-btn.active b{color:#78c4ff!important}
+.day-card{background:linear-gradient(135deg,#131a21ee 0,#102033ee 58%,#0a1219ee 100%)!important}
+.toast{background:#0f1b26!important;color:#eef7ff!important;border-color:#68b8ff60!important;box-shadow:0 12px 32px #0008,0 0 30px #4da6f545!important}
+.ghost{border-color:#68b8ff42!important;background:#11202da0!important;color:#e8f4ff!important}
+
+/* Gold remains a separate visual layer: no blue glow, border or mixed gradient on gold accents. */
+.primary,.badge,.brandline span,.mode-pill,.premium-chip,.text-btn,.day-card small,.synthesis small,.settings-grid small,.lesson-no,.journal-item time,.card-no{filter:none!important;text-shadow:none!important}
+.primary{background:linear-gradient(135deg,#edd99f,#c89e48)!important;color:#181109!important;border-color:transparent!important;box-shadow:0 8px 30px #d7ad4c24!important}
+.badge,.mode-pill,.premium-chip,.brandline span{background:#e5c87d0f!important;border-color:#e5c87d48!important;color:var(--gold)!important;box-shadow:none!important}
+.seal{border-color:#e5c87d55!important;background:radial-gradient(circle,#2b271d,#0e0e0e 70%)!important;box-shadow:0 0 45px #dcb75c17!important}
+.arcana-mark{background:radial-gradient(circle at 50% 35%,#332f24,#121212 68%)!important;border-color:#e5c87d2f!important;box-shadow:none!important}
+.synthesis,.practice{background:#e5c87d08!important;border-color:#e5c87d2c!important}
+.day-card .mini-card{border-color:#e5c87d55!important;background:linear-gradient(155deg,#2f2a20,#111111)!important;box-shadow:0 15px 35px #0007!important}
+.day-card .lumen-day-visual,.day-card .day-card-visual{filter:none!important}
+.lumen-day-card-frame,.lumen-day-card-frame img{box-shadow:none!important}
