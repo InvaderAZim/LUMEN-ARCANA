@@ -35,6 +35,18 @@ test("local interpretation works without OpenAI", async () => {
   assert.equal(b.cards.length, 1);
 });
 
+test("anonymous interpretation cannot use OpenAI", async () => {
+  const protectedEnv = { ...env, OPENAI_API_KEY: "test-key", TELEGRAM_BOT_TOKEN: "test-bot-token" };
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({ language: "uk", question: "Що варто осмислити сьогодні?", spread: "single", cards: [{ name: "Маг", position: "Фокус", orientation: "upright", keywords: ["воля", "дія"] }] })
+  }), protectedEnv);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.source, "local");
+  assert.equal(b.cards.length, 1);
+});
+
 test("Telegram webhook requires secret configuration", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/telegram/webhook", { method: "POST", body: "{}" }), env);
   assert.equal(r.status, 503);
