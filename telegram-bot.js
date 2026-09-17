@@ -233,11 +233,12 @@ export async function handleTelegramSetup(request, env) {
   return json(result, result.ok ? 200 : 502);
 }
 
-export async function handleTelegramRepair(env) {
-  const result = await configureTelegramBot(env, { force: true });
-  return json(result, result.ok ? 200 : 502);
+export async function handleTelegramRepair() {
+  return json({
+    error: "repair_endpoint_disabled",
+    message: "Use POST /telegram/setup with Authorization: Bearer <ADMIN_SECRET>"
+  }, 405);
 }
-
 
 export async function handleTelegramStatus(env) {
   if (!env.TELEGRAM_BOT_TOKEN) {
