@@ -9,12 +9,7 @@
   radial-gradient(circle at 82% 76%,rgba(25,91,147,.14) 0,transparent 34%);
   filter:blur(10px);
 }
-#lumen-splash .splash-stars{position:absolute;inset:0;pointer-events:none;opacity:.52;background-image:
-  radial-gradient(circle,rgba(151,211,255,.92) 0 1px,transparent 1.4px),
-  radial-gradient(circle,rgba(83,168,235,.56) 0 1px,transparent 1.35px);
-  background-size:54px 54px,83px 83px;background-position:4px 12px,27px 39px;
-  filter:drop-shadow(0 0 5px rgba(77,167,240,.32));
-}
+#lumen-splash .splash-stars{display:none!important}
 #lumen-splash .splash-core{position:relative;z-index:2}
 #lumen-splash .splash-emblem{color:#71bfff!important;filter:drop-shadow(0 0 20px rgba(72,163,238,.40));}
 #lumen-splash .splash-emblem .emblem-orbit-ring,#lumen-splash .splash-emblem .emblem-ornament-ring{color:#71bfff!important;stroke:#71bfff!important;filter:drop-shadow(0 0 6px rgba(61,151,224,.34));}
