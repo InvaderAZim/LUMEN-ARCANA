@@ -1,5 +1,5 @@
 (()=>{
-  const sound=new Audio('/nav-menu-sound.mp3?v=20260917nav61');
+  const sound=new Audio('/nav-menu-sound.mp3?v=20260917nav62');
   sound.preload='auto';
   sound.playsInline=true;
   sound.volume=0.58;
