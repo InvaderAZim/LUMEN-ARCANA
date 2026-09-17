@@ -1,10 +1,15 @@
 (()=>{
-  const sound=new Audio('/nav-menu-sound.mp3?v=20260917nav62');
-  sound.preload='auto';
-  sound.playsInline=true;
-  sound.volume=0.58;
+  const navSound=new Audio('/nav-menu-sound.mp3?v=20260917nav62');
+  navSound.preload='auto';
+  navSound.playsInline=true;
+  navSound.volume=0.58;
 
-  function play(){
+  const buttonSound=new Audio('/button-sound.mp3?v=20260917btn63');
+  buttonSound.preload='auto';
+  buttonSound.playsInline=true;
+  buttonSound.volume=0.52;
+
+  function play(sound){
     try{
       sound.pause();
       sound.currentTime=0;
@@ -13,16 +18,30 @@
     }catch{}
   }
 
-  document.addEventListener('pointerdown',event=>{
-    const target=event.target instanceof Element?event.target.closest('#bottom-nav button,#bottom-nav .nav-btn'):null;
-    if(target)play();
-  },true);
+  function navTarget(target){
+    return target instanceof Element?target.closest('#bottom-nav button,#bottom-nav .nav-btn'):null;
+  }
+
+  function regularButton(target){
+    if(!(target instanceof Element))return null;
+    const button=target.closest('button,[role="button"],input[type="button"],input[type="submit"],input[type="reset"]');
+    if(!button||button.closest('#bottom-nav'))return null;
+    if(button.matches(':disabled,[aria-disabled="true"]'))return null;
+    return button;
+  }
+
+  function handle(target){
+    if(navTarget(target)){play(navSound);return}
+    if(regularButton(target))play(buttonSound);
+  }
+
+  document.addEventListener('pointerdown',event=>handle(event.target),true);
 
   document.addEventListener('keydown',event=>{
     if(event.key!=='Enter'&&event.key!==' ')return;
-    const target=event.target instanceof Element?event.target.closest('#bottom-nav button,#bottom-nav .nav-btn'):null;
-    if(target)play();
+    handle(event.target);
   },true);
 
-  window.LUMEN_NAV_SOUND=sound;
+  window.LUMEN_NAV_SOUND=navSound;
+  window.LUMEN_BUTTON_SOUND=buttonSound;
 })();
