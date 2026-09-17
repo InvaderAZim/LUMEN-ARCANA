@@ -1,0 +1,13 @@
+:root{--blue:#67b3ff;--blue2:#1b4b78;--blue-soft:#67b3ff18}
+body{background:radial-gradient(circle at 86% 4%,#2c79bd1f 0,transparent 30%),radial-gradient(circle at 50% -20%,#242015 0,#111111 34%,#080808 72%)}
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item{border-color:#67b3ff14;box-shadow:0 22px 70px #0008,0 0 42px #3d91dd08}
+.settings-grid article,.quick-grid button,.reading-cards article,.spread{border-color:#67b3ff17}
+.quick-grid button:hover,.ghost:hover,.spread:hover{border-color:#67b3ff40}
+.seal{box-shadow:0 0 45px #dcb75c17,0 0 36px #4aa8ff16}
+.arcana-mark{background:radial-gradient(circle at 50% 35%,#332f24 0,#14202a 42%,#121212 72%)}
+.bottom-nav{border-color:#67b3ff1c;box-shadow:0 18px 50px #000a,0 0 34px #479de515}
+.nav-btn.active{box-shadow:inset 0 0 0 1px #e5c87d36,0 0 22px #58aaf514}
+.toast{border-color:#67b3ff2c;box-shadow:0 12px 32px #0008,0 0 28px #4da6f515}
+.lumen-png-fallback{position:fixed;left:50%;bottom:max(104px,calc(env(safe-area-inset-bottom) + 92px));transform:translateX(-50%);z-index:80;width:min(720px,calc(100% - 20px));display:flex;align-items:center;justify-content:space-between;gap:14px;padding:14px 16px;border-radius:18px;border:1px solid #67b3ff3b;background:linear-gradient(145deg,#10202ddd,#0c0c0cf2);backdrop-filter:blur(18px);box-shadow:0 22px 60px #000a,0 0 40px #3e9cf525;color:#f8f3e9}
+.lumen-png-fallback strong{display:block;color:#dceeff;font-size:.95rem}.lumen-png-fallback small{display:block;margin-top:4px;color:#aebdca;line-height:1.35}.lumen-png-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}.lumen-png-actions button{cursor:pointer;border:1px solid #67b3ff35;background:#67b3ff12;color:#eaf5ff;border-radius:12px;padding:10px 12px;font-weight:800}.lumen-png-actions button.primary{border-color:#e5c87d55;background:linear-gradient(135deg,#edd99f,#c89e48);color:#181109}.lumen-png-actions button.ghost{min-width:40px;padding-inline:10px}
+@media(max-width:640px){.lumen-png-fallback{align-items:flex-start;flex-direction:column}.lumen-png-actions{width:100%;justify-content:flex-start}.lumen-png-actions button:not(.ghost){flex:1}}
