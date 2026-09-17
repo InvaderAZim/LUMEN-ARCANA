@@ -5,6 +5,7 @@
   ambient.playsInline=true;
   ambient.volume=0.14;
 
+  const soundEnabled=()=>localStorage.getItem('la_sound_enabled')!=='0';
   let started=false;
   let trying=false;
   let startTimer=null;
@@ -16,7 +17,8 @@
   }
 
   async function tryPlay(){
-    if(trying||!document.hidden&&started&&!ambient.paused)return started;
+    if(!soundEnabled())return false;
+    if(trying||(!document.hidden&&started&&!ambient.paused))return started;
     trying=true;
     try{
       await ambient.play();
@@ -41,10 +43,21 @@
   document.addEventListener('keydown',onFirstInteraction,true);
 
   document.addEventListener('visibilitychange',()=>{
-    if(document.hidden){
+    if(document.hidden||!soundEnabled()){
       ambient.pause();
       window.LUMEN_AMBIENT_PLAYING=false;
     }else if(started){
+      void tryPlay();
+    }
+  });
+
+  window.addEventListener('lumen:sound-change',event=>{
+    const on=event.detail?.enabled!==false;
+    if(!on){
+      if(startTimer){clearTimeout(startTimer);startTimer=null}
+      ambient.pause();
+      window.LUMEN_AMBIENT_PLAYING=false;
+    }else if(!document.hidden){
       void tryPlay();
     }
   });
