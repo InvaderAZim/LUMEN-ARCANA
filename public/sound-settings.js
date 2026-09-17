@@ -15,7 +15,7 @@
   function render(){
     const app=document.querySelector('#app');
     const title=app?.querySelector('.top h1')?.textContent?.trim();
-    const grid=app?.querySelector('.settings-grid');
+    const grid=[...(app?.querySelectorAll('.premium-panel')||[])].find(panel=>panel.querySelector('.badge')?.textContent?.trim()==='НАЛАШТУВАННЯ')?.querySelector('.settings-grid');
     if(title!=='Профіль'||!grid||grid.querySelector('#lumenSoundSetting'))return;
 
     const on=enabled();
