@@ -1,6 +1,6 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "lumen-arcana-v2",
+  "name": "lumen-arcana",
   "main": "worker.js",
   "compatibility_date": "2026-09-10",
   "compatibility_flags": ["nodejs_compat"],
