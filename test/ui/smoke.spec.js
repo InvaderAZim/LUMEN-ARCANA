@@ -473,3 +473,46 @@ test("Home quick actions are compact on mobile", async ({ page }) => {
   expect(style.paddingRight).toBe("13px");
   expect(style.borderRadius).toBe("17px");
 });
+
+
+test("Home quick action icons sit beside text", async ({ page }) => {
+  await openApp(page);
+
+  const button = page.locator(".home-quick-grid button").first();
+  const layout = await button.evaluate(node => {
+    const css = getComputedStyle(node);
+    const icon = node.querySelector("b").getBoundingClientRect();
+    const text = node.querySelector("span").getBoundingClientRect();
+    return {
+      display: css.display,
+      columns: css.gridTemplateColumns,
+      iconCenterY: icon.top + icon.height / 2,
+      textCenterY: text.top + text.height / 2,
+      iconRight: icon.right,
+      textLeft: text.left
+    };
+  });
+
+  expect(layout.display).toBe("grid");
+  expect(layout.textLeft).toBeGreaterThan(layout.iconRight);
+  expect(Math.abs(layout.iconCenterY - layout.textCenterY)).toBeLessThan(12);
+});
+
+test("Corrupt localStorage does not break core app screens", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("la_profile_prefs", "{");
+    localStorage.setItem("la_natal_profile", "{");
+    localStorage.setItem("la_compatibility", "{");
+    localStorage.setItem("la_journal", "{");
+  });
+
+  await openApp(page);
+  await expect(page.locator("#app .top h1")).toBeVisible();
+
+  await page.locator('[data-go="daily"]').click();
+  await expect(page.locator("#app .top h1")).toBeVisible();
+
+  await page.locator('[data-r="home"]').click();
+  await page.locator('[data-go="compatibility"]').click();
+  await expect(page.locator("#app .top h1")).toBeVisible();
+});
