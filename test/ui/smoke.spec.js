@@ -704,3 +704,39 @@ test("Library section labels are semantic and clean", async ({ page }) => {
   expect(libraryText).not.toContain("◇ РОЗДІЛ");
   expect(libraryText).not.toContain("◌ РОЗДІЛ");
 });
+
+
+test("Academy lessons have distinct relevant practices", async ({ page }) => {
+  await openApp(page);
+
+  await page.locator('[data-go="library"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Бібліотека знань");
+  await page.locator("#openAcademy").click();
+  await expect(page.locator("#app .top h1")).toHaveText("Академія");
+
+  const lessons = page.locator(".lesson");
+  await expect(lessons).toHaveCount(6);
+
+  const practices = await page.locator(".academy-practice").allTextContents();
+  expect(practices).toHaveLength(6);
+  expect(new Set(practices).size).toBe(6);
+
+  const expectedFragments = [
+    "що станеться",
+    "три конкретні деталі",
+    "ресурс",
+    "повторюваний мотив",
+    "Через три дні",
+    "профільного фахівця"
+  ];
+
+  expectedFragments.forEach((fragment, index) => {
+    expect(practices[index]).toContain(fragment);
+  });
+
+  for (let i = 0; i < 6; i++) {
+    await lessons.nth(i).locator(".text-btn").click();
+    await expect(lessons.nth(i).locator(".extra")).toHaveClass(/open/);
+    await expect(lessons.nth(i).locator(".academy-practice")).toBeVisible();
+  }
+});
