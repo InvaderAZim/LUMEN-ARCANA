@@ -237,3 +237,159 @@ test("Tarot themed draw renders five unique cards and saves journal entry", asyn
   expect(journal[0].cards).toHaveLength(5);
   expect(new Set(journal[0].cards.map(card => card.name)).size).toBe(5);
 });
+
+const NATAL_POSITIONS = {
+  Sun: 295.1,
+  Moon: 140.2,
+  Mercury: 280.3,
+  Venus: 310.4,
+  Mars: 100.5,
+  Jupiter: 70.6,
+  Saturn: 350.7,
+  Uranus: 50.8,
+  Neptune: 330.9,
+  Pluto: 300
+};
+
+async function installNatalMocks(page, calls) {
+  await page.route("**/api/natal/timezone", async route => {
+    const body = route.request().postDataJSON();
+    calls.timezone.push(body);
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        source: "tz-lookup+Intl",
+        timeZone: "Europe/Kyiv",
+        offsetHours: 2,
+        offsetMinutes: 120,
+        utc: "2000-01-15T10:30:00.000Z"
+      })
+    });
+  });
+
+  await page.route("**/api/natal/ephemeris", async route => {
+    const body = route.request().postDataJSON();
+    calls.ephemeris.push(body);
+
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        ok: true,
+        source: "astronomy-engine",
+        frame: "true-ecliptic-of-date",
+        utc: body.utc,
+        positions: NATAL_POSITIONS
+      })
+    });
+  });
+}
+
+async function buildNatalChart(page, calls) {
+  await page.locator('[data-go="natal"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
+
+  await page.locator("#xNDate").fill("2000-01-15");
+  await page.locator("#xNTime").fill("12:30");
+  await page.locator("#xNPlace").fill("Kyiv Test");
+  await page.locator("#xNLat").fill("50.4501");
+  await page.locator("#xNLon").fill("30.5234");
+  await page.locator("#xNHouseSystem").selectOption("equal");
+  await page.locator("#xNCalc").click();
+
+  await expect.poll(() => calls.timezone.length).toBe(1);
+  await expect.poll(() => calls.ephemeris.length).toBe(1);
+  await expect(page.locator("#xNatalWheel")).toBeVisible();
+  await expect(
+    page.getByText("Astronomy Engine · true ecliptic of date", { exact: false }).first()
+  ).toBeVisible();
+}
+
+test("Natal saves profile and renders precise 10-body ephemeris", async ({ page }) => {
+  const calls = { timezone: [], ephemeris: [] };
+  await installNatalMocks(page, calls);
+  await openApp(page);
+  await buildNatalChart(page, calls);
+
+  expect(calls.timezone[0]).toEqual({
+    date: "2000-01-15",
+    time: "12:30",
+    lat: 50.4501,
+    lon: 30.5234
+  });
+  expect(calls.ephemeris[0]).toEqual({
+    utc: "2000-01-15T10:30:00.000Z"
+  });
+
+  const profile = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("la_natal_profile") || "{}")
+  );
+
+  expect(profile).toMatchObject({
+    date: "2000-01-15",
+    time: "12:30",
+    place: "Kyiv Test",
+    lat: "50.4501",
+    lon: "30.5234",
+    houseSystem: "equal",
+    utcOffset: "2",
+    timezone: "Europe/Kyiv",
+    utcIso: "2000-01-15T10:30:00.000Z",
+    timezoneToken: "2000-01-15|12:30|50.4501|30.5234"
+  });
+
+  const exportData = await page.evaluate(() => window.LUMEN_NATAL_EXPORT_DATA);
+  expect(Object.keys(exportData.pos).sort()).toEqual(Object.keys(NATAL_POSITIONS).sort());
+  expect(exportData.pos).toEqual(NATAL_POSITIONS);
+
+  for (const planet of [
+    "СОНЦЕ",
+    "МІСЯЦЬ",
+    "МЕРКУРІЙ",
+    "ВЕНЕРА",
+    "МАРС",
+    "ЮПІТЕР",
+    "САТУРН",
+    "УРАН",
+    "НЕПТУН",
+    "ПЛУТОН"
+  ]) {
+    await expect(
+      page.locator(".settings-grid article small").filter({ hasText: planet })
+    ).toHaveCount(1);
+  }
+});
+
+test("Natal switches between LUMEN and Classic chart views", async ({ page }) => {
+  const calls = { timezone: [], ephemeris: [] };
+  await installNatalMocks(page, calls);
+  await openApp(page);
+  await buildNatalChart(page, calls);
+
+  await expect(page.locator("#xNatalLumen")).toHaveClass(/primary/);
+  await expect(page.locator("#xNatalWheel")).not.toHaveClass(/classic-natal-svg/);
+
+  await page.locator("#xNatalClassic").click();
+
+  await expect(page.locator("#xNatalClassic")).toHaveClass(/primary/);
+  await expect(page.locator(".classic-chart-shell")).toBeVisible();
+  await expect(page.locator(".classic-natal-table")).toBeVisible();
+  await expect(page.locator(".classic-aspect-matrix")).toBeVisible();
+  await expect(page.locator("#xNatalWheel")).toHaveClass(/classic-natal-svg/);
+  expect(
+    await page.evaluate(() => localStorage.getItem("la_natal_view"))
+  ).toBe("classic");
+
+  await page.locator("#xNatalLumen").click();
+
+  await expect(page.locator("#xNatalLumen")).toHaveClass(/primary/);
+  await expect(page.locator(".classic-chart-shell")).toHaveCount(0);
+  await expect(page.locator("#xNatalWheel")).not.toHaveClass(/classic-natal-svg/);
+  expect(
+    await page.evaluate(() => localStorage.getItem("la_natal_view"))
+  ).toBe("lumen");
+});
+
