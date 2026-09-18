@@ -735,8 +735,27 @@ test("Academy lessons have distinct relevant practices", async ({ page }) => {
   });
 
   for (let i = 0; i < 6; i++) {
-    await lessons.nth(i).locator(".text-btn").click();
-    await expect(lessons.nth(i).locator(".extra")).toHaveClass(/open/);
+    const button = lessons.nth(i).locator("[data-academy-practice]");
+    const panel = lessons.nth(i).locator(".extra");
+
+    await expect(button).not.toHaveAttribute("onclick");
+    await expect(button).toHaveAttribute("aria-expanded", "false");
+    const controls = await button.getAttribute("aria-controls");
+    expect(controls).toBeTruthy();
+    await expect(panel).toHaveAttribute("id", controls);
+    await expect(panel).toHaveAttribute("aria-hidden", "true");
+
+    await button.click();
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    await expect(panel).toHaveAttribute("aria-hidden", "false");
+    await expect(panel).toHaveClass(/open/);
     await expect(lessons.nth(i).locator(".academy-practice")).toBeVisible();
   }
+
+  const firstButton = lessons.first().locator("[data-academy-practice]");
+  const firstPanel = lessons.first().locator(".extra");
+  await firstButton.click();
+  await expect(firstButton).toHaveAttribute("aria-expanded", "false");
+  await expect(firstPanel).toHaveAttribute("aria-hidden", "true");
+  await expect(firstPanel).not.toHaveClass(/open/);
 });
