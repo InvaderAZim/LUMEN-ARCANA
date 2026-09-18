@@ -681,3 +681,26 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".settings-grid article")).toHaveCount(4);
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
 });
+
+
+test("Library section labels are semantic and clean", async ({ page }) => {
+  await openApp(page);
+
+  await page.locator('[data-go="library"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Бібліотека знань");
+
+  const labels = await page.locator(".library-section-label").allTextContents();
+  expect(labels).toEqual([
+    "ОСНОВИ",
+    "СТАРШІ АРКАНИ",
+    "ПИТАННЯ",
+    "РОЗКЛАДИ",
+    "СИМВОЛИ",
+    "БЕЗПЕКА"
+  ]);
+
+  const libraryText = await page.locator(".library-grid").innerText();
+  expect(libraryText).not.toContain("? РОЗДІЛ");
+  expect(libraryText).not.toContain("◇ РОЗДІЛ");
+  expect(libraryText).not.toContain("◌ РОЗДІЛ");
+});
