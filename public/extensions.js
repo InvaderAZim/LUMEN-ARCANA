@@ -170,7 +170,9 @@ function placidusCuspX(lst,lat,eps,fraction,direction){
 }
 function placidusHouseCuspsX(jd,lat,lon,asc,mc){
   if(!Number.isFinite(jd)||!Number.isFinite(lat)||!Number.isFinite(lon)||asc==null||mc==null)return null;
-  const eps=meanObliquityX(jd),lst=localSiderealX(jd,lon);
+  const eps=meanObliquityX(jd);
+  if(Math.abs(lat)>=90-eps)return null;
+  const lst=localSiderealX(jd,lon);
   const h11=placidusCuspX(lst,lat,eps,1/3,+1),h12=placidusCuspX(lst,lat,eps,2/3,+1),h9=placidusCuspX(lst,lat,eps,1/3,-1),h8=placidusCuspX(lst,lat,eps,2/3,-1);
   if([h8,h9,h11,h12].some(v=>v==null))return null;
   return[
