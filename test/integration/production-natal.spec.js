@@ -83,7 +83,7 @@ test("production browser reaches real Worker natal APIs and renders a real natal
     fallback: false
   });
 
-  const bodies = Object.values(data.positions || {});
+  const bodies = Object.values(data.pos || {});
   expect(bodies).toHaveLength(10);
   expect(bodies.every(value => Number.isFinite(Number(value)))).toBe(true);
 
