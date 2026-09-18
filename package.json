@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
-    "test": "node --test",
+    "test": "node --test test/worker.test.js",
     "test:ui": "playwright test"
   },
   "engines": {
