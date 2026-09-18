@@ -1085,13 +1085,15 @@ body:before{
 /* HOME QUICK ACTIONS v21 — icon beside text */
 .home-quick-grid button{
   display:grid!important;
-  grid-template-columns:auto minmax(0,1fr)!important;
+  grid-template-columns:30px minmax(0,1fr)!important;
   align-items:center!important;
   column-gap:11px!important;
 }
 .home-quick-grid b{
   display:block!important;
+  width:30px!important;
   margin:0!important;
+  text-align:center!important;
 }
 .home-quick-grid span{
   margin-top:0!important;
@@ -1099,7 +1101,11 @@ body:before{
 }
 @media(max-width:560px){
   .home-quick-grid button{
+    grid-template-columns:28px minmax(0,1fr)!important;
     column-gap:9px!important;
+  }
+  .home-quick-grid b{
+    width:28px!important;
   }
 }
 
