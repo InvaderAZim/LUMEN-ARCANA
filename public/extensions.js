@@ -1,12 +1,11 @@
+import { escapeHtml as escX, parseLocal as parseX, flashToast, pageShell } from './core.js?v=3.0.0-beta.1-a1';
 const tg=window.Telegram?.WebApp;
 const app=document.querySelector('#app');
 const nav=document.querySelector('#bottom-nav');
 const toast=document.querySelector('#toast');
 const HKEY='la_journal',FKEY='la_favorites',PKEY='la_profile_prefs',NKEY='la_natal_profile';
-const escX=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-const parseX=(k,f)=>{try{return JSON.parse(localStorage.getItem(k)||JSON.stringify(f))}catch{return f}};
-const flashX=t=>{if(!toast)return;toast.textContent=t;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1700)};
-const shellX=(title,sub,icon='☾')=>{app.innerHTML=`<main class="page"><header class="top"><div><div class="brandline">LUMEN ARCANA <span>BETA · PREMIUM</span></div><h1>${escX(title)}</h1>${sub?`<p>${escX(sub)}</p>`:''}</div><div class="seal">${icon}</div></header><div id="content"></div></main>`;return app.querySelector('#content')};
+const flashX=t=>flashToast(toast,t);
+const shellX=(title,sub,icon='☾')=>pageShell(app,title,sub,icon);
 function activeNav(route){nav?.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.r===route))}
 function uidX(){return crypto?.randomUUID?.()||`la_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,9)}`}
 function legacyHistoryIdX(x,i){return `${x?.createdAt||''}|${x?.title||''}|${x?.question||''}|${i}`}
