@@ -395,3 +395,56 @@ test("Natal switches between LUMEN and Classic chart views", async ({ page }) =>
   ).toBe("lumen");
 });
 
+test("Profile clear removes all local app data including sound keys", async ({ page }) => {
+  await openApp(page);
+
+  const seeded = {
+    la_journal: '[{"id":"smoke-history"}]',
+    la_favorites: '["smoke-history"]',
+    la_natal_profile: '{"date":"2000-01-15"}',
+    la_profile_prefs: '{"displayName":"Smoke User","density":"compact"}',
+    la_compatibility: '{"score":77}',
+    la_tarot_type: "three",
+    la_mode: "pro",
+    la_sound_enabled: "0",
+    la_sound_volume: "37"
+  };
+  const keys = Object.keys(seeded);
+
+  await page.evaluate(entries => {
+    for (const [key, value] of Object.entries(entries)) {
+      localStorage.setItem(key, value);
+    }
+  }, seeded);
+
+  await openProfile(page);
+
+  const before = await page.evaluate(storageKeys =>
+    Object.fromEntries(storageKeys.map(key => [key, localStorage.getItem(key)])),
+    keys
+  );
+  expect(before).toEqual(seeded);
+
+  let dialogMessage = "";
+  page.once("dialog", dialog => {
+    dialogMessage = dialog.message();
+    void dialog.accept();
+  });
+
+  await Promise.all([
+    page.waitForEvent("load"),
+    page.locator("#xClear").click()
+  ]);
+
+  expect(dialogMessage).toBe("Очистити локальні дані LUMEN ARCANA?");
+  await expect(page.locator("#app .top h1")).toBeVisible();
+
+  const after = await page.evaluate(storageKeys =>
+    Object.fromEntries(storageKeys.map(key => [key, localStorage.getItem(key)])),
+    keys
+  );
+
+  expect(after).toEqual(
+    Object.fromEntries(keys.map(key => [key, null]))
+  );
+});
