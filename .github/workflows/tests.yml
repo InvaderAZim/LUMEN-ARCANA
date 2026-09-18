@@ -77,3 +77,30 @@ jobs:
           LUMEN_SMOKE_DELAY_MS: "10000"
         run: node test/production-smoke.mjs
 
+  live_integration:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - test
+      - ui
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Run live browser Worker integration
+        env:
+          LUMEN_LIVE_URL: https://lumen-arcana.kraplenii.workers.dev
+        run: npx playwright test --config=playwright.integration.config.js
+
