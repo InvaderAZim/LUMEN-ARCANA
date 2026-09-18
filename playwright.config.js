@@ -17,8 +17,8 @@ export default defineConfig({
     trace: "retain-on-failure"
   },
   webServer: {
-    command: "npm run dev -- --port 8787",
-    url: "http://127.0.0.1:8787/api/health",
+    command: "python3 -m http.server 8787 --bind 127.0.0.1 --directory public",
+    url: "http://127.0.0.1:8787/",
     reuseExistingServer: !process.env.CI,
     timeout: 120_000
   }
