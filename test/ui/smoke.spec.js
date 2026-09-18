@@ -475,27 +475,35 @@ test("Home quick actions are compact on mobile", async ({ page }) => {
 });
 
 
-test("Home quick action icons sit beside text", async ({ page }) => {
+test("Home quick action icons sit beside text with aligned label starts", async ({ page }) => {
   await openApp(page);
 
-  const button = page.locator(".home-quick-grid button").first();
-  const layout = await button.evaluate(node => {
+  const buttons = page.locator(".home-quick-grid button");
+  await expect(buttons).toHaveCount(6);
+
+  const layouts = await buttons.evaluateAll(nodes => nodes.map(node => {
     const css = getComputedStyle(node);
+    const box = node.getBoundingClientRect();
     const icon = node.querySelector("b").getBoundingClientRect();
     const text = node.querySelector("span").getBoundingClientRect();
     return {
       display: css.display,
-      columns: css.gridTemplateColumns,
       iconCenterY: icon.top + icon.height / 2,
       textCenterY: text.top + text.height / 2,
       iconRight: icon.right,
-      textLeft: text.left
+      textLeft: text.left,
+      textOffset: text.left - box.left
     };
-  });
+  }));
 
-  expect(layout.display).toBe("grid");
-  expect(layout.textLeft).toBeGreaterThan(layout.iconRight);
-  expect(Math.abs(layout.iconCenterY - layout.textCenterY)).toBeLessThan(12);
+  for (const layout of layouts) {
+    expect(layout.display).toBe("grid");
+    expect(layout.textLeft).toBeGreaterThan(layout.iconRight);
+    expect(Math.abs(layout.iconCenterY - layout.textCenterY)).toBeLessThan(12);
+  }
+
+  const offsets = layouts.map(x => x.textOffset);
+  expect(Math.max(...offsets) - Math.min(...offsets)).toBeLessThan(1.5);
 });
 
 test("Corrupt localStorage does not break core app screens", async ({ page }) => {
@@ -515,4 +523,38 @@ test("Corrupt localStorage does not break core app screens", async ({ page }) =>
   await page.locator('[data-r="home"]').click();
   await page.locator('[data-go="compatibility"]').click();
   await expect(page.locator("#app .top h1")).toBeVisible();
+});
+
+
+test("Day card artwork is fully visible without cropping", async ({ page }) => {
+  await openApp(page);
+
+  const card = page.locator(".day-card .mini-card.day-card-art");
+  await expect(card).toBeVisible();
+
+  const image = card.locator("img");
+  await expect(image).toHaveCount(1);
+  await expect.poll(() =>
+    image.evaluate(node => node.complete && node.naturalWidth > 0 && node.naturalHeight > 0)
+  ).toBe(true);
+
+  const audit = await card.evaluate(node => {
+    const img = node.querySelector("img");
+    const cardCss = getComputedStyle(node);
+    const imageCss = getComputedStyle(img);
+    const rect = node.getBoundingClientRect();
+    return {
+      objectFit: imageCss.objectFit,
+      objectPosition: imageCss.objectPosition,
+      cardRatio: rect.width / rect.height,
+      naturalRatio: img.naturalWidth / img.naturalHeight,
+      overflow: cardCss.overflow
+    };
+  });
+
+  expect(audit.objectFit).toBe("contain");
+  expect(audit.objectPosition).toContain("50%");
+  expect(audit.overflow).toBe("hidden");
+  expect(Math.abs(audit.cardRatio - 0.58)).toBeLessThan(0.02);
+  expect(Math.abs(audit.cardRatio - audit.naturalRatio)).toBeLessThan(0.04);
 });
