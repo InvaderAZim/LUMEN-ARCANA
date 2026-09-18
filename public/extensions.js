@@ -336,8 +336,24 @@ function exportPngX(svgMarkup){
 function printClassicX(svgMarkup){
   if(!svgMarkup)return;
   document.querySelector('#xNatalPrintSheet')?.remove();document.querySelector('#xNatalPrintStyle')?.remove();
-  const sheet=document.createElement('div');sheet.id='xNatalPrintSheet';sheet.innerHTML=svgMarkup;
-  const style=document.createElement('style');style.id='xNatalPrintStyle';style.textContent='@media print{html,body{background:#fff!important;margin:0!important;padding:0!important}body>:not(#xNatalPrintSheet){display:none!important}#xNatalPrintSheet{display:block!important;width:100%!important;background:#fff!important}#xNatalPrintSheet svg{display:block!important;width:auto!important;height:283mm!important;max-width:196mm!important;max-height:283mm!important;margin:0 auto!important}@page{size:A4 portrait;margin:7mm}}';
+  const parsed=new DOMParser().parseFromString(svgMarkup,'image/svg+xml'),source=parsed.documentElement;
+  const W=Number(source.getAttribute('width'))||1400,H=Number(source.getAttribute('height'))||2360;
+  const matrixTitle=[...source.querySelectorAll('text')].find(n=>n.textContent?.trim()==='Матриця аспектів');
+  const matrixY=Number(matrixTitle?.getAttribute('y'));
+  const splitY=Number.isFinite(matrixY)&&matrixY>400&&matrixY<H-200?Math.max(0,matrixY-46):Math.round(H*.68);
+  const pageSvg=(y,h,label)=>{
+    const node=source.cloneNode(true);
+    node.setAttribute('width',String(W));node.setAttribute('height',String(h));
+    node.setAttribute('viewBox',`0 ${y} ${W} ${h}`);
+    node.setAttribute('preserveAspectRatio','xMidYMin meet');
+    node.setAttribute('aria-label',label);
+    return new XMLSerializer().serializeToString(node)
+  };
+  const first=pageSvg(0,splitY,'Classic Natal Chart · колесо та положення');
+  const second=pageSvg(splitY,Math.max(1,H-splitY),'Classic Natal Chart · матриця аспектів');
+  const sheet=document.createElement('div');sheet.id='xNatalPrintSheet';
+  sheet.innerHTML=`<section class="x-natal-print-page">${first}</section><section class="x-natal-print-page">${second}</section>`;
+  const style=document.createElement('style');style.id='xNatalPrintStyle';style.textContent='@media print{html,body{background:#fff!important;margin:0!important;padding:0!important}body>:not(#xNatalPrintSheet){display:none!important}#xNatalPrintSheet{display:block!important;width:100%!important;background:#fff!important}.x-natal-print-page{box-sizing:border-box;width:100%!important;min-height:283mm!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;break-after:page!important;page-break-after:always!important;background:#fff!important}.x-natal-print-page:last-child{break-after:auto!important;page-break-after:auto!important}.x-natal-print-page svg{display:block!important;width:196mm!important;height:auto!important;max-width:196mm!important;max-height:269mm!important;margin:0 auto!important}@page{size:A4 portrait;margin:7mm}}';
   document.body.append(style,sheet);
   const cleanup=()=>{sheet.remove();style.remove()};
   window.addEventListener('afterprint',cleanup,{once:true});
