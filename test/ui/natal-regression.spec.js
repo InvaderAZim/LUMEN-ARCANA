@@ -244,13 +244,6 @@ test("Placidus falls back to Equal House when the reference system is undefined 
   });
 
   // Swiss Ephemeris reports Placidus houses as undefined for this benchmark.
-  // Current LUMEN still returns a Placidus set here, so preserve the failing
-  // expectation as an explicit fixme instead of weakening the reference.
-  test.fixme(
-    data.houseMeta.used !== "equal" || data.houseMeta.fallback !== true,
-    "Current solver accepts polar Placidus cusps where the reference engine reports undefined."
-  );
-
   expect(data.houseMeta).toMatchObject({
     requested: "placidus",
     used: "equal",
