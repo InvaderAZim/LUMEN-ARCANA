@@ -543,12 +543,19 @@ test("Day card artwork is fully visible without cropping", async ({ page }) => {
     const cardCss = getComputedStyle(node);
     const imageCss = getComputedStyle(img);
     const rect = node.getBoundingClientRect();
+    const host = node.closest(".day-card");
+    const hostCss = getComputedStyle(host);
     return {
       objectFit: imageCss.objectFit,
       objectPosition: imageCss.objectPosition,
       cardRatio: rect.width / rect.height,
       naturalRatio: img.naturalWidth / img.naturalHeight,
-      overflow: cardCss.overflow
+      overflow: cardCss.overflow,
+      enhanced: host.classList.contains("day-card-enhanced"),
+      hostDisplay: hostCss.display,
+      hasOverlayLabel: !!node.querySelector(".day-card-art-label"),
+      rightEdge: rect.right,
+      viewportWidth: window.innerWidth
     };
   });
 
@@ -557,4 +564,30 @@ test("Day card artwork is fully visible without cropping", async ({ page }) => {
   expect(audit.overflow).toBe("hidden");
   expect(audit.naturalRatio).toBeGreaterThan(0);
   expect(Math.abs(audit.cardRatio - 0.58)).toBeLessThan(0.02);
+  expect(audit.enhanced).toBe(true);
+  expect(audit.hostDisplay).toBe("grid");
+  expect(audit.hasOverlayLabel).toBe(false);
+  expect(audit.rightEdge).toBeLessThanOrEqual(audit.viewportWidth);
+});
+
+
+test("Optional module failure does not block app startup", async ({ page }) => {
+  await page.route("**/background.js*", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: 'throw new Error("optional-module-smoke")'
+    })
+  );
+
+  await openApp(page);
+  await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
+
+  const status = await page.evaluate(() => structuredClone(window.LUMEN_BOOT_STATUS));
+  expect(status.ok).toBe(false);
+  expect(status.failed).toContain("background");
+
+  await expect(page.locator(".home-quick-grid button")).toHaveCount(6);
+  await expect(page.locator(".day-card")).toBeVisible();
+  await expect(page.locator("#bottom-nav")).toBeVisible();
 });
