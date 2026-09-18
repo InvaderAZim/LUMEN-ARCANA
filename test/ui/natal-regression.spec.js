@@ -255,3 +255,28 @@ test("Placidus falls back to Equal House when the reference system is undefined 
   const expectedCusps = Array.from({ length: 12 }, (_, i) => (asc + i * 30) % 360);
   expectCusps(data.houseMeta.cusps, expectedCusps, 1e-7);
 });
+
+
+test("Natal shows an explicit message for an ambiguous DST local time", async ({ page }) => {
+  await page.route("**/api/natal/timezone", async route => {
+    await route.fulfill({
+      status: 400,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "local_time_ambiguous" })
+    });
+  });
+  await openApp(page);
+
+  await page.locator('[data-go="natal"]').click();
+  await page.locator("#xNDate").fill("2026-10-25");
+  await page.locator("#xNTime").fill("03:30");
+  await page.locator("#xNPlace").fill("Kyiv DST overlap");
+  await page.locator("#xNLat").fill("50.4501");
+  await page.locator("#xNLon").fill("30.5234");
+  await page.locator("#xNHouseSystem").selectOption("equal");
+  await page.locator("#xNCalc").click();
+
+  await expect(page.locator("#toast")).toContainText(
+    "Цей місцевий час повторюється через переведення годинника"
+  );
+});
