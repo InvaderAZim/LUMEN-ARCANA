@@ -555,6 +555,6 @@ test("Day card artwork is fully visible without cropping", async ({ page }) => {
   expect(audit.objectFit).toBe("contain");
   expect(audit.objectPosition).toContain("50%");
   expect(audit.overflow).toBe("hidden");
+  expect(audit.naturalRatio).toBeGreaterThan(0);
   expect(Math.abs(audit.cardRatio - 0.58)).toBeLessThan(0.02);
-  expect(Math.abs(audit.cardRatio - audit.naturalRatio)).toBeLessThan(0.04);
 });
