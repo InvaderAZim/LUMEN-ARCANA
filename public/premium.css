@@ -1082,3 +1082,24 @@ body:before{
   }
 }
 
+/* HOME QUICK ACTIONS v21 — icon beside text */
+.home-quick-grid button{
+  display:grid!important;
+  grid-template-columns:auto minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:11px!important;
+}
+.home-quick-grid b{
+  display:block!important;
+  margin:0!important;
+}
+.home-quick-grid span{
+  margin-top:0!important;
+  min-width:0!important;
+}
+@media(max-width:560px){
+  .home-quick-grid button{
+    column-gap:9px!important;
+  }
+}
+
