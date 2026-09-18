@@ -32,8 +32,11 @@ async function openApp(page) {
   await page.waitForFunction(() => typeof window.LUMEN_EXT_ROUTES?.natal === "function");
 }
 
-async function installNatalMocks(page) {
+async function installNatalMocks(page, calls) {
   await page.route("**/api/natal/timezone", async route => {
+    const body = route.request().postDataJSON();
+    calls.timezone.push(body);
+
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -50,6 +53,7 @@ async function installNatalMocks(page) {
 
   await page.route("**/api/natal/ephemeris", async route => {
     const body = route.request().postDataJSON();
+    calls.ephemeris.push(body);
     await route.fulfill({
       status: 200,
       contentType: "application/json",
@@ -64,8 +68,8 @@ async function installNatalMocks(page) {
   });
 }
 
-async function buildClassicNatal(page) {
-  await installNatalMocks(page);
+async function buildClassicNatal(page, calls) {
+  await installNatalMocks(page, calls);
   await openApp(page);
 
   await page.locator('[data-go="natal"]').click();
@@ -79,6 +83,8 @@ async function buildClassicNatal(page) {
   await page.locator("#xNHouseSystem").selectOption("equal");
   await page.locator("#xNCalc").click();
 
+  await expect.poll(() => calls.timezone.length).toBe(1);
+  await expect.poll(() => calls.ephemeris.length).toBe(1);
   await page.waitForFunction(() =>
     window.LUMEN_NATAL_EXPORT_DATA?.engineLabel?.startsWith("Astronomy Engine")
   );
@@ -92,7 +98,8 @@ async function buildClassicNatal(page) {
 }
 
 test("Classic Natal PNG exports a real PNG file", async ({ page }) => {
-  await buildClassicNatal(page);
+  const calls = { timezone: [], ephemeris: [] };
+  await buildClassicNatal(page, calls);
 
   const downloadPromise = page.waitForEvent("download");
   await page.locator("#xPng").click();
@@ -110,10 +117,19 @@ test("Classic Natal PNG exports a real PNG file", async ({ page }) => {
 
   expect(png.length).toBeGreaterThan(10_000);
   expect([...png.subarray(0, 8)]).toEqual([137, 80, 78, 71, 13, 10, 26, 10]);
+
+  const width = png.readUInt32BE(16);
+  const height = png.readUInt32BE(20);
+  expect(width).toBe(1400);
+  expect(height).toBeGreaterThan(2200);
+
+  expect(calls.timezone).toHaveLength(1);
+  expect(calls.ephemeris).toHaveLength(1);
 });
 
 test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only content", async ({ page }) => {
-  await buildClassicNatal(page);
+  const calls = { timezone: [], ephemeris: [] };
+  await buildClassicNatal(page, calls);
 
   await page.evaluate(() => {
     window.__lumenPrintCalls = 0;
@@ -154,6 +170,10 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
       secondMatrixY: textY(secondSvg, "Матриця аспектів"),
       sheetContainsApp: !!sheet?.querySelector("#app"),
       sheetContainsNav: !!sheet?.querySelector("#bottom-nav"),
+      firstHasWhiteBackground:
+        [...(firstSvg?.querySelectorAll("rect") || [])].some(
+          rect => rect.getAttribute("fill") === "#fff"
+        ),
       styleText: style?.textContent || ""
     };
   });
@@ -180,6 +200,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
 
   expect(printState.sheetContainsApp).toBe(false);
   expect(printState.sheetContainsNav).toBe(false);
+  expect(printState.firstHasWhiteBackground).toBe(true);
   expect(printState.styleText).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
   expect(printState.styleText).toContain("@page{size:A4 portrait;margin:7mm}");
   expect(printState.styleText).toContain("page-break-after:always");
