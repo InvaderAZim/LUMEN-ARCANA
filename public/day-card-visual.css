@@ -1,8 +1,8 @@
-.day-card .mini-card.day-card-art{position:relative;width:112px;height:auto;aspect-ratio:.58;padding:0;overflow:hidden;flex:0 0 auto;border:1px solid #e5c87d66;background:linear-gradient(160deg,#171b24,#0c0e13);box-shadow:0 16px 34px #0008,0 0 28px #2b6cff18}
+.day-card .mini-card.day-card-art{position:relative;width:112px!important;height:auto!important;aspect-ratio:.58!important;padding:0!important;overflow:hidden;flex:0 0 auto;border:1px solid #e5c87d66;background:linear-gradient(160deg,#171b24,#0c0e13);box-shadow:0 16px 34px #0008,0 0 28px #2b6cff18}
 .day-card .mini-card.day-card-art img{width:100%;height:100%;display:block;object-fit:contain;object-position:center;opacity:0;transform:none;transition:opacity .24s ease}
 .day-card .mini-card.day-card-art.is-loaded img{opacity:1;transform:scale(1)}
 .day-card .day-card-art-label{position:absolute;top:7px;left:50%;transform:translateX(-50%);z-index:2;padding:4px 8px;border-radius:999px;background:#080808c9;border:1px solid #e5c87d66;color:#f2d47d;font-size:.58rem;letter-spacing:.13em;font-weight:900;backdrop-filter:blur(7px)}
 .day-card .day-card-art-fallback{position:absolute;inset:0;display:grid;place-items:center;font-size:2rem;color:#e5c87d;background:radial-gradient(circle at 50% 40%,#173d751f,transparent 52%)}
 .day-card .mini-card.day-card-art.is-loaded .day-card-art-fallback{display:none}
 .day-card .mini-card.day-card-art.is-fallback .day-card-art-fallback{display:grid}
-@media(max-width:480px){.day-card .mini-card.day-card-art{width:86px;height:auto;aspect-ratio:.58;border-radius:13px}.day-card .day-card-art-label{top:5px;font-size:.52rem;padding:3px 6px}}
+@media(max-width:480px){.day-card .mini-card.day-card-art{width:86px!important;height:auto!important;aspect-ratio:.58!important;border-radius:13px}.day-card .day-card-art-label{top:5px;font-size:.52rem;padding:3px 6px}}
