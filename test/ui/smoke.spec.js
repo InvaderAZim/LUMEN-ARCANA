@@ -543,13 +543,18 @@ test("Day card artwork is fully visible without cropping", async ({ page }) => {
     const cardCss = getComputedStyle(node);
     const imageCss = getComputedStyle(img);
     const rect = node.getBoundingClientRect();
+    const imgRect = img.getBoundingClientRect();
     const host = node.closest(".day-card");
     const hostCss = getComputedStyle(host);
     return {
       objectFit: imageCss.objectFit,
       objectPosition: imageCss.objectPosition,
-      cardRatio: rect.width / rect.height,
       naturalRatio: img.naturalWidth / img.naturalHeight,
+      renderedRatio: imgRect.width / imgRect.height,
+      frameWidthDelta: rect.width - imgRect.width,
+      frameHeightDelta: rect.height - imgRect.height,
+      borderWidth: parseFloat(cardCss.borderLeftWidth) || 0,
+      borderRadius: cardCss.borderRadius,
       overflow: cardCss.overflow,
       enhanced: host.classList.contains("day-card-enhanced"),
       hostDisplay: hostCss.display,
@@ -563,7 +568,10 @@ test("Day card artwork is fully visible without cropping", async ({ page }) => {
   expect(audit.objectPosition).toContain("50%");
   expect(audit.overflow).toBe("hidden");
   expect(audit.naturalRatio).toBeGreaterThan(0);
-  expect(Math.abs(audit.cardRatio - 0.58)).toBeLessThan(0.02);
+  expect(Math.abs(audit.renderedRatio - audit.naturalRatio)).toBeLessThan(0.01);
+  expect(Math.abs(audit.frameWidthDelta - audit.borderWidth * 2)).toBeLessThan(1.5);
+  expect(Math.abs(audit.frameHeightDelta - audit.borderWidth * 2)).toBeLessThan(1.5);
+  expect(audit.borderRadius).toBe("6px");
   expect(audit.enhanced).toBe(true);
   expect(audit.hostDisplay).toBe("grid");
   expect(audit.hasOverlayLabel).toBe(false);
@@ -639,4 +647,37 @@ test("Shared core helpers escape, parse, toast and shell safely", async ({ page 
   expect(audit.contentIsReturned).toBe(true);
   expect(audit.toastText).toBe("Core toast");
   expect(audit.toastShown).toBe(true);
+});
+
+
+test("Moon falls back when extensions module fails", async ({ page }) => {
+  await page.route("https://telegram.org/js/telegram-web-app.js", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: ""
+    })
+  );
+
+  await page.route("**/extensions.js*", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: 'throw new Error("extensions-fallback-smoke")'
+    })
+  );
+
+  await page.goto("/");
+  await expect(page.locator("#app .top h1")).toBeVisible();
+  await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
+
+  const status = await page.evaluate(() => structuredClone(window.LUMEN_BOOT_STATUS));
+  expect(status.ok).toBe(false);
+  expect(status.failed).toContain("extensions");
+
+  await page.locator('[data-go="moon"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Місячний календар");
+  await expect(page.locator(".badge")).toContainText("LUNAR · FALLBACK");
+  await expect(page.locator(".settings-grid article")).toHaveCount(4);
+  await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
 });
