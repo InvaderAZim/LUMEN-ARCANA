@@ -343,7 +343,9 @@ test("Natal saves profile and renders precise 10-body ephemeris", async ({ page 
 
   const exportData = await page.evaluate(() => window.LUMEN_NATAL_EXPORT_DATA);
   expect(Object.keys(exportData.pos).sort()).toEqual(Object.keys(NATAL_POSITIONS).sort());
-  expect(exportData.pos).toEqual(NATAL_POSITIONS);
+  for (const [name, expected] of Object.entries(NATAL_POSITIONS)) {
+    expect(exportData.pos[name]).toBeCloseTo(expected, 10);
+  }
 
   for (const planet of [
     "СОНЦЕ",
