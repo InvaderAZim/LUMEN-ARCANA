@@ -182,4 +182,11 @@ test("natal timezone rejects a nonexistent Kyiv local time during the spring DST
   assert.deepEqual(await r.json(), { error: "local_time_ambiguous_or_invalid" });
 });
 
-test.todo("natal timezone must explicitly disambiguate the repeated 03:30 local time in Kyiv during the autumn DST overlap");
+test("natal timezone rejects the repeated Kyiv local time during the autumn DST overlap", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/natal/timezone", {
+    method: "POST",
+    body: JSON.stringify({ date: "2026-10-25", time: "03:30", lat: 50.4501, lon: 30.5234 })
+  }), env);
+  assert.equal(r.status, 400);
+  assert.deepEqual(await r.json(), { error: "local_time_ambiguous" });
+});
