@@ -2,11 +2,11 @@
   const NAV_BASE_VOLUME=0.58;
   const BUTTON_BASE_VOLUME=0.52;
 
-  const navSound=new Audio('/nav-menu-sound.mp3?v=20260917nav62');
+  const navSound=new Audio('/nav-menu-sound.mp3?v=3.0.0-beta.1-a1');
   navSound.preload='auto';
   navSound.playsInline=true;
 
-  const buttonSound=new Audio('/button-sound.mp3?v=20260917btn63');
+  const buttonSound=new Audio('/button-sound.mp3?v=3.0.0-beta.1-a1');
   buttonSound.preload='auto';
   buttonSound.playsInline=true;
 
