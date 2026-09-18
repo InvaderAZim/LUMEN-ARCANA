@@ -53,3 +53,27 @@ jobs:
 
       - name: Run UI smoke tests
         run: npm run test:ui
+
+  production_smoke:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - test
+      - ui
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Verify production DST overlap handling
+        env:
+          LUMEN_PRODUCTION_URL: https://lumen-arcana.kraplenii.workers.dev
+          LUMEN_SMOKE_ATTEMPTS: "18"
+          LUMEN_SMOKE_DELAY_MS: "10000"
+        run: node test/production-smoke.mjs
+
