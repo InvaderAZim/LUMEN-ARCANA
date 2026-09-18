@@ -407,7 +407,9 @@ test("Profile clear removes all local app data including sound keys", async ({ p
     la_tarot_type: "three",
     la_mode: "pro",
     la_sound_enabled: "0",
-    la_sound_volume: "37"
+    la_sound_volume: "37",
+    la_natal_view: "classic",
+    la_personalization_enabled: "1"
   };
   const keys = Object.keys(seeded);
 
@@ -447,4 +449,27 @@ test("Profile clear removes all local app data including sound keys", async ({ p
   expect(after).toEqual(
     Object.fromEntries(keys.map(key => [key, null]))
   );
+});
+
+
+test("Home quick actions are compact on mobile", async ({ page }) => {
+  await openApp(page);
+
+  const buttons = page.locator(".home-quick-grid button");
+  await expect(buttons).toHaveCount(6);
+
+  const style = await buttons.first().evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      minHeight: css.minHeight,
+      paddingTop: css.paddingTop,
+      paddingRight: css.paddingRight,
+      borderRadius: css.borderRadius
+    };
+  });
+
+  expect(style.minHeight).toBe("88px");
+  expect(style.paddingTop).toBe("12px");
+  expect(style.paddingRight).toBe("13px");
+  expect(style.borderRadius).toBe("17px");
 });
