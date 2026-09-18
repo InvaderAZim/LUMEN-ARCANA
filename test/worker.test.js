@@ -139,3 +139,47 @@ test("static request is delegated to Cloudflare assets", async () => {
   assert.equal(r.status, 200);
   assert.equal(await r.text(), "asset-ok");
 });
+
+
+test("natal timezone resolves offsets on both sides of Kyiv DST transitions", async () => {
+  const beforeSpring = await worker.fetch(new Request("https://example.workers.dev/api/natal/timezone", {
+    method: "POST",
+    body: JSON.stringify({ date: "2026-03-29", time: "02:30", lat: 50.4501, lon: 30.5234 })
+  }), env);
+  assert.equal(beforeSpring.status, 200);
+  const a = await beforeSpring.json();
+  assert.equal(a.timeZone, "Europe/Kyiv");
+  assert.equal(a.offsetHours, 2);
+  assert.equal(a.utc, "2026-03-29T00:30:00.000Z");
+
+  const afterSpring = await worker.fetch(new Request("https://example.workers.dev/api/natal/timezone", {
+    method: "POST",
+    body: JSON.stringify({ date: "2026-03-29", time: "04:30", lat: 50.4501, lon: 30.5234 })
+  }), env);
+  assert.equal(afterSpring.status, 200);
+  const b = await afterSpring.json();
+  assert.equal(b.timeZone, "Europe/Kyiv");
+  assert.equal(b.offsetHours, 3);
+  assert.equal(b.utc, "2026-03-29T01:30:00.000Z");
+
+  const afterAutumn = await worker.fetch(new Request("https://example.workers.dev/api/natal/timezone", {
+    method: "POST",
+    body: JSON.stringify({ date: "2026-10-25", time: "04:30", lat: 50.4501, lon: 30.5234 })
+  }), env);
+  assert.equal(afterAutumn.status, 200);
+  const c = await afterAutumn.json();
+  assert.equal(c.timeZone, "Europe/Kyiv");
+  assert.equal(c.offsetHours, 2);
+  assert.equal(c.utc, "2026-10-25T02:30:00.000Z");
+});
+
+test("natal timezone rejects a nonexistent Kyiv local time during the spring DST gap", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/natal/timezone", {
+    method: "POST",
+    body: JSON.stringify({ date: "2026-03-29", time: "03:30", lat: 50.4501, lon: 30.5234 })
+  }), env);
+  assert.equal(r.status, 400);
+  assert.deepEqual(await r.json(), { error: "local_time_ambiguous_or_invalid" });
+});
+
+test.todo("natal timezone must explicitly disambiguate the repeated 03:30 local time in Kyiv during the autumn DST overlap");
