@@ -1,3 +1,4 @@
+import { escapeHtml as esc, parseLocal as safeParseLocal, flashToast, pageShell } from './core.js?v=3.0.0-beta.1-a1';
 const tg=window.Telegram?.WebApp;
 tg?.ready?.();
 
@@ -130,10 +131,8 @@ function tarotRuntimeState(){
 }
 window.LUMEN_TAROT_STATE=tarotRuntimeState;
 function tarotCardBySeed(seed){const deck=window.LUMEN_TAROT78;return Array.isArray(deck)&&deck.length?deck[Math.abs(Number(seed)||0)%deck.length]:null}
-const esc=s=>String(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-function safeParseLocal(key,fallback){try{const raw=localStorage.getItem(key);return raw==null?fallback:JSON.parse(raw)}catch{return fallback}}
-function flash(x){toast.textContent=x;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1700)}
-function shell(title,sub=''){app.innerHTML=`<main class="page"><header class="top"><div><div class="brandline">LUMEN ARCANA <span>BETA · PREMIUM</span></div><h1>${esc(title)}</h1>${sub?`<p>${esc(sub)}</p>`:''}</div><div class="seal">${lumenEmblemMarkup('seal-emblem')}</div></header><div id="content"></div></main>`;return document.querySelector('#content')}
+const flash=x=>flashToast(toast,x);
+const shell=(title,sub='')=>pageShell(app,title,sub,lumenEmblemMarkup('seal-emblem'));
 function navigate(route){state.route=route;state.result=null;const enhanced=window.LUMEN_EXT_ROUTES?.[route];if(typeof enhanced==='function'){setNav();enhanced();requestAnimationFrame(decorateLumen);return}render()}
 window.LUMEN_NAVIGATE=navigate;
 function setNav(){const items=[['home','◉','Сьогодні'],['reading','✦','Розклад'],['library','▤','Бібліотека'],['deck','▦','Колода'],['journal','✎','Щоденник'],['profile','☾','Профіль']];nav.hidden=false;nav.innerHTML=items.map(([r,i,l])=>`<button class="nav-btn ${state.route===r?'active':''}" data-r="${r}"><b>${i}</b><span>${l}</span></button>`).join('');nav.querySelectorAll('[data-r]').forEach(b=>b.onclick=()=>navigate(b.dataset.r))}
