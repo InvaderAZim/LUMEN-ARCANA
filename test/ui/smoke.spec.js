@@ -591,3 +591,52 @@ test("Optional module failure does not block app startup", async ({ page }) => {
   await expect(page.locator(".day-card").first()).toBeVisible();
   await expect(page.locator("#bottom-nav")).toBeVisible();
 });
+
+
+test("Shared core helpers escape, parse, toast and shell safely", async ({ page }) => {
+  await openApp(page);
+
+  const audit = await page.evaluate(async () => {
+    const core = await import("/core.js?v=3.0.0-beta.1-a1");
+
+    localStorage.setItem("core_bad_json", "{");
+    localStorage.setItem("core_good_json", JSON.stringify({ ok: 1 }));
+
+    const host = document.createElement("div");
+    const content = core.pageShell(
+      host,
+      "<Unsafe title>",
+      'Sub & "quote"',
+      "<b>SEAL</b>"
+    );
+
+    const toast = document.createElement("div");
+    core.flashToast(toast, "Core toast", 5000);
+
+    const result = {
+      escaped: core.escapeHtml('<>&"\''),
+      bad: core.parseLocal("core_bad_json", { fallback: true }),
+      good: core.parseLocal("core_good_json", {}),
+      title: host.querySelector("h1")?.textContent,
+      sub: host.querySelector(".top p")?.textContent,
+      sealHtml: host.querySelector(".seal")?.innerHTML,
+      contentIsReturned: content === host.querySelector("#content"),
+      toastText: toast.textContent,
+      toastShown: toast.classList.contains("show")
+    };
+
+    localStorage.removeItem("core_bad_json");
+    localStorage.removeItem("core_good_json");
+    return result;
+  });
+
+  expect(audit.escaped).toBe("&lt;&gt;&amp;&quot;&#39;");
+  expect(audit.bad).toEqual({ fallback: true });
+  expect(audit.good).toEqual({ ok: 1 });
+  expect(audit.title).toBe("<Unsafe title>");
+  expect(audit.sub).toBe('Sub & "quote"');
+  expect(audit.sealHtml).toBe("<b>SEAL</b>");
+  expect(audit.contentIsReturned).toBe(true);
+  expect(audit.toastText).toBe("Core toast");
+  expect(audit.toastShown).toBe(true);
+});
