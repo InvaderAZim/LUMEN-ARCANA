@@ -588,6 +588,6 @@ test("Optional module failure does not block app startup", async ({ page }) => {
   expect(status.failed).toContain("background");
 
   await expect(page.locator(".home-quick-grid button")).toHaveCount(6);
-  await expect(page.locator(".day-card")).toBeVisible();
+  await expect(page.locator(".day-card").first()).toBeVisible();
   await expect(page.locator("#bottom-nav")).toBeVisible();
 });
