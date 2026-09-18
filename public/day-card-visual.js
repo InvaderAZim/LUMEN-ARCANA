@@ -21,8 +21,10 @@ function decorateDayCard(){
     const mini=card.querySelector('.mini-card');
     if(!tarot?.image||!mini)continue;
     const safeName=String(tarot.name||'Карта дня').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+    card.classList.add('day-card-enhanced');
     mini.classList.add('day-card-art');
-    mini.innerHTML=`<img src="${tarot.image}" alt="${safeName}" decoding="async" loading="eager"><span class="day-card-art-label">DAY</span><b class="day-card-art-fallback" aria-hidden="true">✦</b>`;
+    mini.setAttribute('aria-label',safeName);
+    mini.innerHTML=`<img src="${tarot.image}" alt="${safeName}" decoding="async" loading="eager"><b class="day-card-art-fallback" aria-hidden="true">✦</b>`;
     const img=mini.querySelector('img');
     img.addEventListener('load',()=>mini.classList.add('is-loaded'),{once:true});
     img.addEventListener('error',()=>{img.remove();mini.classList.add('is-fallback')},{once:true});
