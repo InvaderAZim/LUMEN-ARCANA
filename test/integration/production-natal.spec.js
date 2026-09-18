@@ -40,11 +40,20 @@ test("production browser reaches real Worker natal APIs and renders a real natal
     });
     const timezone = await timezoneResponse.json();
 
+    const ephemerisResponse = await fetch("/api/natal/ephemeris", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ utc: timezone.utc })
+    });
+    const ephemeris = await ephemerisResponse.json();
+
     return {
       healthStatus: healthResponse.status,
       health,
       timezoneStatus: timezoneResponse.status,
-      timezone
+      timezone,
+      ephemerisStatus: ephemerisResponse.status,
+      ephemeris
     };
   });
 
@@ -56,6 +65,16 @@ test("production browser reaches real Worker natal APIs and renders a real natal
     timeZone: "Europe/Kyiv",
     utc: "2000-01-15T10:30:00.000Z"
   });
+  expect(sameOrigin.ephemerisStatus).toBe(200);
+  expect(sameOrigin.ephemeris).toMatchObject({
+    ok: true,
+    source: "astronomy-engine",
+    frame: "true-ecliptic-of-date",
+    utc: "2000-01-15T10:30:00.000Z"
+  });
+  const livePositions = Object.values(sameOrigin.ephemeris.positions || {});
+  expect(livePositions).toHaveLength(10);
+  expect(livePositions.every(value => Number.isFinite(Number(value)))).toBe(true);
 
   await page.locator('[data-go="natal"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
@@ -88,10 +107,7 @@ test("production browser reaches real Worker natal APIs and renders a real natal
   expect(bodies.every(value => Number.isFinite(Number(value)))).toBe(true);
 
   const timezoneCalls = apiResponses.filter(x => x.url.includes("/api/natal/timezone"));
-  const ephemerisCalls = apiResponses.filter(x => x.url.includes("/api/natal/ephemeris"));
-
   expect(timezoneCalls.some(x => x.status === 200)).toBe(true);
-  expect(ephemerisCalls.some(x => x.status === 200)).toBe(true);
 
   await expect(page.locator("#xNatalWheel")).toBeVisible();
 });
