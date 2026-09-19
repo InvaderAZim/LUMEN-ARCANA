@@ -777,7 +777,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a3") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a4") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -982,4 +982,84 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
   expect(haloCss.paintOrder).toContain("stroke");
   expect(haloCss.stroke).not.toBe("none");
   expect(["3px","4px","5px"]).toContain(haloCss.strokeWidth);
+});
+
+
+test("Tarot and sound settings have no inline style attributes", async ({ page }) => {
+  await openApp(page);
+
+  const sourceAudit = await page.evaluate(async () => {
+    const [tarotSource, soundSource] = await Promise.all([
+      fetch("/tarot78.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text()),
+      fetch("/sound-settings.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text())
+    ]);
+    return {
+      tarotHasInlineStyle: /\sstyle\s*=\s*["']/i.test(tarotSource),
+      soundHasInlineStyle: /\sstyle\s*=\s*["']/i.test(soundSource),
+      tarotHasHiddenClass: tarotSource.includes("tarot-art-fallback-hidden"),
+      tarotHasMarginClass: tarotSource.includes("classic-deck lumen-mt-14"),
+      soundHasToggleRow: soundSource.includes("sound-toggle-row"),
+      soundHasToggleControl: soundSource.includes("sound-toggle-control"),
+      soundHasVolumeBlock: soundSource.includes("sound-volume-block"),
+      soundHasVolumeHead: soundSource.includes("sound-volume-head"),
+      soundHasVolumeRange: soundSource.includes("sound-volume-range")
+    };
+  });
+
+  expect(sourceAudit.tarotHasInlineStyle).toBe(false);
+  expect(sourceAudit.soundHasInlineStyle).toBe(false);
+  expect(sourceAudit.tarotHasHiddenClass).toBe(true);
+  expect(sourceAudit.tarotHasMarginClass).toBe(true);
+  expect(sourceAudit.soundHasToggleRow).toBe(true);
+  expect(sourceAudit.soundHasToggleControl).toBe(true);
+  expect(sourceAudit.soundHasVolumeBlock).toBe(true);
+  expect(sourceAudit.soundHasVolumeHead).toBe(true);
+  expect(sourceAudit.soundHasVolumeRange).toBe(true);
+
+  await openProfile(page);
+
+  const soundAudit = await page.evaluate(() => {
+    const row = document.querySelector(".sound-toggle-row");
+    const toggle = document.querySelector(".sound-toggle-control");
+    const block = document.querySelector(".sound-volume-block");
+    const head = document.querySelector(".sound-volume-head");
+    const range = document.querySelector(".sound-volume-range");
+
+    const rowCss = getComputedStyle(row);
+    const toggleCss = getComputedStyle(toggle);
+    const blockCss = getComputedStyle(block);
+    const headCss = getComputedStyle(head);
+    const rangeCss = getComputedStyle(range);
+
+    return {
+      styleAttrs: [row,toggle,block,head,range].map(node => node?.getAttribute("style")),
+      rowDisplay: rowCss.display,
+      rowGap: rowCss.gap,
+      rowMarginTop: rowCss.marginTop,
+      rowCursor: rowCss.cursor,
+      toggleWidth: toggleCss.width,
+      toggleHeight: toggleCss.height,
+      blockMarginTop: blockCss.marginTop,
+      headDisplay: headCss.display,
+      headGap: headCss.gap,
+      rangeWidth: rangeCss.width,
+      rangeMarginTop: rangeCss.marginTop
+    };
+  });
+
+  expect(soundAudit.styleAttrs).toEqual([null,null,null,null,null]);
+  expect(soundAudit.rowDisplay).toBe("flex");
+  expect(soundAudit.rowGap).toBe("10px");
+  expect(soundAudit.rowMarginTop).toBe("10px");
+  expect(soundAudit.rowCursor).toBe("pointer");
+  expect(soundAudit.toggleWidth).toBe("20px");
+  expect(soundAudit.toggleHeight).toBe("20px");
+  expect(soundAudit.blockMarginTop).toBe("14px");
+  expect(soundAudit.headDisplay).toBe("flex");
+  expect(soundAudit.headGap).toBe("12px");
+  expect(soundAudit.rangeMarginTop).toBe("8px");
+
+  await page.locator('#bottom-nav [data-r="deck"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Колода");
+  await expect(page.locator(".classic-deck.lumen-mt-14")).toBeVisible();
 });
