@@ -15,11 +15,13 @@ test("app shell routes run Worker first for security headers", () => {
   assert.deepEqual(config.assets?.run_worker_first, ["/", "/index.html"]);
 });
 
-test("static assets use report-only CSP", async () => {
+test("static assets use matching report-only and enforced CSP", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/"), env);
   const p = r.headers.get("content-security-policy-report-only") || "";
+  const enforced = r.headers.get("content-security-policy") || "";
   assert.equal(r.status, 200);
-  assert.equal(r.headers.get("content-security-policy"), null);
+  assert.ok(enforced);
+  assert.equal(enforced, p);
   assert.match(p, /default-src 'self'/);
   assert.match(p, /script-src 'self' https:\/\/telegram\.org/);
   assert.match(p, /script-src-attr 'none'/);
