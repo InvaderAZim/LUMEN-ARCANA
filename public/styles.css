@@ -48,3 +48,11 @@
 .classic-svg-halo-5{stroke-width:5px}
 .classic-svg-halo-4{stroke-width:4px}
 .classic-svg-halo-3{stroke-width:3px}
+
+/* CSP-safe Tarot and sound-setting utilities. */
+.tarot-art-fallback-hidden{display:none}
+.sound-toggle-row{display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer}
+.sound-toggle-control{width:20px;height:20px;accent-color:#e5c87d}
+.sound-volume-block{margin-top:14px}
+.sound-volume-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
+.sound-volume-range{width:100%;margin-top:8px;accent-color:#e5c87d}
