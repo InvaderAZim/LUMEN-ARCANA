@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("production report-only CSP audit covers primary UI and exports", async ({ page }) => {
+test("production enforced CSP audit covers primary UI and exports", async ({ page }) => {
   await page.route("https://telegram.org/js/telegram-web-app.js", route =>
     route.fulfill({
       status: 200,
@@ -40,7 +40,7 @@ test("production report-only CSP audit covers primary UI and exports", async ({ 
   expect(reportOnly).toContain("style-src 'self'");
   expect(reportOnly).toContain("style-src-attr 'none'");
   expect(reportOnly).not.toContain("frame-ancestors");
-  expect(enforcement).toBe("");
+  expect(enforcement).toBe(reportOnly);
 
   await expect(page.locator("#app .top h1")).toBeVisible();
   await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
