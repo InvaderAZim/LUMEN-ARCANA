@@ -827,3 +827,72 @@ test("Critical splash CSS is external with no inline style block", async ({ page
   expect(audit.centered).toBe(true);
   expect(audit.noPointerEvents).toBe(true);
 });
+
+
+test("app.js has no inline style attributes and fallback UI keeps styling", async ({ page }) => {
+  await page.route("https://telegram.org/js/telegram-web-app.js", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: ""
+    })
+  );
+
+  await page.route("**/extensions.js*", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: 'throw new Error("extensions-csp-style-smoke")'
+    })
+  );
+
+  await page.addInitScript(() => {
+    HTMLMediaElement.prototype.play = () => Promise.resolve();
+    HTMLMediaElement.prototype.pause = () => {};
+  });
+
+  await page.goto("/");
+  await expect(page.locator("#app .top h1")).toBeVisible();
+  await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
+
+  const sourceHasInlineStyle = await page.evaluate(async () => {
+    const source = await fetch("/app.js?v=3.0.0-beta.1-a9", {
+      cache: "no-store"
+    }).then(r => r.text());
+    return /\sstyle\s*=/i.test(source);
+  });
+  expect(sourceHasInlineStyle).toBe(false);
+
+  await page.locator('[data-go="natal"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
+
+  const fields = page.locator(".lumen-field");
+  await expect(fields).toHaveCount(3);
+
+  const fieldAudit = await fields.first().evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      styleAttr: node.getAttribute("style"),
+      background: css.backgroundColor,
+      color: css.color,
+      borderRadius: css.borderRadius,
+      paddingTop: css.paddingTop,
+      outlineStyle: css.outlineStyle
+    };
+  });
+
+  expect(fieldAudit.styleAttr).toBeNull();
+  expect(fieldAudit.background).toBe("rgb(9, 9, 9)");
+  expect(fieldAudit.color).toBe("rgb(255, 255, 255)");
+  expect(fieldAudit.borderRadius).toBe("14px");
+  expect(fieldAudit.paddingTop).toBe("13px");
+  expect(fieldAudit.outlineStyle).toBe("none");
+
+  await expect(page.locator(".lumen-muted-copy")).toBeVisible();
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
+  await expect(page.locator(".settings-grid.lumen-mt-14")).toBeVisible();
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("moon"));
+  await expect(page.locator(".settings-grid.lumen-mt-14")).toBeVisible();
+});
