@@ -1,0 +1,10 @@
+/* Classic Natal two-page A4 print layout. Externalized for CSP compatibility. */
+@media print{
+  html,body{background:#fff!important;margin:0!important;padding:0!important}
+  body>:not(#xNatalPrintSheet){display:none!important}
+  #xNatalPrintSheet{display:block!important;width:100%!important;background:#fff!important}
+  .x-natal-print-page{box-sizing:border-box;width:100%!important;min-height:283mm!important;display:flex!important;align-items:flex-start!important;justify-content:center!important;break-after:page!important;page-break-after:always!important;background:#fff!important}
+  .x-natal-print-page:last-child{break-after:auto!important;page-break-after:auto!important}
+  .x-natal-print-page svg{display:block!important;width:196mm!important;height:auto!important;max-width:196mm!important;max-height:269mm!important;margin:0 auto!important}
+  @page{size:A4 portrait;margin:7mm}
+}
