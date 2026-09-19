@@ -22,7 +22,7 @@
     const level=volume();
     const card=document.createElement('article');
     card.id='lumenSoundSetting';
-    card.innerHTML=`<small>ЗВУК</small><h3 id="lumenSoundState">${on?'Увімкнено':'Вимкнено'}</h3><p>Старт, фон і звуки кнопок.</p><label style="display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer"><input id="lumenSoundToggle" type="checkbox" role="switch" ${on?'checked':''} style="width:20px;height:20px;accent-color:#e5c87d"><span id="lumenSoundLabel">${on?'Звуки активні':'Звуки вимкнені'}</span></label><div style="margin-top:14px"><label for="lumenSoundVolume" style="display:flex;justify-content:space-between;gap:12px;align-items:center"><span>Загальна гучність</span><strong id="lumenSoundVolumeValue">${level}%</strong></label><input id="lumenSoundVolume" type="range" min="0" max="100" step="1" value="${level}" aria-label="Загальна гучність" style="width:100%;margin-top:8px;accent-color:#e5c87d"></div>`;
+    card.innerHTML=`<small>ЗВУК</small><h3 id="lumenSoundState">${on?'Увімкнено':'Вимкнено'}</h3><p>Старт, фон і звуки кнопок.</p><label class="sound-toggle-row"><input id="lumenSoundToggle" type="checkbox" role="switch" ${on?'checked':''} class="sound-toggle-control"><span id="lumenSoundLabel">${on?'Звуки активні':'Звуки вимкнені'}</span></label><div class="sound-volume-block"><label for="lumenSoundVolume" class="sound-volume-head"><span>Загальна гучність</span><strong id="lumenSoundVolumeValue">${level}%</strong></label><input id="lumenSoundVolume" type="range" min="0" max="100" step="1" value="${level}" aria-label="Загальна гучність" class="sound-volume-range"></div>`;
     grid.append(card);
 
     const toggle=card.querySelector('#lumenSoundToggle');
