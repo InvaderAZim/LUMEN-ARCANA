@@ -65,3 +65,85 @@ test("production UI labels client Tarot fallback when API fails", async ({ page 
   );
   await expect(page.locator(".result-premium h2")).toHaveText("Твій розклад");
 });
+
+
+test("production Tarot image failure stays CSP-safe", async ({ page }) => {
+  let releaseInterpret;
+  const gate = new Promise(resolve => {
+    releaseInterpret = resolve;
+  });
+
+  await page.route("https://telegram.org/js/telegram-web-app.js", route =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/javascript",
+      body: ""
+    })
+  );
+
+  await page.addInitScript(() => {
+    window.__imageFallbackCspViolations = [];
+    document.addEventListener("securitypolicyviolation", event => {
+      window.__imageFallbackCspViolations.push({
+        effectiveDirective: event.effectiveDirective || "",
+        blockedURI: event.blockedURI || "",
+        disposition: event.disposition || ""
+      });
+    });
+  });
+
+  await page.route("**/api/interpret", async route => {
+    const body = route.request().postDataJSON();
+    await gate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        blocked: false,
+        risk: "normal",
+        source: "mock",
+        title: "Production image fallback test",
+        cards: body.cards.map(card => ({
+          card: card.name,
+          symbolism: (card.keywords || []).join(" · "),
+          practice: "Production image fallback"
+        })),
+        synthesis: "Production image fallback"
+      })
+    });
+  });
+
+  await page.route("**/cards/rws/**", route => route.abort());
+
+  await page.goto("/?tarotImageFallbackLive=1", { waitUntil: "domcontentloaded" });
+  await expect(page.locator("#app .top h1")).toBeVisible();
+  await page.waitForFunction(() => Array.isArray(window.LUMEN_TAROT78) && window.LUMEN_TAROT78.length === 78);
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
+  await expect(page.locator("#app .top h1")).toHaveText("Таро");
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Production image fallback audit");
+  await page.locator("#draw").click();
+
+  const image = page.locator(".drawing .rws-card-img.image-failed").first();
+  const fallback = page.locator(".drawing .tarot-art-fallback").first();
+
+  await expect(image).toHaveCount(1);
+  await expect(fallback).toHaveClass(/tarot-art-fallback-visible/);
+  await expect(fallback).not.toHaveClass(/tarot-art-fallback-hidden/);
+
+  const state = await fallback.evaluate(node => ({
+    styleAttr: node.getAttribute("style"),
+    display: getComputedStyle(node).display
+  }));
+  expect(state.styleAttr).toBeNull();
+  expect(state.display).toBe("grid");
+
+  const violations = await page.evaluate(() =>
+    structuredClone(window.__imageFallbackCspViolations || [])
+  );
+  expect(violations).toEqual([]);
+
+  releaseInterpret();
+  await expect(page.locator(".result-premium")).toBeVisible();
+});
