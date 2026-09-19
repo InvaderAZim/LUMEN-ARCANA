@@ -180,6 +180,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
           rect => rect.getAttribute("fill") === "#fff"
         ),
       dynamicStylePresent: !!style,
+      printCssLinked: !!document.querySelector('link[href*="/natal-print.css?v=3.0.0-beta.1-a1"]'),
       printCss,
       extensionsCreatesStyle: /createElement\s*\(\s*["']style["']\s*\)/.test(extensionsSource)
     };
@@ -209,6 +210,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
   expect(printState.sheetContainsNav).toBe(false);
   expect(printState.firstHasWhiteBackground).toBe(true);
   expect(printState.dynamicStylePresent).toBe(false);
+  expect(printState.printCssLinked).toBe(true);
   expect(printState.extensionsCreatesStyle).toBe(false);
   expect(printState.printCss).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
   expect(printState.printCss).toContain("@page{size:A4 portrait;margin:7mm}");
