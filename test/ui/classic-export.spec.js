@@ -144,7 +144,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
     page.evaluate(() => window.__lumenPrintCalls)
   ).toBe(1);
 
-  const printState = await page.evaluate(() => {
+  const printState = await page.evaluate(async () => {
     const sheet = document.querySelector("#xNatalPrintSheet");
     const style = document.querySelector("#xNatalPrintStyle");
     const pages = [...document.querySelectorAll("#xNatalPrintSheet .x-natal-print-page")];
@@ -152,6 +152,11 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
     const viewBoxes = svgs.map(svg =>
       String(svg?.getAttribute("viewBox") || "").split(/\s+/).map(Number)
     );
+
+    const [printCss, extensionsSource] = await Promise.all([
+      fetch("/natal-print.css?v=3.0.0-beta.1-a1", { cache: "no-store" }).then(r => r.text()),
+      fetch("/extensions.js?v=3.0.0-beta.1-a7", { cache: "no-store" }).then(r => r.text())
+    ]);
 
     const firstSvg = svgs[0];
     const secondSvg = svgs[1];
@@ -174,7 +179,9 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
         [...(firstSvg?.querySelectorAll("rect") || [])].some(
           rect => rect.getAttribute("fill") === "#fff"
         ),
-      styleText: style?.textContent || ""
+      dynamicStylePresent: !!style,
+      printCss,
+      extensionsCreatesStyle: /createElement\s*\(\s*["']style["']\s*\)/.test(extensionsSource)
     };
   });
 
@@ -201,9 +208,13 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
   expect(printState.sheetContainsApp).toBe(false);
   expect(printState.sheetContainsNav).toBe(false);
   expect(printState.firstHasWhiteBackground).toBe(true);
-  expect(printState.styleText).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
-  expect(printState.styleText).toContain("@page{size:A4 portrait;margin:7mm}");
-  expect(printState.styleText).toContain("page-break-after:always");
+  expect(printState.dynamicStylePresent).toBe(false);
+  expect(printState.extensionsCreatesStyle).toBe(false);
+  expect(printState.printCss).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
+  expect(printState.printCss).toContain("@page{size:A4 portrait;margin:7mm}");
+  expect(printState.printCss).toContain("page-break-after:always");
+  expect(printState.printCss).toContain("width:196mm!important");
+  expect(printState.printCss).toContain("max-height:269mm!important");
 
   await page.emulateMedia({ media: "print" });
 
