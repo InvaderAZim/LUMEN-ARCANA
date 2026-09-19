@@ -37,3 +37,14 @@
 .lumen-field{width:100%;background:#090909;color:#fff;border:1px solid #ffffff1c;border-radius:14px;padding:13px;outline:none}
 .lumen-muted-copy{color:var(--muted)}
 .lumen-mt-14{margin-top:14px!important}
+
+/* CSP-safe extension UI utilities. */
+.x-history-head{display:flex;justify-content:space-between;gap:10px}
+.x-fav-button{padding:8px 10px}
+.lumen-field-dim{opacity:.82}
+.lumen-help-copy{margin-top:8px;color:var(--muted);font-size:.78rem}
+.natal-wheel-basic{width:min(100%,520px);display:block;margin:auto}
+.classic-svg-halo{paint-order:stroke;stroke:#fff;stroke-linejoin:round}
+.classic-svg-halo-5{stroke-width:5px}
+.classic-svg-halo-4{stroke-width:4px}
+.classic-svg-halo-3{stroke-width:3px}
