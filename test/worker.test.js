@@ -1,11 +1,19 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import worker from "../worker.js";
 
 const env = {
   BETA_CODES: "LUMEN-BETA,TEST-2026",
   ASSETS: { fetch: async () => new Response("asset-ok", { status: 200 }) }
 };
+
+test("app shell routes run Worker first for security headers", () => {
+  const config = JSON.parse(
+    readFileSync(new URL("../wrangler.jsonc", import.meta.url), "utf8")
+  );
+  assert.deepEqual(config.assets?.run_worker_first, ["/", "/index.html"]);
+});
 
 test("static assets use report-only CSP", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/"), env);
