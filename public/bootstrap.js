@@ -1,4 +1,4 @@
-await import('/app.js?v=3.0.0-beta.1-a8');
+await import('/app.js?v=3.0.0-beta.1-a9');
 
 const optionalModules=[
   ['background','/background.js?v=3.0.0-beta.1-a1'],
