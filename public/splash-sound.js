@@ -1,6 +1,6 @@
 (()=>{
   const BASE_VOLUME=0.8;
-  const audio=new Audio('/startup-sound.mp3?v=3.0.0-beta.1-a1');
+  const audio=new Audio('/startup-sound.mp3');
   audio.preload='auto';
   audio.playsInline=true;
 
