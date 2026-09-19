@@ -7,6 +7,23 @@ const env = {
   ASSETS: { fetch: async () => new Response("asset-ok", { status: 200 }) }
 };
 
+test("static assets use report-only CSP", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/"), env);
+  const p = r.headers.get("content-security-policy-report-only") || "";
+  assert.equal(r.status, 200);
+  assert.equal(r.headers.get("content-security-policy"), null);
+  assert.match(p, /default-src 'self'/);
+  assert.match(p, /script-src 'self' https:\/\/telegram\.org/);
+  assert.match(p, /script-src-attr 'none'/);
+  assert.match(p, /style-src 'self'/);
+  assert.match(p, /style-src-attr 'none'/);
+  assert.match(p, /connect-src 'self'/);
+  assert.match(p, /img-src 'self' blob: data:/);
+  assert.match(p, /object-src 'none'/);
+  assert.match(p, /base-uri 'none'/);
+  assert.equal(p.includes("frame-ancestors"), false);
+});
+
 test("health reports Cloudflare runtime and canonical app version", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/api/health"), env);
   assert.equal(r.status, 200);
