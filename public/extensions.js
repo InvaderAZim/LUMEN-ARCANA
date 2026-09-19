@@ -1,4 +1,4 @@
-import { escapeHtml as escX, parseLocal as parseX, flashToast, pageShell } from './core.js?v=3.0.0-beta.1-a1';
+import { escapeHtml as escX, parseLocal as parseX, flashToast, pageShell } from './core.js';
 const tg=window.Telegram?.WebApp;
 const app=document.querySelector('#app');
 const nav=document.querySelector('#bottom-nav');
