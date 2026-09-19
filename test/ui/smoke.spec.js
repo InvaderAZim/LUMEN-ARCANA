@@ -829,7 +829,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a7") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a8") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -1049,7 +1049,7 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
 
   const sourceAudit = await page.evaluate(async () => {
     const [tarotSource, soundSource] = await Promise.all([
-      fetch("/tarot78.js?v=3.0.0-beta.1-a3", { cache: "no-store" }).then(r => r.text()),
+      fetch("/tarot78.js?v=3.0.0-beta.1-a4", { cache: "no-store" }).then(r => r.text()),
       fetch("/sound-settings.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text())
     ]);
     return {
