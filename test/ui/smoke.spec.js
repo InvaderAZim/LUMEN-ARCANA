@@ -176,7 +176,32 @@ test("sound toggle and volume persist in localStorage", async ({ page }) => {
 });
 
 test("Tarot image failure uses CSP-safe fallback classes", async ({ page }) => {
-  await installTarotMock(page, []);
+  let releaseInterpret;
+  const interpretGate = new Promise(resolve => {
+    releaseInterpret = resolve;
+  });
+
+  await page.route("**/api/interpret", async route => {
+    const body = route.request().postDataJSON();
+    await interpretGate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        blocked: false,
+        risk: "normal",
+        source: "mock",
+        title: "Image fallback test",
+        cards: body.cards.map(card => ({
+          card: card.name,
+          symbolism: (card.keywords || []).join(" · "),
+          practice: "Fallback image test"
+        })),
+        synthesis: "Image fallback test"
+      })
+    });
+  });
+
   await page.route("**/cards/rws/**", route => route.abort());
   await openApp(page);
 
@@ -184,12 +209,10 @@ test("Tarot image failure uses CSP-safe fallback classes", async ({ page }) => {
   await page.locator("#q").fill("Тест помилки зображення");
   await page.locator("#draw").click();
 
-  await expect(page.locator(".result-premium")).toBeVisible();
-
   const failed = page.locator(".drawing .rws-card-img.image-failed").first();
   const fallback = page.locator(".drawing .tarot-art-fallback").first();
 
-  await expect(failed).toBeVisible({ visible: false }).catch(() => {});
+  await expect(failed).toHaveCount(1);
   await expect(fallback).toHaveClass(/tarot-art-fallback-visible/);
   await expect(fallback).not.toHaveClass(/tarot-art-fallback-hidden/);
 
@@ -200,6 +223,9 @@ test("Tarot image failure uses CSP-safe fallback classes", async ({ page }) => {
 
   expect(state.styleAttr).toBeNull();
   expect(state.display).toBe("grid");
+
+  releaseInterpret();
+  await expect(page.locator(".result-premium")).toBeVisible();
 });
 
 test("Tarot marks server local interpretation transparently", async ({ page }) => {
