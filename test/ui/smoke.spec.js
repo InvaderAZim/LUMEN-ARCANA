@@ -777,7 +777,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a5") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a6") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -856,13 +856,20 @@ test("app.js has no inline style attributes and fallback UI keeps styling", asyn
   await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
 
   const sourceHasInlineStyle = await page.evaluate(async () => {
-    const source = await fetch("/app.js?v=3.0.0-beta.1-a9", {
+    const source = await fetch("/app.js?v=3.0.0-beta.1-a10", {
       cache: "no-store"
     }).then(r => r.text());
-    return /\sstyle\s*=/i.test(source);
+    return /style\s*=/i.test(source);
   });
   expect(sourceHasInlineStyle).toBe(false);
 
+  await page.evaluate(() => window.LUMEN_NAVIGATE("reading"));
+  await expect(page.locator("#app .top h1")).toHaveText("Таро");
+  const selectedType = page.locator(".tarot-type-selected");
+  await expect(selectedType).toHaveCount(1);
+  await expect(selectedType).toHaveAttribute("style", null);
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("home"));
   await page.locator('[data-go="natal"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
 
@@ -902,7 +909,7 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
   await openApp(page);
 
   const sourceAudit = await page.evaluate(async () => {
-    const source = await fetch("/extensions.js?v=3.0.0-beta.1-a6", {
+    const source = await fetch("/extensions.js?v=3.0.0-beta.1-a7", {
       cache: "no-store"
     }).then(r => r.text());
     return {
