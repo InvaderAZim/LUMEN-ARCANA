@@ -32,3 +32,8 @@
 .classic-aspect-blue{color:#1747ff}.classic-aspect-red{color:#ef1717}.classic-aspect-neutral{color:#222}
 .classic-matrix-legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:10px;font-size:.7rem;font-weight:800}
 @media(max-width:480px){.classic-aspect-matrix{padding:9px;border-radius:14px}.classic-matrix-table{min-width:630px}.classic-matrix-table th,.classic-matrix-table td{width:50px;height:48px}.classic-matrix-table tbody>tr>th{width:94px;min-width:94px}}
+
+/* CSP-safe utility classes used by app.js. */
+.lumen-field{width:100%;background:#090909;color:#fff;border:1px solid #ffffff1c;border-radius:14px;padding:13px;outline:none}
+.lumen-muted-copy{color:var(--muted)}
+.lumen-mt-14{margin-top:14px!important}
