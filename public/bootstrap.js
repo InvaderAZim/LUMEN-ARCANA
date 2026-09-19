@@ -3,7 +3,7 @@ await import('/app.js?v=3.0.0-beta.1-a9');
 const optionalModules=[
   ['background','/background.js?v=3.0.0-beta.1-a1'],
   ['extensions','/extensions.js?v=3.0.0-beta.1-a6'],
-  ['tarot78','/tarot78.js?v=3.0.0-beta.1-a1'],
+  ['tarot78','/tarot78.js?v=3.0.0-beta.1-a2'],
   ['exportCompat','/export-compat.js?v=3.0.0-beta.1-a1']
 ];
 
