@@ -777,7 +777,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a2") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a3") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -895,4 +895,84 @@ test("app.js has no inline style attributes and fallback UI keeps styling", asyn
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("moon"));
   await expect(page.locator(".settings-grid.lumen-mt-14")).toBeVisible();
+});
+
+
+test("extensions.js has no inline style attributes and keeps computed styling", async ({ page }) => {
+  await openApp(page);
+
+  const sourceAudit = await page.evaluate(async () => {
+    const source = await fetch("/extensions.js?v=3.0.0-beta.1-a6", {
+      cache: "no-store"
+    }).then(r => r.text());
+    return {
+      hasInlineStyleAttr: /\sstyle\s*=\s*["']/i.test(source),
+      hasHistoryClass: source.includes("x-history-head"),
+      hasFieldClass: source.includes("lumen-field"),
+      hasHelpClass: source.includes("lumen-help-copy"),
+      hasSvgHaloClass: source.includes("classic-svg-halo")
+    };
+  });
+
+  expect(sourceAudit.hasInlineStyleAttr).toBe(false);
+  expect(sourceAudit.hasHistoryClass).toBe(true);
+  expect(sourceAudit.hasFieldClass).toBe(true);
+  expect(sourceAudit.hasHelpClass).toBe(true);
+  expect(sourceAudit.hasSvgHaloClass).toBe(true);
+
+  await page.locator('#bottom-nav [data-r="profile"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Профіль");
+
+  const profileField = page.locator("#xName");
+  await expect(profileField).toHaveClass(/lumen-field/);
+  const profileCss = await profileField.evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      styleAttr: node.getAttribute("style"),
+      background: css.backgroundColor,
+      color: css.color,
+      borderRadius: css.borderRadius,
+      paddingTop: css.paddingTop
+    };
+  });
+  expect(profileCss.styleAttr).toBeNull();
+  expect(profileCss.background).toBe("rgb(9, 9, 9)");
+  expect(profileCss.color).toBe("rgb(255, 255, 255)");
+  expect(profileCss.borderRadius).toBe("14px");
+  expect(profileCss.paddingTop).toBe("13px");
+
+  await page.evaluate(() => {
+    localStorage.setItem("la_natal_profile", JSON.stringify({
+      date: "2000-01-15",
+      time: "12:30",
+      place: "Kyiv"
+    }));
+    localStorage.setItem("la_natal_view", "classic");
+    window.LUMEN_NAVIGATE("natal");
+  });
+
+  await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
+  await expect(page.locator("#xNDate")).toHaveClass(/lumen-field/);
+  await expect(page.locator("#xNOffset")).toHaveClass(/lumen-field-dim/);
+
+  const dimOpacity = await page.locator("#xNOffset").evaluate(node => getComputedStyle(node).opacity);
+  expect(dimOpacity).toBe("0.82");
+
+  const classicSvg = page.locator(".classic-natal-svg");
+  await expect(classicSvg).toBeVisible();
+  const halo = classicSvg.locator(".classic-svg-halo").first();
+  await expect(halo).toBeVisible();
+  const haloCss = await halo.evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      paintOrder: css.paintOrder,
+      stroke: css.stroke,
+      strokeWidth: css.strokeWidth,
+      styleAttr: node.getAttribute("style")
+    };
+  });
+  expect(haloCss.styleAttr).toBeNull();
+  expect(haloCss.paintOrder).toContain("stroke");
+  expect(haloCss.stroke).not.toBe("none");
+  expect(["3px","4px","5px"]).toContain(haloCss.strokeWidth);
 });
