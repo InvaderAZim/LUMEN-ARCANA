@@ -793,3 +793,37 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
   expect(audit.fullscreenFunction).toBe("function");
   expect(audit.bootStatus).toEqual({ ok: true, failed: [] });
 });
+
+
+test("Critical splash CSS is external with no inline style block", async ({ page }) => {
+  await openApp(page);
+
+  const audit = await page.evaluate(async () => {
+    const indexHtml = await fetch("/", { cache: "no-store" }).then(r => r.text());
+    const criticalCss = await fetch("/critical-splash.css?v=3.0.0-beta.1-a1", {
+      cache: "no-store"
+    }).then(r => r.text());
+
+    return {
+      hasInlineStyleTag: /<style\b/i.test(indexHtml),
+      hasCriticalLink: indexHtml.includes(
+        '/critical-splash.css?v=3.0.0-beta.1-a1'
+      ),
+      fixed: criticalCss.includes("position:fixed"),
+      inset: criticalCss.includes("inset:0"),
+      zIndex: criticalCss.includes("z-index:9999"),
+      grid: criticalCss.includes("display:grid"),
+      centered: criticalCss.includes("place-items:center"),
+      noPointerEvents: criticalCss.includes("pointer-events:none")
+    };
+  });
+
+  expect(audit.hasInlineStyleTag).toBe(false);
+  expect(audit.hasCriticalLink).toBe(true);
+  expect(audit.fixed).toBe(true);
+  expect(audit.inset).toBe(true);
+  expect(audit.zIndex).toBe(true);
+  expect(audit.grid).toBe(true);
+  expect(audit.centered).toBe(true);
+  expect(audit.noPointerEvents).toBe(true);
+});
