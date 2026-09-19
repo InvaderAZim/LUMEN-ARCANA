@@ -51,6 +51,7 @@
 
 /* CSP-safe Tarot and sound-setting utilities. */
 .tarot-art-fallback-hidden{display:none}
+.tarot-art-fallback-visible{display:grid}
 .sound-toggle-row{display:flex;align-items:center;gap:10px;margin-top:10px;cursor:pointer}
 .sound-toggle-control{width:20px;height:20px;accent-color:#e5c87d}
 .sound-volume-block{margin-top:14px}
