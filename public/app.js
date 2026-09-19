@@ -1,4 +1,4 @@
-import { escapeHtml as esc, parseLocal as safeParseLocal, flashToast, pageShell } from './core.js?v=3.0.0-beta.1-a1';
+import { escapeHtml as esc, parseLocal as safeParseLocal, flashToast, pageShell } from './core.js';
 const tg=window.Telegram?.WebApp;
 tg?.ready?.();
 
