@@ -777,7 +777,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a4") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a5") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
