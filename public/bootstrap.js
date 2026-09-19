@@ -1,10 +1,10 @@
-await import('/app.js?v=3.0.0-beta.1-a10');
+await import('/app.js');
 
 const optionalModules=[
-  ['background','/background.js?v=3.0.0-beta.1-a1'],
-  ['extensions','/extensions.js?v=3.0.0-beta.1-a7'],
-  ['tarot78','/tarot78.js?v=3.0.0-beta.1-a5'],
-  ['exportCompat','/export-compat.js?v=3.0.0-beta.1-a1']
+  ['background','/background.js'],
+  ['extensions','/extensions.js'],
+  ['tarot78','/tarot78.js'],
+  ['exportCompat','/export-compat.js']
 ];
 
 const settled=await Promise.allSettled(
@@ -22,7 +22,7 @@ if(failed.length){
 }
 
 try{
-  await import('/day-card-visual.js?v=3.0.0-beta.1-a2');
+  await import('/day-card-visual.js');
 }catch(error){
   window.LUMEN_BOOT_STATUS.failed.push('dayCardVisual');
   window.LUMEN_BOOT_STATUS.ok=false;
