@@ -867,7 +867,7 @@ test("app.js has no inline style attributes and fallback UI keeps styling", asyn
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
   const selectedType = page.locator(".tarot-type-selected");
   await expect(selectedType).toHaveCount(1);
-  await expect(selectedType).toHaveAttribute("style", null);
+  expect(await selectedType.getAttribute("style")).toBeNull();
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("home"));
   await page.locator('[data-go="natal"]').click();
