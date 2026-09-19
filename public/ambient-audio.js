@@ -1,6 +1,6 @@
 (()=>{
   const BASE_VOLUME=0.14;
-  const ambient=new Audio('/ambient-mystic-forest.mp3?v=3.0.0-beta.1-a1');
+  const ambient=new Audio('/ambient-mystic-forest.mp3');
   ambient.preload='auto';
   ambient.loop=true;
   ambient.playsInline=true;
