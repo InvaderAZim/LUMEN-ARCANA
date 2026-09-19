@@ -175,6 +175,33 @@ test("sound toggle and volume persist in localStorage", async ({ page }) => {
   await expect(page.locator("#lumenSoundVolumeValue")).toHaveText("37%");
 });
 
+test("Tarot image failure uses CSP-safe fallback classes", async ({ page }) => {
+  await installTarotMock(page, []);
+  await page.route("**/cards/rws/**", route => route.abort());
+  await openApp(page);
+
+  await openTarotType(page, "single");
+  await page.locator("#q").fill("Тест помилки зображення");
+  await page.locator("#draw").click();
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+
+  const failed = page.locator(".drawing .rws-card-img.image-failed").first();
+  const fallback = page.locator(".drawing .tarot-art-fallback").first();
+
+  await expect(failed).toBeVisible({ visible: false }).catch(() => {});
+  await expect(fallback).toHaveClass(/tarot-art-fallback-visible/);
+  await expect(fallback).not.toHaveClass(/tarot-art-fallback-hidden/);
+
+  const state = await fallback.evaluate(node => ({
+    styleAttr: node.getAttribute("style"),
+    display: getComputedStyle(node).display
+  }));
+
+  expect(state.styleAttr).toBeNull();
+  expect(state.display).toBe("grid");
+});
+
 test("Tarot marks server local interpretation transparently", async ({ page }) => {
   await page.route("**/api/interpret", async route => {
     const body = route.request().postDataJSON();
@@ -829,7 +856,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a8") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a9") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -1049,7 +1076,7 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
 
   const sourceAudit = await page.evaluate(async () => {
     const [tarotSource, soundSource] = await Promise.all([
-      fetch("/tarot78.js?v=3.0.0-beta.1-a4", { cache: "no-store" }).then(r => r.text()),
+      fetch("/tarot78.js?v=3.0.0-beta.1-a5", { cache: "no-store" }).then(r => r.text()),
       fetch("/sound-settings.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text())
     ]);
     return {
