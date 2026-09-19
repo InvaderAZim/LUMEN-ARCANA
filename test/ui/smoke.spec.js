@@ -73,6 +73,7 @@ async function drawTarot(page, requests, type, expectedCount, question) {
   await expect(page.locator(".result-premium h2")).toHaveText("UI Mock Reading");
   await expect(page.locator(".result-premium .synthesis p")).toHaveText("UI smoke synthesis");
   await expect(page.locator(".reading-card-classic")).toHaveCount(expectedCount);
+  await expect(page.locator(".tarot-source-badge")).toHaveCount(0);
   await expect.poll(() => requests.length).toBe(1);
 
   const request = requests[0];
@@ -172,6 +173,57 @@ test("sound toggle and volume persist in localStorage", async ({ page }) => {
   await expect(page.locator("#lumenSoundToggle")).not.toBeChecked();
   await expect(page.locator("#lumenSoundVolume")).toHaveValue("37");
   await expect(page.locator("#lumenSoundVolumeValue")).toHaveText("37%");
+});
+
+test("Tarot marks server local interpretation transparently", async ({ page }) => {
+  await page.route("**/api/interpret", async route => {
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        blocked: false,
+        risk: "normal",
+        source: "local",
+        title: "Локальний розклад",
+        cards: body.cards.map(card => ({
+          card: card.name,
+          symbolism: (card.keywords || []).join(" · "),
+          practice: "Одна практична дія."
+        })),
+        synthesis: "Локальне резервне тлумачення."
+      })
+    });
+  });
+
+  await openApp(page);
+  await openTarotType(page, "single");
+  await page.locator("#q").fill("Тест локального тлумачення");
+  await page.locator("#draw").click();
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".tarot-source-badge")).toHaveText("Локальне тлумачення");
+});
+
+test("Tarot marks client fallback when interpretation server fails", async ({ page }) => {
+  await page.route("**/api/interpret", route =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "temporary_unavailable" })
+    })
+  );
+
+  await openApp(page);
+  await openTarotType(page, "single");
+  await page.locator("#q").fill("Тест резервного режиму");
+  await page.locator("#draw").click();
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".tarot-source-badge")).toHaveText(
+    "Локальне тлумачення · сервер недоступний"
+  );
+  await expect(page.locator(".result-premium h2")).toHaveText("Твій розклад");
 });
 
 test("Tarot single draw sends and renders one unique card", async ({ page }) => {
@@ -777,7 +829,7 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
         script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a6") &&
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a7") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -997,7 +1049,7 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
 
   const sourceAudit = await page.evaluate(async () => {
     const [tarotSource, soundSource] = await Promise.all([
-      fetch("/tarot78.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text()),
+      fetch("/tarot78.js?v=3.0.0-beta.1-a3", { cache: "no-store" }).then(r => r.text()),
       fetch("/sound-settings.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text())
     ]);
     return {
