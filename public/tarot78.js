@@ -75,7 +75,10 @@ document.addEventListener('error',e=>{
   if(!(img instanceof HTMLImageElement)||!img.classList.contains('rws-card-img'))return;
   img.classList.add('image-failed');
   const fallback=img.parentElement?.querySelector('.tarot-art-fallback');
-  if(fallback)fallback.style.display='grid';
+  if(fallback){
+    fallback.classList.remove('tarot-art-fallback-hidden');
+    fallback.classList.add('tarot-art-fallback-visible');
+  }
 },true);
 setTimeout(applyPersonalization78,0);
 window.LUMEN_RENDER_DECK78=renderDeck78;
