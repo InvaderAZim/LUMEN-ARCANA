@@ -154,8 +154,8 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
     );
 
     const [printCss, extensionsSource] = await Promise.all([
-      fetch("/natal-print.css?v=3.0.0-beta.1-a1", { cache: "no-store" }).then(r => r.text()),
-      fetch("/extensions.js?v=3.0.0-beta.1-a7", { cache: "no-store" }).then(r => r.text())
+      fetch("/natal-print.css", { cache: "no-store" }).then(r => r.text()),
+      fetch("/extensions.js", { cache: "no-store" }).then(r => r.text())
     ]);
 
     const firstSvg = svgs[0];
@@ -180,7 +180,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
           rect => rect.getAttribute("fill") === "#fff"
         ),
       dynamicStylePresent: !!style,
-      printCssLinked: !!document.querySelector('link[href*="/natal-print.css?v=3.0.0-beta.1-a1"]'),
+      printCssLinked: !!document.querySelector('link[href*="/natal-print.css"]'),
       printCss,
       extensionsCreatesStyle: /createElement\s*\(\s*["']style["']\s*\)/.test(extensionsSource)
     };
