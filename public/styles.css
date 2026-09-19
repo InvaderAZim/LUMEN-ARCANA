@@ -56,3 +56,6 @@
 .sound-volume-block{margin-top:14px}
 .sound-volume-head{display:flex;justify-content:space-between;gap:12px;align-items:center}
 .sound-volume-range{width:100%;margin-top:8px;accent-color:#e5c87d}
+
+/* CSP-safe selected Tarot type state. */
+.tarot-type-selected{border-color:#e5c87d66!important;background:#e5c87d0c!important}
