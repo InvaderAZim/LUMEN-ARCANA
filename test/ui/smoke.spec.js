@@ -759,3 +759,37 @@ test("Academy lessons have distinct relevant practices", async ({ page }) => {
   await expect(firstPanel).toHaveAttribute("aria-hidden", "true");
   await expect(firstPanel).not.toHaveClass(/open/);
 });
+
+
+test("Startup uses external scripts with no inline JavaScript", async ({ page }) => {
+  await openApp(page);
+
+  const audit = await page.evaluate(() => {
+    const scripts = [...document.scripts].map(script => ({
+      src: script.getAttribute("src") || "",
+      type: script.getAttribute("type") || "",
+      inlineText: script.textContent?.trim() || ""
+    }));
+
+    return {
+      inlineScripts: scripts.filter(script => !script.src && script.inlineText),
+      hasTelegramInit: scripts.some(script =>
+        script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
+      ),
+      hasBootstrap: scripts.some(script =>
+        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a1") &&
+        script.type === "module"
+      ),
+      fullscreenFunction: typeof window.__lumenFullscreen,
+      bootStatus: window.LUMEN_BOOT_STATUS
+        ? structuredClone(window.LUMEN_BOOT_STATUS)
+        : null
+    };
+  });
+
+  expect(audit.inlineScripts).toEqual([]);
+  expect(audit.hasTelegramInit).toBe(true);
+  expect(audit.hasBootstrap).toBe(true);
+  expect(audit.fullscreenFunction).toBe("function");
+  expect(audit.bootStatus).toEqual({ ok: true, failed: [] });
+});
