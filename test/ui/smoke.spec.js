@@ -945,7 +945,14 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
     localStorage.setItem("la_natal_profile", JSON.stringify({
       date: "2000-01-15",
       time: "12:30",
-      place: "Kyiv"
+      place: "Kyiv",
+      lat: "50.4501",
+      lon: "30.5234",
+      utcOffset: "2",
+      timezone: "Europe/Kyiv",
+      utcIso: "2000-01-15T10:30:00.000Z",
+      timezoneToken: "2000-01-15|12:30|50.4501|30.5234",
+      houseSystem: "equal"
     }));
     localStorage.setItem("la_natal_view", "classic");
     window.LUMEN_NAVIGATE("natal");
