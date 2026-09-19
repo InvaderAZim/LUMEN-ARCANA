@@ -710,7 +710,7 @@ test("Shared core helpers escape, parse, toast and shell safely", async ({ page 
   await openApp(page);
 
   const audit = await page.evaluate(async () => {
-    const core = await import("/core.js?v=3.0.0-beta.1-a1");
+    const core = await import("/core.js");
 
     localStorage.setItem("core_bad_json", "{");
     localStorage.setItem("core_good_json", JSON.stringify({ ok: 1 }));
@@ -879,10 +879,10 @@ test("Startup uses external scripts with no inline JavaScript", async ({ page })
     return {
       inlineScripts: scripts.filter(script => !script.src && script.inlineText),
       hasTelegramInit: scripts.some(script =>
-        script.src.includes("/telegram-init.js?v=3.0.0-beta.1-a1")
+        script.src.includes("/telegram-init.js")
       ),
       hasBootstrap: scripts.some(script =>
-        script.src.includes("/bootstrap.js?v=3.0.0-beta.1-a9") &&
+        script.src.includes("/bootstrap.js") &&
         script.type === "module"
       ),
       fullscreenFunction: typeof window.__lumenFullscreen,
@@ -905,14 +905,14 @@ test("Critical splash CSS is external with no inline style block", async ({ page
 
   const audit = await page.evaluate(async () => {
     const indexHtml = await fetch("/", { cache: "no-store" }).then(r => r.text());
-    const criticalCss = await fetch("/critical-splash.css?v=3.0.0-beta.1-a1", {
+    const criticalCss = await fetch("/critical-splash.css", {
       cache: "no-store"
     }).then(r => r.text());
 
     return {
       hasInlineStyleTag: /<style\b/i.test(indexHtml),
       hasCriticalLink: indexHtml.includes(
-        '/critical-splash.css?v=3.0.0-beta.1-a1'
+        '/critical-splash.css'
       ),
       fixed: criticalCss.includes("position:fixed"),
       inset: criticalCss.includes("inset:0"),
@@ -961,7 +961,7 @@ test("app.js has no inline style attributes and fallback UI keeps styling", asyn
   await page.waitForFunction(() => window.LUMEN_BOOT_STATUS);
 
   const sourceHasInlineStyle = await page.evaluate(async () => {
-    const source = await fetch("/app.js?v=3.0.0-beta.1-a10", {
+    const source = await fetch("/app.js", {
       cache: "no-store"
     }).then(r => r.text());
     return /style\s*=/i.test(source);
@@ -1014,7 +1014,7 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
   await openApp(page);
 
   const sourceAudit = await page.evaluate(async () => {
-    const source = await fetch("/extensions.js?v=3.0.0-beta.1-a7", {
+    const source = await fetch("/extensions.js", {
       cache: "no-store"
     }).then(r => r.text());
     return {
@@ -1102,8 +1102,8 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
 
   const sourceAudit = await page.evaluate(async () => {
     const [tarotSource, soundSource] = await Promise.all([
-      fetch("/tarot78.js?v=3.0.0-beta.1-a5", { cache: "no-store" }).then(r => r.text()),
-      fetch("/sound-settings.js?v=3.0.0-beta.1-a2", { cache: "no-store" }).then(r => r.text())
+      fetch("/tarot78.js", { cache: "no-store" }).then(r => r.text()),
+      fetch("/sound-settings.js", { cache: "no-store" }).then(r => r.text())
     ]);
     return {
       tarotHasInlineStyle: /\sstyle\s*=\s*["']/i.test(tarotSource),
@@ -1174,4 +1174,37 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
   await page.locator('#bottom-nav [data-r="deck"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Колода");
   await expect(page.locator(".classic-deck.lumen-mt-14")).toBeVisible();
+});
+
+
+test("frontend asset references avoid manual version query strings", async ({ page }) => {
+  await openApp(page);
+
+  const audit = await page.evaluate(async () => {
+    const paths = [
+      "/",
+      "/bootstrap.js",
+      "/app.js",
+      "/extensions.js",
+      "/ambient-audio.js",
+      "/nav-menu-sound.js",
+      "/splash-sound.js"
+    ];
+
+    const sources = await Promise.all(
+      paths.map(async path => ({
+        path,
+        text: await fetch(path, { cache: "no-store" }).then(r => r.text())
+      }))
+    );
+
+    return sources
+      .map(({ path, text }) => ({
+        path,
+        matches: [...text.matchAll(/\?v=[A-Za-z0-9._-]+/g)].map(match => match[0])
+      }))
+      .filter(item => item.matches.length > 0);
+  });
+
+  expect(audit).toEqual([]);
 });
