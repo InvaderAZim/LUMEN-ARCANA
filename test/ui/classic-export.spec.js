@@ -146,7 +146,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
 
   const printState = await page.evaluate(async () => {
     const sheet = document.querySelector("#xNatalPrintSheet");
-    const style = document.querySelector("#xNatalPrintStyle");
+    const style = document.querySelector("#xNatalPrintIsolation");
     const pages = [...document.querySelectorAll("#xNatalPrintSheet .x-natal-print-page")];
     const svgs = pages.map(page => page.querySelector("svg"));
     const viewBoxes = svgs.map(svg =>
@@ -180,6 +180,7 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
           rect => rect.getAttribute("fill") === "#fff"
         ),
       dynamicStylePresent: !!style,
+      isolationCss: style?.textContent || "",
       printCssLinked: !!document.querySelector('link[href*="/natal-print.css"]'),
       printCss,
       extensionsCreatesStyle: /createElement\s*\(\s*["']style["']\s*\)/.test(extensionsSource)
@@ -209,9 +210,11 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
   expect(printState.sheetContainsApp).toBe(false);
   expect(printState.sheetContainsNav).toBe(false);
   expect(printState.firstHasWhiteBackground).toBe(true);
-  expect(printState.dynamicStylePresent).toBe(false);
+  expect(printState.dynamicStylePresent).toBe(true);
+  expect(printState.isolationCss).toContain("body>*:not(#xNatalPrintSheet){display:none!important}");
+  expect(printState.isolationCss).toContain("#xNatalPrintSheet{display:block!important;visibility:visible!important");
   expect(printState.printCssLinked).toBe(true);
-  expect(printState.extensionsCreatesStyle).toBe(false);
+  expect(printState.extensionsCreatesStyle).toBe(true);
   expect(printState.printCss).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
   expect(printState.printCss).toContain("@page{size:A4 portrait;margin:7mm}");
   expect(printState.printCss).toContain("page-break-after:always");
@@ -241,4 +244,8 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
 
   const pageObjects = pdf.toString("latin1").match(/\/Type\s*\/Page\b/g) || [];
   expect(pageObjects.length).toBe(2);
+
+  await page.evaluate(() => window.dispatchEvent(new Event("afterprint")));
+  await expect(page.locator("#xNatalPrintSheet")).toHaveCount(0);
+  await expect(page.locator("#xNatalPrintIsolation")).toHaveCount(0);
 });
