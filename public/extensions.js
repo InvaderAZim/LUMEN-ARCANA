@@ -337,7 +337,6 @@ function exportPngX(svgMarkup){
 function printClassicX(svgMarkup){
   if(!svgMarkup)return;
   document.querySelector('#xNatalPrintSheet')?.remove();
-  document.querySelector('#xNatalPrintIsolation')?.remove();
   const parsed=new DOMParser().parseFromString(svgMarkup,'image/svg+xml'),source=parsed.documentElement;
   const W=Number(source.getAttribute('width'))||1400,H=Number(source.getAttribute('height'))||2360;
   const matrixTitle=[...source.querySelectorAll('text')].find(n=>n.textContent?.trim()==='Матриця аспектів');
@@ -353,13 +352,10 @@ function printClassicX(svgMarkup){
   };
   const first=pageSvg(0,splitY,'Classic Natal Chart · колесо та положення');
   const second=pageSvg(splitY,Math.max(1,H-splitY),'Classic Natal Chart · матриця аспектів');
-  const style=document.createElement('style');style.id='xNatalPrintIsolation';
-  style.textContent='@media print{body>*:not(#xNatalPrintSheet){display:none!important}#xNatalPrintSheet{display:block!important;visibility:visible!important;background:#fff!important;margin:0!important;padding:0!important}#xNatalPrintSheet .x-natal-print-page{display:block!important;visibility:visible!important}}';
-  document.head.append(style);
   const sheet=document.createElement('div');sheet.id='xNatalPrintSheet';
   sheet.innerHTML=`<section class="x-natal-print-page">${first}</section><section class="x-natal-print-page">${second}</section>`;
   document.body.append(sheet);
-  const cleanup=()=>{sheet.remove();style.remove()};
+  const cleanup=()=>sheet.remove();
   window.addEventListener('afterprint',cleanup,{once:true});
   requestAnimationFrame(()=>setTimeout(()=>window.print(),50));
   setTimeout(()=>{if(document.body.contains(sheet))cleanup()},30000)
