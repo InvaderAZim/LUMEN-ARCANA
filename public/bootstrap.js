@@ -2,7 +2,7 @@ await import('/app.js');
 
 const optionalModules=[
   ['background','/background.js'],
-  ['extensions','/extensions.js'],
+  ['extensions','/extensions.js?20260920printisolation44'],
   ['tarot78','/tarot78.js'],
   ['exportCompat','/export-compat.js']
 ];
