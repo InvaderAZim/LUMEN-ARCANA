@@ -5,7 +5,7 @@ const NATAL_POSITIONS = {
   Moon: 140.2,
   Mercury: 280.3,
   Venus: 310.4,
-  Mars: 100.5,
+  Mars: 115.1,
   Jupiter: 70.6,
   Saturn: 350.7,
   Uranus: 50.8,
@@ -80,7 +80,7 @@ async function buildClassicNatal(page, calls) {
   await page.locator("#xNPlace").fill("Kyiv Export Test");
   await page.locator("#xNLat").fill("50.4501");
   await page.locator("#xNLon").fill("30.5234");
-  await page.locator("#xNHouseSystem").selectOption("equal");
+  await page.locator("#xNHouseSystem").selectOption("placidus");
   await page.locator("#xNCalc").click();
 
   await expect.poll(() => calls.timezone.length).toBe(1);
@@ -93,6 +93,7 @@ async function buildClassicNatal(page, calls) {
   await expect(page.locator(".classic-chart-shell")).toBeVisible();
   await expect(page.locator(".classic-natal-table")).toBeVisible();
   await expect(page.locator(".classic-aspect-matrix")).toBeVisible();
+  await expect(page.locator(".classic-chart-meta span")).toContainText("Placidus");
   await expect(page.locator("#xPng")).toBeVisible();
   await expect(page.locator("#xPrint")).toBeVisible();
 }
@@ -159,6 +160,25 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
 
     const firstSvg = svgs[0];
     const secondSvg = svgs[1];
+    const wheelSvg = firstSvg?.querySelector('svg[viewBox="0 0 720 720"]');
+    const wheelTexts = [...(wheelSvg?.querySelectorAll("text") || [])];
+    const axisLabels = ["AC", "DC", "MC", "IC"].map(label => {
+      const node = wheelTexts.find(item => item.textContent?.trim() === label);
+      return {
+        label,
+        present: !!node,
+        x: Number(node?.getAttribute("x")),
+        y: Number(node?.getAttribute("y"))
+      };
+    });
+    const houseNumbers = wheelTexts
+      .filter(node => node.classList.contains("classic-svg-halo-4"))
+      .map(node => node.textContent?.trim())
+      .sort((a, b) => Number(a) - Number(b));
+    const houseLineCount = [...(wheelSvg?.querySelectorAll('line[stroke="#555"]') || [])].length;
+    const aspectStrokes = [...(wheelSvg?.querySelectorAll("line") || [])]
+      .map(node => node.getAttribute("stroke"))
+      .filter(stroke => stroke === "#1747ff" || stroke === "#ef1717");
     const textY = (svg, text) => {
       const node = [...(svg?.querySelectorAll("text") || [])]
         .find(item => item.textContent?.trim() === text);
@@ -178,6 +198,11 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
         [...(firstSvg?.querySelectorAll("rect") || [])].some(
           rect => rect.getAttribute("fill") === "#fff"
         ),
+      exportUsesPlacidus: firstSvg?.textContent?.includes("Система домів: Placidus") || false,
+      axisLabels,
+      houseNumbers,
+      houseLineCount,
+      aspectStrokes,
       printCssLinked: !!document.querySelector('link[href*="/natal-print.css"]'),
       printCss,
       extensionsCreatesStyle: /createElement\s*\(\s*["']style["']\s*\)/.test(extensionsSource)
@@ -207,6 +232,20 @@ test("Classic Natal PDF/Print renders exactly two A4 pages with clean print-only
   expect(printState.sheetContainsApp).toBe(false);
   expect(printState.sheetContainsNav).toBe(false);
   expect(printState.firstHasWhiteBackground).toBe(true);
+  expect(printState.exportUsesPlacidus).toBe(true);
+  expect(printState.houseNumbers).toEqual(
+    Array.from({ length: 12 }, (_, index) => String(index + 1))
+  );
+  expect(printState.houseLineCount).toBe(12);
+  expect(printState.aspectStrokes).toContain("#1747ff");
+  expect(printState.aspectStrokes).toContain("#ef1717");
+  for (const axis of printState.axisLabels) {
+    expect(axis.present, axis.label).toBe(true);
+    expect(axis.x, axis.label).toBeGreaterThan(20);
+    expect(axis.x, axis.label).toBeLessThan(700);
+    expect(axis.y, axis.label).toBeGreaterThan(20);
+    expect(axis.y, axis.label).toBeLessThan(700);
+  }
   expect(printState.printCssLinked).toBe(true);
   expect(printState.extensionsCreatesStyle).toBe(false);
   expect(printState.printCss).toContain("body>:not(#xNatalPrintSheet){display:none!important}");
