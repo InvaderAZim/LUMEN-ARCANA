@@ -98,6 +98,41 @@ async function buildClassicNatal(page, calls) {
   await expect(page.locator("#xPrint")).toBeVisible();
 }
 
+
+test("Classic Natal desktop layout stays contained at 1440px", async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  const calls = { timezone: [], ephemeris: [] };
+  await buildClassicNatal(page, calls);
+
+  const layout = await page.evaluate(() => {
+    const shell = document.querySelector(".classic-chart-shell");
+    const wheel = document.querySelector(".classic-natal-svg");
+    const positionsWrap = document.querySelector(".classic-table-wrap");
+    const matrixWrap = document.querySelector(".classic-matrix-wrap");
+    const shellRect = shell?.getBoundingClientRect();
+    const wheelRect = wheel?.getBoundingClientRect();
+
+    return {
+      viewportWidth: window.innerWidth,
+      bodyScrollWidth: document.documentElement.scrollWidth,
+      shellLeft: shellRect?.left ?? -1,
+      shellRight: shellRect?.right ?? Number.POSITIVE_INFINITY,
+      wheelWidth: wheelRect?.width ?? 0,
+      positionsFits: !!positionsWrap && positionsWrap.scrollWidth <= positionsWrap.clientWidth + 1,
+      matrixFits: !!matrixWrap && matrixWrap.scrollWidth <= matrixWrap.clientWidth + 1
+    };
+  });
+
+  expect(layout.viewportWidth).toBe(1440);
+  expect(layout.bodyScrollWidth).toBeLessThanOrEqual(1441);
+  expect(layout.shellLeft).toBeGreaterThanOrEqual(0);
+  expect(layout.shellRight).toBeLessThanOrEqual(1440);
+  expect(layout.wheelWidth).toBeGreaterThan(600);
+  expect(layout.wheelWidth).toBeLessThanOrEqual(760);
+  expect(layout.positionsFits).toBe(true);
+  expect(layout.matrixFits).toBe(true);
+});
+
 test("Classic Natal PNG exports a real PNG file", async ({ page }) => {
   const calls = { timezone: [], ephemeris: [] };
   await buildClassicNatal(page, calls);
