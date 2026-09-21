@@ -72,6 +72,74 @@ test("local interpretation works without OpenAI", async () => {
   assert.equal(b.cards.length, 1);
 });
 
+test("yes-no local interpretation can lean yes without claiming certainty", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто погодитися на цю зустріч?",
+      spread: "yesno",
+      cards: [{
+        name: "Маг",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["воля", "дія", "майстерність"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.source, "local");
+  assert.equal(b.title, "Тенденція: скоріше так");
+  assert.match(b.synthesis, /не гарантує результат/i);
+});
+
+test("yes-no local interpretation can lean no from caution symbolism", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто поспішати з цим рішенням?",
+      spread: "yesno",
+      cards: [{
+        name: "Вежа",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["руйнування", "різка зміна", "перебудова"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.source, "local");
+  assert.equal(b.title, "Тенденція: скоріше ні");
+  assert.match(b.synthesis, /не поспішати/i);
+});
+
+test("yes-no high-stakes request is forced to an unclear tendency", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи брати мені кредит?",
+      spread: "yesno",
+      cards: [{
+        name: "Сонце",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["ясність", "життєвість", "успіх"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.source, "local");
+  assert.equal(b.risk, "financial");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+  assert.match(b.synthesis, /факти й профільна порада/i);
+  assert.match(b.caution, /Таро не замінює професійне рішення/i);
+});
+
 test("crisis Tarot request is blocked before interpretation", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
     method: "POST",
