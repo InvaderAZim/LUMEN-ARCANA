@@ -67,6 +67,77 @@ test("production UI labels client Tarot fallback when API fails", async ({ page 
 });
 
 
+async function drawYesNoClientFallback(page, question, randomValues) {
+  await page.evaluate(values => {
+    const queue = [...values];
+    Math.random = () => queue.length ? queue.shift() : 0.5;
+  }, randomValues);
+  await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
+  await expect(page.locator("#app .top h1")).toHaveText("Таро");
+  await page.locator('[data-type="yesno"]').click();
+  await page.locator("#q").fill(question);
+  await page.locator("#draw").click();
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".tarot-source-badge")).toHaveText(
+    "Локальне тлумачення · сервер недоступний"
+  );
+}
+
+test("production client yes-no fallback preserves yes no unclear reversed and high-stakes safety", async ({ page }) => {
+  await page.route("**/api/interpret", route =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "production_yesno_fallback_audit" })
+    })
+  );
+
+  await prepareProductionTarot(page);
+
+  const cases = [
+    {
+      question: "Чи варто погодитися на цю зустріч?",
+      randomValues: [1.5 / 78, 0.5],
+      title: "Тенденція: скоріше так"
+    },
+    {
+      question: "Чи варто поспішати з цим рішенням?",
+      randomValues: [16.5 / 78, 0.5],
+      title: "Тенденція: скоріше ні"
+    },
+    {
+      question: "Чи варто повернутися до цієї розмови?",
+      randomValues: [0.001, 0.5],
+      title: "Тенденція: неоднозначно"
+    },
+    {
+      question: "Чи варто погодитися на цю зустріч?",
+      randomValues: [1.5 / 78, 0.1],
+      title: "Тенденція: неоднозначно"
+    },
+    {
+      question: "Чи покращаться мої фінанси найближчим часом?",
+      randomValues: [19.5 / 78, 0.5],
+      title: "Тенденція: неоднозначно"
+    },
+    {
+      question: "Чи варто мені приймати ці ліки?",
+      randomValues: [19.5 / 78, 0.5],
+      title: "Тенденція: неоднозначно"
+    },
+    {
+      question: "Чи варто мені підписувати цей договір?",
+      randomValues: [19.5 / 78, 0.5],
+      title: "Тенденція: неоднозначно"
+    }
+  ];
+
+  for (const item of cases) {
+    await drawYesNoClientFallback(page, item.question, item.randomValues);
+    await expect(page.locator(".result-premium h2")).toHaveText(item.title);
+  }
+});
+
 test("production Tarot image failure stays CSP-safe", async ({ page }) => {
   let releaseInterpret;
   const gate = new Promise(resolve => {

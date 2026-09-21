@@ -116,6 +116,113 @@ test("yes-no local interpretation can lean no from caution symbolism", async () 
   assert.match(b.synthesis, /не поспішати/i);
 });
 
+test("yes-no neutral symbolism stays unclear", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто повернутися до цієї розмови?",
+      spread: "yesno",
+      cards: [{
+        name: "Верховна Жриця",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["інтуїція", "тиша", "внутрішнє знання"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.risk, "normal");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+});
+
+test("yes-no reversed positive card reduces certainty", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто погодитися на цю зустріч?",
+      spread: "yesno",
+      cards: [{
+        name: "Маг",
+        position: "Тенденція відповіді",
+        orientation: "reversed",
+        keywords: ["воля", "дія", "майстерність"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.risk, "normal");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+});
+
+test("yes-no broader financial request is forced to an unclear tendency", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи покращаться мої фінанси найближчим часом?",
+      spread: "yesno",
+      cards: [{
+        name: "Сонце",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["ясність", "життєвість", "успіх"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.risk, "financial");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+});
+
+test("yes-no medical request is forced to an unclear tendency", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто мені приймати ці ліки?",
+      spread: "yesno",
+      cards: [{
+        name: "Сонце",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["ясність", "життєвість", "успіх"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.risk, "medical");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+  assert.match(b.synthesis, /факти й профільна порада/i);
+});
+
+test("yes-no legal request is forced to an unclear tendency", async () => {
+  const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
+    method: "POST",
+    body: JSON.stringify({
+      language: "uk",
+      question: "Чи варто мені підписувати цей договір?",
+      spread: "yesno",
+      cards: [{
+        name: "Сонце",
+        position: "Тенденція відповіді",
+        orientation: "upright",
+        keywords: ["ясність", "життєвість", "успіх"]
+      }]
+    })
+  }), env);
+  assert.equal(r.status, 200);
+  const b = await r.json();
+  assert.equal(b.risk, "legal");
+  assert.equal(b.title, "Тенденція: неоднозначно");
+  assert.match(b.synthesis, /факти й профільна порада/i);
+});
+
 test("yes-no high-stakes request is forced to an unclear tendency", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
     method: "POST",

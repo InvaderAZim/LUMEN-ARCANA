@@ -77,10 +77,13 @@ const THEMED_POSITIONS78={
 function tarotPositions(count){const {type,spread}=tarotState78();if(type==='three')return['Минуле','Теперішнє','Напрямок'];if(type==='love')return['Почуття','Зв’язок','Наступний крок'];if(type==='work')return['Ситуація','Ресурс','Дія'];if(type==='yesno')return['Тенденція відповіді'];if(type==='single')return['Головний фокус'];if(type==='themed'&&THEMED_POSITIONS78[spread])return THEMED_POSITIONS78[spread].slice(0,count);return Array.from({length:count},(_,i)=>`Позиція ${i+1}`)}
 const YESNO_CLIENT_POSITIVE_RX=/(успіх|надія|відновлення|гармон|достаток|цілісн|результат|ясність|воля|дія|майстерність|сміливість|рух|потенціал|розвиток|стабіл|звістка|зрілість|керування|відповідальність|взаємодія|баланс|зв’язок|узгодженість|творення|ресурс)/i;
 const YESNO_CLIENT_CAUTION_RX=/(конфлікт|напруга|виклик|навантаження|несвобода|руйнування|невизначеність|прив’язаність|спокуса|пауза|відпускання|страх|межа|перевірка|ризик)/i;
-const YESNO_CLIENT_HIGH_RISK_RX=/(кредит|лотере|інвест|акці|крипт|ставк|вигра|діагноз|лікуван|операц|вагітн|пологи|хвороб|рак|суд|вирок|арешт|поліці|закон)/i;
+const YESNO_CLIENT_MEDICAL_RX=/(діагноз|лікуван|операц|вагітн|пологи|хвороб|рак|здоров|лікар|ліки|медикамент|препарат|таблет|дозув|доза|симптом|обстеж|pregnan|diagnos|surgery|disease|health|doctor|medicat|medicine|prescription|dose|symptom|treatment)/i;
+const YESNO_CLIENT_FINANCIAL_RX=/(кредит|позик|лотере|інвест|акці|крипт|ставк|вигра|фінанс|грош|дохід|зарплат|зароб|бюджет|витрат|прибут|борг|іпотек|банк|депозит|облігац|платіж|податк|loan|lottery|invest|stock|crypto|bet|financ|money|income|salary|budget|expense|profit|debt|mortgage|bank|deposit|bond|payment|tax)/i;
+const YESNO_CLIENT_LEGAL_RX=/(суд|вирок|арешт|поліці|закон|юрид|правов|адвокат|юрист|договор|контракт|позов|штраф|криміналь|цивільн.{0,12}справ|прокурат|слідств|затриман|court|arrest|legal|lawyer|attorney|contract|lawsuit|fine|criminal|prosecut|investigat|detention)/i;
+const isYesNoClientHighRisk78=question=>YESNO_CLIENT_MEDICAL_RX.test(question||'')||YESNO_CLIENT_FINANCIAL_RX.test(question||'')||YESNO_CLIENT_LEGAL_RX.test(question||'');
 function yesNoClient78(question,card){
  const name=card?.name||'Карта';
- if(YESNO_CLIENT_HIGH_RISK_RX.test(question||''))return{title:'Тенденція: неоднозначно',synthesis:`Для запиту «${question}» не варто зводити рішення до «так/ні» за картою. Тут важливі факти й профільна порада; Таро може бути лише приводом сформулювати питання.`};
+ if(isYesNoClientHighRisk78(question))return{title:'Тенденція: неоднозначно',synthesis:`Для запиту «${question}» не варто зводити рішення до «так/ні» за картою. Тут важливі факти й профільна порада; Таро може бути лише приводом сформулювати питання.`};
  const text=[name,...(card?.keywords||[])].filter(Boolean).join(' ');
  let score=(YESNO_CLIENT_POSITIVE_RX.test(text)?1:0)-(YESNO_CLIENT_CAUTION_RX.test(text)?1:0);
  if(card?.orientation==='reversed')score-=1;
