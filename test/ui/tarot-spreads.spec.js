@@ -31,12 +31,13 @@ async function openApp(page, requests) {
   );
 }
 
-async function draw(page, requests, type, question, spread = null) {
+async function draw(page, requests, type, question, spread = null, mode = null) {
   const before = requests.length;
   await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
   await page.locator(`[data-type="${type}"]`).click();
   if (spread) await page.locator(`[data-s="${spread}"]`).click();
+  if (mode) await page.locator("#mode").selectOption(mode);
   await page.locator("#q").fill(question);
   await page.locator("#draw").click();
   await expect(page.locator(".result-premium")).toBeVisible();
@@ -87,30 +88,21 @@ test("Tarot yes/no, love and work keep correct counts and positions", async ({ p
   }
 });
 
-test("all themed Tarot spreads keep semantic positions and journal metadata", async ({ page }) => {
-  const requests = [];
-  await openApp(page, requests);
+const THEMED_CASES = [
+  ["conflict", 5, ["Суть напруги", "Що приховано", "Твоя реакція", "Що повертає контроль", "Наступний крок"]],
+  ["closure", 4, ["Що завершилось", "Що варто відпустити", "Що забрати із собою", "Наступний крок"]],
+  ["new_relationship", 4, ["Твоя готовність", "Межі", "Очікування", "Як відкритися без втрати себе"]],
+  ["distance", 4, ["Стан контакту", "Що підтримує довіру", "Що створює дистанцію", "Реалістичний крок"]],
+  ["career_choice", 5, ["Перший напрям", "Другий напрям", "Твій ресурс", "Головний ризик", "Наступний крок"]],
+  ["work_resources", 4, ["Поточна ситуація", "Твоя сильна сторона", "Що виснажує", "Практичний крок"]],
+  ["month", 5, ["Головна тема", "Робота / розвиток", "Стосунки", "Ресурс", "Фокус місяця"]],
+  ["week", 3, ["Що завершити", "Що помітити", "Куди рухатись"]]
+];
 
-  const cases = [
-    ["conflict", 5, ["Суть напруги", "Що приховано", "Твоя реакція", "Що повертає контроль", "Наступний крок"]],
-    ["closure", 4, ["Що завершилось", "Що варто відпустити", "Що забрати із собою", "Наступний крок"]],
-    ["new_relationship", 4, ["Твоя готовність", "Межі", "Очікування", "Як відкритися без втрати себе"]],
-    ["distance", 4, ["Стан контакту", "Що підтримує довіру", "Що створює дистанцію", "Реалістичний крок"]],
-    ["career_choice", 5, ["Перший напрям", "Другий напрям", "Твій ресурс", "Головний ризик", "Наступний крок"]],
-    ["work_resources", 4, ["Поточна ситуація", "Твоя сильна сторона", "Що виснажує", "Практичний крок"]],
-    ["month", 5, ["Головна тема", "Робота / розвиток", "Стосунки", "Ресурс", "Фокус місяця"]],
-    ["week", 3, ["Що завершити", "Що помітити", "Куди рухатись"]]
-  ];
-
-  let savedRequest = null;
-
-  for (const [spread, count, positions] of cases) {
-    await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
-    await page.locator('[data-type="themed"]').click();
-
-    if (spread === "career_choice") {
-      await page.locator("#mode").selectOption("pro");
-    }
+for (const [spread, count, positions] of THEMED_CASES) {
+  test(`themed Tarot spread ${spread} keeps semantic positions`, async ({ page }) => {
+    const requests = [];
+    await openApp(page, requests);
 
     const request = await draw(
       page,
@@ -122,15 +114,26 @@ test("all themed Tarot spreads keep semantic positions and journal metadata", as
 
     expect(request.spread).toBe(spread);
     expectCards(request, count, positions);
+  });
+}
 
-    if (spread === "career_choice") {
-      savedRequest = request;
-      await page.locator("#save78").click();
-    }
-  }
+test("themed Tarot journal keeps spread mode positions and orientation", async ({ page }) => {
+  const requests = [];
+  await openApp(page, requests);
 
-  expect(savedRequest).not.toBeNull();
-  expect(savedRequest.mode).toBe("pro");
+  const request = await draw(
+    page,
+    requests,
+    "themed",
+    "Regression themed journal",
+    "career_choice",
+    "pro"
+  );
+
+  expect(request.spread).toBe("career_choice");
+  expect(request.mode).toBe("pro");
+
+  await page.locator("#save78").click();
 
   const journal = await page.evaluate(() =>
     JSON.parse(localStorage.getItem("la_journal") || "[]")
