@@ -79,7 +79,7 @@ const YESNO_CLIENT_POSITIVE_RX=/(успіх|надія|відновлення|г
 const YESNO_CLIENT_CAUTION_RX=/(конфлікт|напруга|виклик|навантаження|несвобода|руйнування|невизначеність|прив’язаність|спокуса|пауза|відпускання|страх|межа|перевірка|ризик)/i;
 const YESNO_CLIENT_MEDICAL_RX=/(діагноз|лікуван|операц|вагітн|пологи|хвороб|рак|здоров|лікар|ліки|медикамент|препарат|таблет|дозув|доза|симптом|обстеж|pregnan|diagnos|surgery|disease|health|doctor|medicat|medicine|prescription|dose|symptom|treatment)/i;
 const YESNO_CLIENT_FINANCIAL_RX=/(кредит|позик|лотере|інвест|акці|крипт|ставк|вигра|фінанс|грош|дохід|зарплат|зароб|бюджет|витрат|прибут|борг|іпотек|банк|депозит|облігац|платіж|податк|loan|lottery|invest|stock|crypto|bet|financ|money|income|salary|budget|expense|profit|debt|mortgage|bank|deposit|bond|payment|tax)/i;
-const YESNO_CLIENT_LEGAL_RX=/(суд|вирок|арешт|поліці|закон|юрид|правов|адвокат|юрист|договор|контракт|позов|штраф|криміналь|цивільн.{0,12}справ|прокурат|слідств|затриман|court|arrest|legal|lawyer|attorney|contract|lawsuit|fine|criminal|prosecut|investigat|detention)/i;
+const YESNO_CLIENT_LEGAL_RX=/(суд|вирок|арешт|поліці|закон|юрид|правов|адвокат|юрист|догов(?:ір|ор)|контракт|позов|штраф|криміналь|цивільн.{0,12}справ|прокурат|слідств|затриман|court|arrest|legal|lawyer|attorney|contract|lawsuit|fine|criminal|prosecut|investigat|detention)/i;
 const isYesNoClientHighRisk78=question=>YESNO_CLIENT_MEDICAL_RX.test(question||'')||YESNO_CLIENT_FINANCIAL_RX.test(question||'')||YESNO_CLIENT_LEGAL_RX.test(question||'');
 function yesNoClient78(question,card){
  const name=card?.name||'Карта';

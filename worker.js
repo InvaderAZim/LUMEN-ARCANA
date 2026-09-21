@@ -13,7 +13,7 @@ export async function verifyTelegramInitData(d,t,max=86400){if(!d||!t)return fal
 const crisis=/(суїцид|самогуб|убить себя|самоубий|не хочу жить|не хочу жити|kill myself|suicide|self.?harm)/i;
 const medical=/(діагноз|лікуван|операц|вагітн|пологи|хвороб|рак|здоров|лікар|ліки|медикамент|препарат|таблет|дозув|доза|симптом|обстеж|pregnan|diagnos|surgery|disease|health|doctor|medicat|medicine|prescription|dose|symptom|treatment)/i;
 const financial=/(кредит|позик|лотере|інвест|акці|крипт|ставк|вигра|фінанс|грош|дохід|зарплат|зароб|бюджет|витрат|прибут|борг|іпотек|банк|депозит|облігац|платіж|податк|loan|lottery|invest|stock|crypto|bet|financ|money|income|salary|budget|expense|profit|debt|mortgage|bank|deposit|bond|payment|tax)/i;
-const legal=/(суд|вирок|арешт|поліці|закон|юрид|правов|адвокат|юрист|договор|контракт|позов|штраф|криміналь|цивільн.{0,12}справ|прокурат|слідств|затриман|court|arrest|legal|lawyer|attorney|contract|lawsuit|fine|criminal|prosecut|investigat|detention)/i;
+const legal=/(суд|вирок|арешт|поліці|закон|юрид|правов|адвокат|юрист|догов(?:ір|ор)|контракт|позов|штраф|криміналь|цивільн.{0,12}справ|прокурат|слідств|затриман|court|arrest|legal|lawyer|attorney|contract|lawsuit|fine|criminal|prosecut|investigat|detention)/i;
 const risk=q=>crisis.test(q)?"crisis":medical.test(q)?"medical":financial.test(q)?"financial":legal.test(q)?"legal":"normal";
 const kw=v=>Array.isArray(v)?v.slice(0,6).map(x=>clean(x,40)).filter(Boolean):[];
 const arr=v=>Array.isArray(v)?v.slice(0,3).map(x=>clean(x,60)).filter(Boolean):[];
