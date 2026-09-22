@@ -141,6 +141,9 @@ test("themed Tarot journal keeps spread mode positions and orientation", async (
 
   expect(journal).toHaveLength(1);
   expect(journal[0]).toMatchObject({
+    question: "Regression themed journal",
+    title: "Spread Regression",
+    synthesis: "Spread regression synthesis",
     type: "themed",
     spread: "career_choice",
     mode: "pro"
@@ -154,5 +157,8 @@ test("themed Tarot journal keeps spread mode positions and orientation", async (
   ]);
   expect(journal[0].cards.every(card =>
     ["upright", "reversed"].includes(card.orientation)
+  )).toBe(true);
+  expect(journal[0].cards.every(card =>
+    typeof card.group === "string" && card.group.length > 0
   )).toBe(true);
 });
