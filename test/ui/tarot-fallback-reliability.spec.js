@@ -53,3 +53,46 @@ for (const [name, response] of [
     await drawSingle(page, `${name} regression`);
   });
 }
+
+
+test("late Tarot interpretation cannot overwrite another route", async ({ page }) => {
+  let releaseInterpret;
+  const gate = new Promise(resolve => {
+    releaseInterpret = resolve;
+  });
+
+  await page.route("**/api/interpret", async route => {
+    const body = route.request().postDataJSON();
+    await gate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "mock",
+        title: "Late Tarot result",
+        cards: body.cards.map(card => ({
+          card: card.name,
+          symbolism: (card.keywords || []).join(" · "),
+          practice: "Late response"
+        })),
+        synthesis: "This response must stay on the abandoned reading."
+      })
+    });
+  });
+
+  await openTarot(page);
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Race regression");
+  await page.locator("#draw").click();
+  await expect(page.locator(".drawing")).toBeVisible();
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE?.("home"));
+  await expect(page.locator("#app .top h1")).toContainText("Привіт");
+
+  releaseInterpret();
+  await page.waitForTimeout(150);
+
+  await expect(page.locator("#app .top h1")).toContainText("Привіт");
+  await expect(page.locator(".result-premium")).toHaveCount(0);
+  await expect(page.getByText("Late Tarot result", { exact: true })).toHaveCount(0);
+});
