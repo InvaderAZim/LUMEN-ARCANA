@@ -68,15 +68,21 @@ test("production UI labels client Tarot fallback when API fails", async ({ page 
 
 
 async function drawYesNoClientFallback(page, question, randomValues) {
-  await page.evaluate(values => {
-    const queue = [...values];
-    Math.random = () => queue.length ? queue.shift() : 0.5;
-  }, randomValues);
   await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
   await page.locator('[data-type="yesno"]').click();
   await page.locator("#q").fill(question);
+  await page.evaluate(values => {
+    const originalRandom = Math.random;
+    const queue = [...values];
+    Math.random = () => queue.length ? queue.shift() : 0.5;
+    window.__restoreTarotRandom = () => {
+      Math.random = originalRandom;
+      delete window.__restoreTarotRandom;
+    };
+  }, randomValues);
   await page.locator("#draw").click();
+  await page.evaluate(() => window.__restoreTarotRandom?.());
   await expect(page.locator(".result-premium")).toBeVisible();
   await expect(page.locator(".tarot-source-badge")).toHaveText(
     "Локальне тлумачення · сервер недоступний"
