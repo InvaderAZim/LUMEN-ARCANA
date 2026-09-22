@@ -96,3 +96,32 @@ test("late Tarot interpretation cannot overwrite another route", async ({ page }
   await expect(page.locator(".result-premium")).toHaveCount(0);
   await expect(page.getByText("Late Tarot result", { exact: true })).toHaveCount(0);
 });
+
+
+test("Tarot save recovers from non-array journal storage", async ({ page }) => {
+  await page.route("**/api/interpret", route =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "journal_storage_regression" })
+    })
+  );
+
+  await openTarot(page);
+  await page.evaluate(() => {
+    localStorage.setItem("la_journal", JSON.stringify({ corrupted: true }));
+  });
+
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Journal recovery regression");
+  await page.locator("#draw").click();
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await page.locator("#save78").click();
+
+  const journal = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("la_journal") || "[]")
+  );
+  expect(Array.isArray(journal)).toBe(true);
+  expect(journal).toHaveLength(1);
+  expect(journal[0].question).toBe("Journal recovery regression");
+});
