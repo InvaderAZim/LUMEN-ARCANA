@@ -207,3 +207,40 @@ test("Tarot network loss degrades to client fallback", async ({ page }) => {
   await expect(page.locator(".result-premium h2")).toHaveText("Твій розклад");
   await expect(page.locator(".reading-card-classic")).toHaveCount(1);
 });
+
+
+test("rapid duplicate Draw signals create only one interpretation request", async ({ page }) => {
+  let requestCount = 0;
+  await page.route("**/api/interpret", async route => {
+    requestCount += 1;
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "mock",
+        title: "Single draw request",
+        cards: body.cards.map(card => ({
+          card: card.name,
+          symbolism: (card.keywords || []).join(" · "),
+          practice: "Single request"
+        })),
+        synthesis: "Only one interpretation request should exist."
+      })
+    });
+  });
+
+  await openTarot(page);
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Duplicate draw regression");
+
+  await page.evaluate(() => {
+    const button = document.querySelector("#draw");
+    if (!button) throw new Error("Draw button missing");
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect.poll(() => requestCount).toBe(1);
+});
