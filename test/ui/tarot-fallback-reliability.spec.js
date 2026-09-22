@@ -190,3 +190,20 @@ test("partial Tarot server cards are completed from the local draw", async ({ pa
   expect(names).toHaveLength(3);
   expect(new Set(names).size).toBe(3);
 });
+
+
+test("Tarot network loss degrades to client fallback", async ({ page }) => {
+  await page.route("**/api/interpret", route => route.abort("internetdisconnected"));
+
+  await openTarot(page);
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Offline regression");
+  await page.locator("#draw").click();
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".tarot-source-badge")).toHaveText(
+    "Локальне тлумачення · сервер недоступний"
+  );
+  await expect(page.locator(".result-premium h2")).toHaveText("Твій розклад");
+  await expect(page.locator(".reading-card-classic")).toHaveCount(1);
+});
