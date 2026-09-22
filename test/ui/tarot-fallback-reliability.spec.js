@@ -156,3 +156,37 @@ test("Tarot save is idempotent for the current reading", async ({ page }) => {
   await expect(page.locator("#save78")).toBeDisabled();
   await expect(page.locator("#save78")).toHaveText("Збережено");
 });
+
+
+test("partial Tarot server cards are completed from the local draw", async ({ page }) => {
+  await page.route("**/api/interpret", async route => {
+    const body = route.request().postDataJSON();
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "mock",
+        title: "Partial response",
+        cards: [{
+          card: body.cards[0].name,
+          symbolism: "Server symbolism",
+          practice: "Server practice"
+        }],
+        synthesis: "Partial server response"
+      })
+    });
+  });
+
+  await openTarot(page);
+  await page.locator('[data-type="three"]').click();
+  await page.locator("#q").fill("Partial cards regression");
+  await page.locator("#draw").click();
+
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".reading-card-classic")).toHaveCount(3);
+  await expect(page.locator(".reading-card-classic").first()).toContainText("Server symbolism");
+
+  const names = await page.locator(".reading-card-classic h3").allTextContents();
+  expect(names).toHaveLength(3);
+  expect(new Set(names).size).toBe(3);
+});
