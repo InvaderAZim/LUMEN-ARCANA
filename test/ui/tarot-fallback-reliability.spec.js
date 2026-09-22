@@ -125,3 +125,34 @@ test("Tarot save recovers from non-array journal storage", async ({ page }) => {
   expect(journal).toHaveLength(1);
   expect(journal[0].question).toBe("Journal recovery regression");
 });
+
+
+test("Tarot save is idempotent for the current reading", async ({ page }) => {
+  await page.route("**/api/interpret", route =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "duplicate_save_regression" })
+    })
+  );
+
+  await openTarot(page);
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Duplicate save regression");
+  await page.locator("#draw").click();
+  await expect(page.locator(".result-premium")).toBeVisible();
+
+  await page.evaluate(() => {
+    const button = document.querySelector("#save78");
+    button?.click();
+    button?.click();
+  });
+
+  const journal = await page.evaluate(() =>
+    JSON.parse(localStorage.getItem("la_journal") || "[]")
+  );
+  expect(journal).toHaveLength(1);
+  expect(journal[0].question).toBe("Duplicate save regression");
+  await expect(page.locator("#save78")).toBeDisabled();
+  await expect(page.locator("#save78")).toHaveText("Збережено");
+});
