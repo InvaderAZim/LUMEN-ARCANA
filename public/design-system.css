@@ -211,6 +211,30 @@ label{
 .deck-filter-grid{
   gap:10px!important;
 }
+/* PROFILE NORMALIZATION */
+.profile-card .avatar{
+  width:76px!important;
+  height:76px!important;
+  min-width:76px!important;
+  border-radius:50%!important;
+  display:grid!important;
+  place-items:center!important;
+  font-size:2.25rem!important;
+  line-height:1!important;
+}
+.profile-stats-grid{
+  grid-auto-rows:1fr!important;
+  align-items:stretch!important;
+}
+.profile-stats-grid>article{
+  height:100%!important;
+  min-height:156px!important;
+  display:flex!important;
+  flex-direction:column!important;
+}
+.profile-stats-grid>article p{
+  margin-top:auto!important;
+}
 @media(max-width:560px){
   :root{
     --ui-panel-pad:16px;
@@ -244,6 +268,15 @@ label{
     min-height:88px!important;
     padding:12px 13px!important;
     border-radius:17px!important;
+  }
+  .profile-card .avatar{
+    width:68px!important;
+    height:68px!important;
+    min-width:68px!important;
+    font-size:2rem!important;
+  }
+  .profile-stats-grid>article{
+    min-height:148px!important;
   }
   .lumen-field,
   textarea,

@@ -134,3 +134,32 @@ test("deck filters and standard actions use the same control radius", async ({ p
   expect(filterStyle.borderRadius).toBe("14px");
   expect(["46px", "48px"]).toContain(filterStyle.minHeight);
 });
+
+
+test("profile summary cards are equal height and avatar is proportionate", async ({ page }) => {
+  await openApp(page);
+  await page.evaluate(() => window.LUMEN_NAVIGATE("profile"));
+  await expect(page.locator("#app .top h1")).toHaveText("Профіль");
+
+  const cards = page.locator(".profile-stats-grid > article");
+  await expect(cards).toHaveCount(4);
+
+  const heights = await cards.evaluateAll(nodes =>
+    nodes.map(node => Math.round(node.getBoundingClientRect().height))
+  );
+  expect(new Set(heights).size).toBe(1);
+
+  const avatar = await page.locator(".profile-card .avatar").evaluate(node => {
+    const rect = node.getBoundingClientRect();
+    const css = getComputedStyle(node);
+    return {
+      width: Math.round(rect.width),
+      height: Math.round(rect.height),
+      fontSize: parseFloat(css.fontSize)
+    };
+  });
+
+  expect(avatar.width).toBe(avatar.height);
+  expect(avatar.width).toBeGreaterThanOrEqual(68);
+  expect(avatar.fontSize).toBeGreaterThanOrEqual(30);
+});
