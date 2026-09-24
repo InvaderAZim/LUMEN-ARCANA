@@ -1,0 +1,254 @@
+/* LUMEN ARCANA DESIGN SYSTEM v1
+   Final UI normalization layer. Keep specialized chart/card geometry intact. */
+:root{
+  --ui-text:#f8f3e9;
+  --ui-muted:#9fadb9;
+  --ui-gold:#e5c87d;
+  --ui-gold-2:#c89e48;
+  --ui-blue:#68b8ff;
+  --ui-panel-a:#151c24ee;
+  --ui-panel-b:#0c1117ee;
+  --ui-card-a:#111b25dd;
+  --ui-card-b:#0b1015dd;
+  --ui-border:#68b8ff42;
+  --ui-border-soft:#68b8ff30;
+  --ui-border-hover:#68b8ff78;
+  --ui-radius-panel:22px;
+  --ui-radius-card:18px;
+  --ui-radius-control:14px;
+  --ui-control-height:48px;
+  --ui-panel-pad:20px;
+  --ui-gap:12px;
+  --ui-shadow:0 18px 48px #0008,0 0 34px #2b8bd118;
+}
+body{
+  color:var(--ui-text);
+  font-size:16px;
+  line-height:1.45;
+}
+.top h1{
+  font-size:clamp(2.35rem,7vw,3.7rem)!important;
+  line-height:.98!important;
+  letter-spacing:-.035em!important;
+}
+.top p,
+.hero-copy p,
+.deck-source-note,
+.lumen-muted-copy,
+.lumen-help-copy,
+.settings-grid p,
+.journal-item p,
+.lesson p,
+.reading-cards p{
+  color:var(--ui-muted)!important;
+}
+.hero-copy h2,
+.panel-row h2,
+.result-head h2,
+.drawing h2,
+.premium-panel>h2,
+.profile-card h2{
+  font-family:Georgia,"Times New Roman",serif!important;
+  font-size:clamp(1.7rem,5vw,2.15rem)!important;
+  line-height:1.08!important;
+  font-weight:500!important;
+  letter-spacing:-.02em!important;
+}
+.settings-grid h3,
+.reading-cards h3,
+.lesson h3,
+.journal-item h3,
+.quick-grid span,
+.spread strong{
+  line-height:1.22!important;
+}
+.badge,
+.mode-pill,
+.premium-chip,
+.brandline span{
+  color:var(--ui-gold)!important;
+  background:#e5c87d0f!important;
+  border-color:#e5c87d48!important;
+  box-shadow:none!important;
+}
+.hero-premium,
+.day-card,
+.premium-panel,
+.result-premium,
+.drawing,
+.profile-card,
+.premium-strip,
+.empty-state,
+.lesson,
+.journal-item{
+  border:1px solid var(--ui-border)!important;
+  background:linear-gradient(145deg,var(--ui-panel-a),var(--ui-panel-b))!important;
+  border-radius:var(--ui-radius-panel)!important;
+  box-shadow:var(--ui-shadow)!important;
+}
+.hero-premium,
+.premium-panel,
+.result-premium,
+.drawing,
+.profile-card,
+.day-card,
+.empty-state,
+.lesson,
+.journal-item{
+  padding:var(--ui-panel-pad)!important;
+}
+.settings-grid article,
+.quick-grid button,
+.reading-cards article,
+.spread,
+.library-grid article{
+  border:1px solid var(--ui-border-soft)!important;
+  background:linear-gradient(145deg,var(--ui-card-a),var(--ui-card-b))!important;
+  border-radius:var(--ui-radius-card)!important;
+  color:var(--ui-text)!important;
+  box-shadow:none!important;
+}
+.quick-grid button:hover,
+.ghost:hover,
+.spread:hover,
+.settings-grid article:hover{
+  border-color:var(--ui-border-hover)!important;
+}
+.primary,
+.ghost,
+.hero-actions button,
+.result-actions button,
+.deck-filter-grid button,
+.natal-view-switch button,
+.x-fav-button,
+.academy-practice{
+  min-height:var(--ui-control-height)!important;
+  border-radius:var(--ui-radius-control)!important;
+  padding:11px 15px!important;
+  font-size:.92rem!important;
+  line-height:1.15!important;
+  font-weight:800!important;
+}
+.primary{
+  background:linear-gradient(135deg,#edd99f 0,var(--ui-gold-2) 100%)!important;
+  color:#181109!important;
+  border-color:transparent!important;
+  box-shadow:0 8px 28px #d7ad4c24!important;
+}
+.ghost,
+.natal-view-switch button,
+.x-fav-button,
+.academy-practice{
+  border:1px solid var(--ui-border)!important;
+  background:#11202da0!important;
+  color:#e8f4ff!important;
+  box-shadow:none!important;
+}
+.home-quick-grid button,
+.tarot-format-grid button{
+  border-radius:17px!important;
+}
+.lumen-field,
+textarea,
+select,
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]){
+  min-height:var(--ui-control-height);
+  background:#090909!important;
+  color:#fff!important;
+  border:1px solid var(--ui-border)!important;
+  border-radius:var(--ui-radius-control)!important;
+  padding:13px!important;
+  font-size:.95rem!important;
+  line-height:1.3!important;
+  outline:none!important;
+}
+textarea{
+  min-height:108px!important;
+}
+.lumen-field:focus,
+textarea:focus,
+select:focus,
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):focus{
+  border-color:#e5c87d70!important;
+  box-shadow:0 0 0 3px #e5c87d12!important;
+}
+label{
+  color:#e9e2d5!important;
+  font-size:.84rem!important;
+  line-height:1.2!important;
+  font-weight:800!important;
+}
+.bottom-nav{
+  border-color:var(--ui-border)!important;
+  background:linear-gradient(180deg,#0b1620f4,#080d12f2)!important;
+  border-radius:var(--ui-radius-panel)!important;
+  box-shadow:0 18px 48px #000a,0 0 32px #479de520!important;
+}
+.nav-btn{
+  border-radius:var(--ui-radius-control)!important;
+}
+.nav-btn.active{
+  color:#e9f5ff!important;
+  background:#153650cc!important;
+  box-shadow:inset 0 0 0 1px #68b8ff60,0 0 20px #58aaf530!important;
+}
+.toast{
+  border:1px solid var(--ui-border)!important;
+  border-radius:var(--ui-radius-control)!important;
+  background:#0f1b26!important;
+  color:#eef7ff!important;
+}
+.panel-row,
+.result-head,
+.result-actions,
+.hero-actions{
+  gap:var(--ui-gap)!important;
+}
+.settings-grid,
+.quick-grid,
+.spread-list,
+.reading-cards,
+.deck-filter-grid{
+  gap:10px!important;
+}
+@media(max-width:560px){
+  :root{
+    --ui-panel-pad:16px;
+    --ui-gap:10px;
+  }
+  body{font-size:15px}
+  .top h1{font-size:2.5rem!important}
+  .top p{font-size:.92rem!important}
+  .hero-copy h2,
+  .panel-row h2,
+  .result-head h2,
+  .drawing h2,
+  .premium-panel>h2,
+  .profile-card h2{
+    font-size:1.8rem!important;
+  }
+  .primary,
+  .ghost,
+  .hero-actions button,
+  .result-actions button,
+  .deck-filter-grid button,
+  .natal-view-switch button,
+  .x-fav-button,
+  .academy-practice{
+    min-height:46px!important;
+    padding:10px 13px!important;
+    font-size:.88rem!important;
+  }
+  .home-quick-grid button,
+  .tarot-format-grid button{
+    min-height:88px!important;
+    padding:12px 13px!important;
+    border-radius:17px!important;
+  }
+  .lumen-field,
+  textarea,
+  select,
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]){
+    font-size:.95rem!important;
+  }
+}
