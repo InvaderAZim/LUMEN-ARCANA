@@ -349,3 +349,6 @@ label{
   word-break:normal!important;
   hyphens:auto!important;
 }
+
+/* KEYBOARD FOCUS VISIBILITY */
+button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #8bc9ff!important;outline-offset:3px!important;box-shadow:0 0 0 2px #07111a,0 0 0 5px #68b8ff70!important}

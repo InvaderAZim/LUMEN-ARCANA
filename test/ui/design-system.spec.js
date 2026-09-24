@@ -306,3 +306,18 @@ test("quick-grid buttons safely wrap very long localized labels", async ({ page 
   expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(88);
   expect(audit[0].buttonHeight).toBe(audit[1].buttonHeight);
 });
+
+
+test("keyboard navigation exposes a visible focus indicator", async ({ page }) => {
+  await openApp(page);
+  await page.keyboard.press("Tab");
+  const focused = page.locator(":focus");
+  await expect(focused).toBeVisible();
+  const style = await focused.evaluate(node => {
+    const css = getComputedStyle(node);
+    return { outlineStyle: css.outlineStyle, outlineWidth: parseFloat(css.outlineWidth), outlineOffset: parseFloat(css.outlineOffset) };
+  });
+  expect(style.outlineStyle).not.toBe("none");
+  expect(style.outlineWidth).toBeGreaterThanOrEqual(3);
+  expect(style.outlineOffset).toBeGreaterThanOrEqual(3);
+});
