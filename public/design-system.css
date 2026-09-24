@@ -285,3 +285,40 @@ label{
     font-size:.95rem!important;
   }
 }
+
+
+/* NATAL FORM READABILITY */
+.natal-input-grid>article>small{
+  display:block!important;
+  margin-bottom:7px!important;
+  color:#dcecff!important;
+  font-size:.78rem!important;
+  line-height:1.2!important;
+  font-weight:850!important;
+  letter-spacing:.085em!important;
+}
+.natal-input-grid select.lumen-field{
+  -webkit-appearance:none!important;
+  appearance:none!important;
+  padding-right:44px!important;
+  background-color:#090909!important;
+  background-image:
+    linear-gradient(45deg,transparent 50%,var(--ui-gold) 50%),
+    linear-gradient(135deg,var(--ui-gold) 50%,transparent 50%)!important;
+  background-position:
+    calc(100% - 19px) 50%,
+    calc(100% - 13px) 50%!important;
+  background-size:6px 6px,6px 6px!important;
+  background-repeat:no-repeat!important;
+}
+.natal-input-grid select.lumen-field:focus{
+  background-image:
+    linear-gradient(45deg,transparent 50%,#f5dc98 50%),
+    linear-gradient(135deg,#f5dc98 50%,transparent 50%)!important;
+}
+@media(max-width:560px){
+  .natal-input-grid>article>small{
+    font-size:.76rem!important;
+    margin-bottom:6px!important;
+  }
+}

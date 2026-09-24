@@ -164,3 +164,45 @@ test("profile summary cards are equal height and avatar is proportionate", async
   expect(avatar.minWidth).toBeGreaterThanOrEqual(68);
   expect(avatar.fontSize).toBeGreaterThanOrEqual(30);
 });
+
+
+test("natal form labels and select affordance are readable", async ({ page }) => {
+  await openApp(page);
+  await page.evaluate(() => window.LUMEN_NAVIGATE("natal"));
+  await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
+
+  const grid = page.locator(".natal-input-grid");
+  await expect(grid).toHaveCount(1);
+
+  const labelStyle = await grid.locator("article > small").first().evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      fontSize: parseFloat(css.fontSize),
+      fontWeight: Number(css.fontWeight),
+      letterSpacing: css.letterSpacing,
+      color: css.color,
+      marginBottom: parseFloat(css.marginBottom)
+    };
+  });
+
+  expect(labelStyle.fontSize).toBeGreaterThanOrEqual(12);
+  expect(labelStyle.fontWeight).toBeGreaterThanOrEqual(800);
+  expect(labelStyle.marginBottom).toBeGreaterThanOrEqual(6);
+  expect(labelStyle.color).not.toBe("rgb(159, 173, 185)");
+
+  const select = grid.locator("select.lumen-field");
+  await expect(select).toHaveCount(1);
+  const selectStyle = await select.evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      appearance: css.appearance,
+      webkitAppearance: css.webkitAppearance,
+      backgroundImage: css.backgroundImage,
+      paddingRight: parseFloat(css.paddingRight)
+    };
+  });
+
+  expect(["none", ""]).toContain(selectStyle.appearance);
+  expect(selectStyle.backgroundImage).not.toBe("none");
+  expect(selectStyle.paddingRight).toBeGreaterThanOrEqual(40);
+});
