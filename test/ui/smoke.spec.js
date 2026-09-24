@@ -1213,15 +1213,7 @@ test("frontend asset references avoid manual version query strings", async ({ pa
 test("Tarot format buttons reuse the home quick-action button layout", async ({ page }) => {
   await openApp(page);
 
-  await page.locator('#bottom-nav [data-r="reading"]').click();
-  await expect(page.locator("#app .top h1")).toHaveText("Таро");
-
-  const grid = page.locator(".tarot-format-grid");
-  await expect(grid).toHaveCount(1);
-  await expect(grid).toHaveClass(/home-quick-grid/);
-  await expect(grid.locator("[data-type]")).toHaveCount(6);
-
-  const layout = await grid.locator("[data-type]").first().evaluate(button => {
+  const homeLayout = await page.locator(".home-quick-grid [data-go]").first().evaluate(button => {
     const css = getComputedStyle(button);
     const icon = button.querySelector("b");
     const iconCss = getComputedStyle(icon);
@@ -1230,17 +1222,38 @@ test("Tarot format buttons reuse the home quick-action button layout", async ({ 
       columns: css.gridTemplateColumns,
       alignItems: css.alignItems,
       borderRadius: css.borderRadius,
+      minHeight: css.minHeight,
+      padding: css.padding,
       iconWidth: iconCss.width,
       iconDisplay: iconCss.display
     };
   });
 
-  expect(layout.display).toBe("grid");
-  expect(layout.alignItems).toBe("center");
-  expect(layout.columns).toContain("30px");
-  expect(layout.borderRadius).toBe("17px");
-  expect(layout.iconWidth).toBe("30px");
-  expect(layout.iconDisplay).toBe("block");
+  await page.locator('#bottom-nav [data-r="reading"]').click();
+  await expect(page.locator("#app .top h1")).toHaveText("Таро");
+
+  const grid = page.locator(".tarot-format-grid");
+  await expect(grid).toHaveCount(1);
+  await expect(grid).toHaveClass(/home-quick-grid/);
+  await expect(grid.locator("[data-type]")).toHaveCount(6);
+
+  const tarotLayout = await grid.locator("[data-type]").first().evaluate(button => {
+    const css = getComputedStyle(button);
+    const icon = button.querySelector("b");
+    const iconCss = getComputedStyle(icon);
+    return {
+      display: css.display,
+      columns: css.gridTemplateColumns,
+      alignItems: css.alignItems,
+      borderRadius: css.borderRadius,
+      minHeight: css.minHeight,
+      padding: css.padding,
+      iconWidth: iconCss.width,
+      iconDisplay: iconCss.display
+    };
+  });
+
+  expect(tarotLayout).toEqual(homeLayout);
 
   await page.locator('[data-type="yesno"]').click();
   await expect(page.locator('[data-type="yesno"]')).toHaveClass(/tarot-type-selected/);
