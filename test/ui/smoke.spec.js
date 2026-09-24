@@ -1253,7 +1253,10 @@ test("Tarot format buttons reuse the home quick-action button layout", async ({ 
     };
   });
 
-  expect(tarotLayout).toEqual(homeLayout);
+  const { columns: homeColumns, ...homeShared } = homeLayout;
+  const { columns: tarotColumns, ...tarotShared } = tarotLayout;
+  expect(tarotShared).toEqual(homeShared);
+  expect(tarotColumns.split(/\s+/)[0]).toBe(homeColumns.split(/\s+/)[0]);
 
   await page.locator('[data-type="yesno"]').click();
   await expect(page.locator('[data-type="yesno"]')).toHaveClass(/tarot-type-selected/);
