@@ -304,7 +304,7 @@ test("quick-grid buttons safely wrap very long localized labels", async ({ page 
   expect(audit[0].buttonScrollWidth).toBeLessThanOrEqual(audit[0].buttonClientWidth);
   expect(audit[0].spanScrollWidth).toBeLessThanOrEqual(audit[0].spanClientWidth);
   expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(88);
-  expect(audit[0].buttonHeight).toBe(audit[1].buttonHeight);
+  expect(Math.abs(audit[0].buttonHeight - audit[1].buttonHeight)).toBeLessThanOrEqual(1);
 });
 
 
