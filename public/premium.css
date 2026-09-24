@@ -1109,3 +1109,35 @@ body:before{
   }
 }
 
+
+
+/* DECK FILTER GRID — 3 × 2 equal buttons */
+.deck-filter-grid{
+  display:grid!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin-top:18px!important;
+}
+.deck-filter-grid button{
+  width:100%!important;
+  min-width:0!important;
+  min-height:56px!important;
+  padding:12px 8px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+}
+@media(max-width:560px){
+  .deck-filter-grid{
+    gap:8px!important;
+    margin-top:14px!important;
+  }
+  .deck-filter-grid button{
+    min-height:52px!important;
+    padding:10px 6px!important;
+    font-size:.9rem!important;
+    border-radius:16px!important;
+  }
+}

@@ -131,3 +131,35 @@ test("Tarot deck keeps four cards per row on mobile", async ({ page }) => {
   expect(layout.fifthTop).toBeGreaterThan(layout.firstRowTops[0]);
   expect(Math.max(...layout.firstRowRights)).toBeLessThanOrEqual(layout.viewportWidth);
 });
+
+
+test("Tarot deck filters are equal 3 by 2 grid", async ({ page }) => {
+  await openApp(page);
+  await page.evaluate(() => window.LUMEN_RENDER_DECK78?.("all"));
+
+  const filters = page.locator(".deck-filter-grid [data-deck-filter]");
+  await expect(filters).toHaveCount(6);
+
+  const layout = await page.locator(".deck-filter-grid").evaluate(grid => {
+    const buttons = [...grid.querySelectorAll("[data-deck-filter]")];
+    const rects = buttons.map(button => button.getBoundingClientRect());
+    const columns = getComputedStyle(grid).gridTemplateColumns
+      .trim()
+      .split(/\s+/)
+      .filter(Boolean);
+
+    return {
+      columnCount: columns.length,
+      widths: rects.map(rect => Math.round(rect.width)),
+      heights: rects.map(rect => Math.round(rect.height)),
+      tops: rects.map(rect => Math.round(rect.top))
+    };
+  });
+
+  expect(layout.columnCount).toBe(3);
+  expect(new Set(layout.widths).size).toBe(1);
+  expect(new Set(layout.heights).size).toBe(1);
+  expect(new Set(layout.tops.slice(0, 3)).size).toBe(1);
+  expect(new Set(layout.tops.slice(3, 6)).size).toBe(1);
+  expect(layout.tops[3]).toBeGreaterThan(layout.tops[0]);
+});
