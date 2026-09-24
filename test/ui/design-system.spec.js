@@ -206,3 +206,56 @@ test("natal form labels and select affordance are readable", async ({ page }) =>
   expect(selectStyle.backgroundImage).not.toBe("none");
   expect(selectStyle.paddingRight).toBeGreaterThanOrEqual(40);
 });
+
+
+test("beta premium branding uses one canonical badge order", async ({ page }) => {
+  await page.route("**/api/interpret", route =>
+    route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "branding_regression" })
+    })
+  );
+  await openApp(page);
+
+  await expect(page.locator(".home-hero .badge")).toHaveText("BETA · PREMIUM");
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("profile"));
+  await expect(page.locator(".profile-card .premium-chip")).toHaveText("BETA · PREMIUM");
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("natal"));
+  await expect(page.locator(".premium-panel .badge").first()).toHaveText(
+    /(?:FULL )?NATAL · BETA · PREMIUM/
+  );
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
+  await expect(page.locator(".hero-premium .badge").first()).toHaveText(
+    "DAILY · BETA · PREMIUM"
+  );
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("compatibility"));
+  await expect(page.locator(".premium-panel .badge").first()).toHaveText(
+    "COMPATIBILITY · BETA · PREMIUM"
+  );
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("moon"));
+  await expect(page.locator(".hero-premium .badge").first()).toHaveText(
+    /LUNAR · BETA · PREMIUM/
+  );
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("library"));
+  await expect(page.locator(".premium-strip small")).toHaveText("BETA · PREMIUM");
+  await page.locator("[data-topic]").first().click();
+  await expect(page.locator(".premium-panel .badge").first()).toHaveText(
+    "LIBRARY · BETA · PREMIUM"
+  );
+
+  await page.evaluate(() => window.LUMEN_NAVIGATE("reading"));
+  await page.locator('[data-type="single"]').click();
+  await page.locator("#q").fill("Branding regression");
+  await page.locator("#draw").click();
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".result-premium .badge").first()).toHaveText(
+    "TAROT · BETA · PREMIUM · 78"
+  );
+});
