@@ -150,16 +150,17 @@ test("profile summary cards are equal height and avatar is proportionate", async
   expect(new Set(heights).size).toBe(1);
 
   const avatar = await page.locator(".profile-card .avatar").evaluate(node => {
-    const rect = node.getBoundingClientRect();
     const css = getComputedStyle(node);
     return {
-      width: Math.round(rect.width),
-      height: Math.round(rect.height),
+      width: parseFloat(css.width),
+      height: parseFloat(css.height),
+      minWidth: parseFloat(css.minWidth),
       fontSize: parseFloat(css.fontSize)
     };
   });
 
   expect(avatar.width).toBe(avatar.height);
   expect(avatar.width).toBeGreaterThanOrEqual(68);
+  expect(avatar.minWidth).toBeGreaterThanOrEqual(68);
   expect(avatar.fontSize).toBeGreaterThanOrEqual(30);
 });
