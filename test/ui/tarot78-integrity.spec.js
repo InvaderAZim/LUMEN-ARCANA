@@ -104,14 +104,14 @@ test("Tarot 78 deck integrity stays complete and unique", async ({ page }) => {
 });
 
 
-test("Tarot deck keeps four cards per row on mobile", async ({ page }) => {
+test("Tarot deck keeps three cards per row on mobile", async ({ page }) => {
   await openApp(page);
   await page.evaluate(() => window.LUMEN_RENDER_DECK78?.("all"));
   await expect(page.locator(".classic-deck article")).toHaveCount(78);
 
   const layout = await page.locator(".classic-deck").evaluate(grid => {
     const articles = [...grid.querySelectorAll("article")];
-    const rects = articles.slice(0, 5).map(article => article.getBoundingClientRect());
+    const rects = articles.slice(0, 4).map(article => article.getBoundingClientRect());
     const columns = getComputedStyle(grid).gridTemplateColumns
       .trim()
       .split(/\s+/)
@@ -119,16 +119,16 @@ test("Tarot deck keeps four cards per row on mobile", async ({ page }) => {
 
     return {
       columnCount: columns.length,
-      firstRowTops: rects.slice(0, 4).map(rect => Math.round(rect.top)),
-      fifthTop: Math.round(rects[4].top),
-      firstRowRights: rects.slice(0, 4).map(rect => Math.round(rect.right)),
+      firstRowTops: rects.slice(0, 3).map(rect => Math.round(rect.top)),
+      fourthTop: Math.round(rects[3].top),
+      firstRowRights: rects.slice(0, 3).map(rect => Math.round(rect.right)),
       viewportWidth: window.innerWidth
     };
   });
 
-  expect(layout.columnCount).toBe(4);
+  expect(layout.columnCount).toBe(3);
   expect(new Set(layout.firstRowTops).size).toBe(1);
-  expect(layout.fifthTop).toBeGreaterThan(layout.firstRowTops[0]);
+  expect(layout.fourthTop).toBeGreaterThan(layout.firstRowTops[0]);
   expect(Math.max(...layout.firstRowRights)).toBeLessThanOrEqual(layout.viewportWidth);
 });
 

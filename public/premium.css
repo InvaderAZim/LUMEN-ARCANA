@@ -906,7 +906,7 @@ body:before{
 
 /* CLASSIC RWS CARDS v19 */
 .classic-deck{
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
   gap:12px!important;
 }
 .classic-deck>article{
@@ -1025,7 +1025,7 @@ body:before{
 }
 @media(max-width:560px){
   .classic-deck{
-    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
     gap:7px!important;
   }
   .deck-card.has-image{border-radius:11px!important;padding:4px!important}
