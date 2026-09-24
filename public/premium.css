@@ -906,8 +906,8 @@ body:before{
 
 /* CLASSIC RWS CARDS v19 */
 .classic-deck{
-  grid-template-columns:repeat(auto-fill,minmax(138px,1fr))!important;
-  gap:16px!important;
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:12px!important;
 }
 .classic-deck>article{
   min-width:0;
@@ -1025,13 +1025,13 @@ body:before{
 }
 @media(max-width:560px){
   .classic-deck{
-    grid-template-columns:repeat(2,minmax(0,1fr))!important;
-    gap:11px!important;
+    grid-template-columns:repeat(4,minmax(0,1fr))!important;
+    gap:7px!important;
   }
-  .deck-card.has-image{border-radius:15px!important}
-  .deck-card-index{top:7px!important;font-size:.58rem!important}
-  .classic-deck h3{font-size:.92rem!important}
-  .classic-deck p{font-size:.69rem!important}
+  .deck-card.has-image{border-radius:11px!important;padding:4px!important}
+  .deck-card-index{top:5px!important;font-size:.5rem!important}
+  .classic-deck h3{font-size:.72rem!important;line-height:1.12!important;margin:6px 1px 2px!important}
+  .classic-deck p{font-size:.61rem!important;line-height:1.18!important;margin:0 1px!important}
   .drawing .cards{
     grid-template-columns:repeat(auto-fit,minmax(132px,1fr))!important;
   }
