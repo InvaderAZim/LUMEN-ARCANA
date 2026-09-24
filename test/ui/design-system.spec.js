@@ -259,3 +259,50 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
     "TAROT · BETA · PREMIUM · 78"
   );
 });
+
+
+test("quick-grid buttons safely wrap very long localized labels", async ({ page }) => {
+  await openApp(page);
+
+  const buttons = page.locator(".home-quick-grid button");
+  await expect(buttons).toHaveCount(6);
+
+  await buttons.first().evaluate(button => {
+    const span = button.querySelector("span");
+    const small = button.querySelector("small");
+    if (span) {
+      span.firstChild.textContent =
+        "Надзвичайнодовгалокалізовананазварозділуякамаєкоректнопереноситися";
+    }
+    if (small) {
+      small.textContent =
+        "Дуже довгий локалізований опис функції без обрізання та горизонтального виходу за межі кнопки";
+    }
+  });
+
+  const audit = await buttons.evaluateAll(nodes => nodes.slice(0, 2).map(node => {
+    const span = node.querySelector("span");
+    const css = getComputedStyle(node);
+    const spanCss = getComputedStyle(span);
+    const rect = node.getBoundingClientRect();
+    return {
+      buttonWidth: Math.round(rect.width),
+      buttonHeight: Math.round(rect.height),
+      buttonClientWidth: node.clientWidth,
+      buttonScrollWidth: node.scrollWidth,
+      spanClientWidth: span.clientWidth,
+      spanScrollWidth: span.scrollWidth,
+      minWidth: css.minWidth,
+      whiteSpace: spanCss.whiteSpace,
+      overflowWrap: spanCss.overflowWrap
+    };
+  }));
+
+  expect(audit[0].minWidth).toBe("0px");
+  expect(audit[0].whiteSpace).toBe("normal");
+  expect(audit[0].overflowWrap).toBe("anywhere");
+  expect(audit[0].buttonScrollWidth).toBeLessThanOrEqual(audit[0].buttonClientWidth);
+  expect(audit[0].spanScrollWidth).toBeLessThanOrEqual(audit[0].spanClientWidth);
+  expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(88);
+  expect(audit[0].buttonHeight).toBe(audit[1].buttonHeight);
+});
