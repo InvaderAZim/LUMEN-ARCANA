@@ -761,3 +761,14 @@ meter{
   width:100%;
   max-width:100%;
 }
+
+
+/* FIELDSET LAYOUT RESILIENCE */
+fieldset{
+  min-width:0;
+  max-width:100%;
+}
+legend{
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
