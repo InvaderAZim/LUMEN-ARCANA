@@ -235,7 +235,7 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("compatibility"));
   await expect(page.locator(".premium-panel .badge").first()).toHaveText(
-    "COMPATIBILITY · BETA · PREMIUM"
+    "СУМІСНІСТЬ · БЕТА · ПРЕМІУМ"
   );
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("moon"));
