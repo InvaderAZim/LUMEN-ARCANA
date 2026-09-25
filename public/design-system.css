@@ -788,3 +788,14 @@ input[type="file"]{
   overflow:hidden;
   text-overflow:ellipsis;
 }
+
+
+/* DATE/TIME CONTROL RESILIENCE */
+input[type="date"],
+input[type="time"],
+input[type="datetime-local"],
+input[type="month"],
+input[type="week"]{
+  min-width:0;
+  width:100%;
+}
