@@ -441,3 +441,16 @@ textarea:disabled,
     font-size:16px!important;
   }
 }
+
+
+/* SAFE MOBILE MEDIA */
+img,
+svg,
+video,
+canvas{
+  max-width:100%;
+}
+img,
+video{
+  height:auto;
+}
