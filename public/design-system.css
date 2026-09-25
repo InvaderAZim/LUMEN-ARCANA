@@ -799,3 +799,11 @@ input[type="week"]{
   min-width:0;
   width:100%;
 }
+
+
+/* SEARCH FIELD RESILIENCE */
+input[type="search"]{
+  min-width:0;
+  width:100%;
+  max-width:100%;
+}
