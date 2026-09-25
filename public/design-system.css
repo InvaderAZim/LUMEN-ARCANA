@@ -685,3 +685,13 @@ blockquote{
 }
 blockquote>:first-child{margin-top:0}
 blockquote>:last-child{margin-bottom:0}
+
+
+/* LIST CONTENT RESILIENCE */
+ul,
+ol{
+  max-width:100%;
+}
+li{
+  overflow-wrap:anywhere;
+}
