@@ -431,3 +431,13 @@ textarea:disabled,
 .empty-state p{
   overflow-wrap:anywhere;
 }
+
+
+/* MOBILE TEXT INPUT STABILITY */
+@media(max-width:560px){
+  input,
+  textarea,
+  select{
+    font-size:16px!important;
+  }
+}
