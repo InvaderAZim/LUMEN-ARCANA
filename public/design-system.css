@@ -739,3 +739,11 @@ progress{
   max-width:100%;
   accent-color:var(--ui-gold-2);
 }
+
+
+/* NATIVE RANGE CONSISTENCY */
+input[type="range"]{
+  width:100%;
+  max-width:100%;
+  accent-color:var(--ui-gold-2);
+}
