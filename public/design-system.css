@@ -462,3 +462,13 @@ body{
   max-width:100%;
   overflow-x:hidden;
 }
+
+
+/* CONSISTENT CONTROL BOX MODEL */
+button,
+input,
+select,
+textarea{
+  box-sizing:border-box;
+  max-width:100%;
+}
