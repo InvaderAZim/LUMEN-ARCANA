@@ -703,3 +703,11 @@ select[aria-invalid="true"]:focus-visible,
 textarea[aria-invalid="true"]:focus-visible{
   outline-color:#ffb0b0!important;
 }
+
+
+/* MOBILE DIALOG SAFETY */
+dialog{
+  max-width:min(92vw,720px);
+  max-height:88dvh;
+  overflow:auto;
+}
