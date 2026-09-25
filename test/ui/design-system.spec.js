@@ -218,10 +218,10 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
   );
   await openApp(page);
 
-  await expect(page.locator(".home-hero .badge")).toHaveText("BETA · PREMIUM");
+  await expect(page.locator(".home-hero .badge")).toHaveText("БЕТА · ПРЕМІУМ");
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("profile"));
-  await expect(page.locator(".profile-card .premium-chip")).toHaveText("BETA · PREMIUM");
+  await expect(page.locator(".profile-card .premium-chip")).toHaveText("БЕТА · ПРЕМІУМ");
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("natal"));
   await expect(page.locator(".premium-panel .badge").first()).toHaveText(
