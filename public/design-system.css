@@ -654,3 +654,12 @@ abbr[title]{
   text-underline-offset:3px;
   cursor:help;
 }
+
+
+/* READABLE INLINE MARKS */
+mark{
+  background:#e5c87d;
+  color:#181109;
+  border-radius:4px;
+  padding:0 .18em;
+}
