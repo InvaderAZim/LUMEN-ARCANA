@@ -580,3 +580,10 @@ td{
     margin-bottom:6px;
   }
 }
+
+
+/* TEXTAREA RESIZE SAFETY */
+textarea{
+  resize:vertical;
+  max-width:100%;
+}
