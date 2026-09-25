@@ -623,3 +623,11 @@ textarea[aria-invalid="true"]{
   border-color:#ff8d8d!important;
   box-shadow:0 0 0 3px #ff6b6b18!important;
 }
+
+
+/* REQUIRED FIELD CLARITY */
+input:required,
+select:required,
+textarea:required{
+  scroll-margin-top:12px;
+}
