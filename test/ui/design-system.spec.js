@@ -230,7 +230,7 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
   await expect(page.locator(".hero-premium .badge").first()).toHaveText(
-    "DAILY · BETA · PREMIUM"
+    "ЩОДЕННИЙ · БЕТА · ПРЕМІУМ"
   );
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("compatibility"));
