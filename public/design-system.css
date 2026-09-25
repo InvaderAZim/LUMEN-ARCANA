@@ -562,3 +562,12 @@ th,
 td{
   overflow-wrap:anywhere;
 }
+
+
+/* MOBILE SCROLL TARGET STABILITY */
+@media(max-width:560px){
+  [id]{
+    scroll-margin-top:12px;
+    scroll-margin-bottom:calc(12px + env(safe-area-inset-bottom));
+  }
+}
