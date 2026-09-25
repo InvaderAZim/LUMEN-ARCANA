@@ -587,3 +587,11 @@ textarea{
   resize:vertical;
   max-width:100%;
 }
+
+
+/* PLACEHOLDER READABILITY */
+input::placeholder,
+textarea::placeholder{
+  color:#9fadb9;
+  opacity:.82;
+}
