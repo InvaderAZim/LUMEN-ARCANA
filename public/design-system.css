@@ -595,3 +595,14 @@ textarea::placeholder{
   color:#9fadb9;
   opacity:.82;
 }
+
+
+/* FORM AUTOFILL CONSISTENCY */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus{
+  -webkit-text-fill-color:#fff;
+  caret-color:#fff;
+  box-shadow:0 0 0 1000px #090909 inset!important;
+  transition:background-color 9999s ease-out 0s;
+}
