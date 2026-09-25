@@ -17,6 +17,9 @@ export function parseLocal(key,fallback){
 
 export function flashToast(toast,text,duration=1700){
   if(!toast)return;
+  toast.setAttribute('role','status');
+  toast.setAttribute('aria-live','polite');
+  toast.setAttribute('aria-atomic','true');
   toast.textContent=text;
   toast.classList.add('show');
   setTimeout(()=>toast.classList.remove('show'),duration);
