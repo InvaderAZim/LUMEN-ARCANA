@@ -377,3 +377,10 @@ button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible
     min-height:44px;
   }
 }
+
+
+/* TEXT SELECTION READABILITY */
+::selection{
+  background:#e5c87d;
+  color:#181109;
+}
