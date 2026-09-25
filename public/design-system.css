@@ -732,3 +732,10 @@ summary:focus-visible{
   outline:3px solid #8bc9ff;
   outline-offset:3px;
 }
+
+
+/* NATIVE PROGRESS CONSISTENCY */
+progress{
+  max-width:100%;
+  accent-color:var(--ui-gold-2);
+}
