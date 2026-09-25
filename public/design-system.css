@@ -519,3 +519,15 @@ object{
     min-width:0;
   }
 }
+
+
+/* MOBILE BUTTON LABEL SAFETY */
+@media(max-width:560px){
+  button,
+  .primary,
+  .ghost,
+  .nav-btn{
+    white-space:normal;
+    overflow-wrap:anywhere;
+  }
+}
