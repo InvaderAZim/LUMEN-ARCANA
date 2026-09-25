@@ -631,3 +631,18 @@ select:required,
 textarea:required{
   scroll-margin-top:12px;
 }
+
+
+/* READABLE CODE-LIKE CONTENT */
+code,
+pre,
+kbd,
+samp{
+  font-family:ui-monospace,SFMono-Regular,Consolas,"Liberation Mono",monospace;
+}
+pre{
+  max-width:100%;
+  overflow:auto;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+}
