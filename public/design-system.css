@@ -571,3 +571,12 @@ td{
     scroll-margin-bottom:calc(12px + env(safe-area-inset-bottom));
   }
 }
+
+
+/* MOBILE FORM LABEL SPACING */
+@media(max-width:560px){
+  label{
+    display:inline-block;
+    margin-bottom:6px;
+  }
+}
