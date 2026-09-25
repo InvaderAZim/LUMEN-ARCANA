@@ -177,6 +177,7 @@ document.addEventListener('click',e=>{
   const expanded=button.getAttribute('aria-expanded')==='true';
   const next=!expanded;
   button.setAttribute('aria-expanded',String(next));
+  button.textContent=next?'Закрити практику ↑':'Відкрити практику →';
   panel.setAttribute('aria-hidden',String(!next));
   panel.classList.toggle('open',next);
 });
