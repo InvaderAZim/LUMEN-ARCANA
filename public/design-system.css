@@ -646,3 +646,11 @@ pre{
   white-space:pre-wrap;
   overflow-wrap:anywhere;
 }
+
+
+/* ABBREVIATION ACCESSIBILITY */
+abbr[title]{
+  text-decoration-style:dotted;
+  text-underline-offset:3px;
+  cursor:help;
+}
