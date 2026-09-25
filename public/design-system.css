@@ -718,3 +718,17 @@ dialog::backdrop{
   background:rgba(3,7,11,.72);
   backdrop-filter:blur(3px);
 }
+
+
+/* NATIVE DETAILS POLISH */
+details{
+  max-width:100%;
+}
+summary{
+  cursor:pointer;
+  overflow-wrap:anywhere;
+}
+summary:focus-visible{
+  outline:3px solid #8bc9ff;
+  outline-offset:3px;
+}
