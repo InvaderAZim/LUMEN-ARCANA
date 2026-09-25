@@ -779,3 +779,12 @@ input:read-only,
 textarea:read-only{
   cursor:default;
 }
+
+
+/* FILE INPUT RESILIENCE */
+input[type="file"]{
+  width:100%;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
