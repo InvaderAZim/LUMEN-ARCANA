@@ -384,3 +384,18 @@ button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible
   background:#e5c87d;
   color:#181109;
 }
+
+
+/* POINTER AFFORDANCE */
+button,
+a[href],
+select,
+[role="button"],
+[tabindex]:not([tabindex="-1"]){
+  cursor:pointer;
+}
+button:disabled,
+select:disabled,
+[aria-disabled="true"]{
+  cursor:not-allowed;
+}
