@@ -606,3 +606,11 @@ input:-webkit-autofill:focus{
   box-shadow:0 0 0 1000px #090909 inset!important;
   transition:background-color 9999s ease-out 0s;
 }
+
+
+/* NATIVE CONTROL COLOR SCHEME */
+input,
+select,
+textarea{
+  color-scheme:dark;
+}
