@@ -364,3 +364,16 @@ button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible
     scroll-behavior:auto!important;
   }
 }
+
+
+/* TOUCH TARGET ACCESSIBILITY */
+@media (pointer: coarse){
+  button,
+  a,
+  select,
+  input:not([type="checkbox"]):not([type="radio"]),
+  [role="button"],
+  [tabindex]:not([tabindex="-1"]){
+    min-height:44px;
+  }
+}
