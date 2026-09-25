@@ -695,3 +695,11 @@ ol{
 li{
   overflow-wrap:anywhere;
 }
+
+
+/* ACCESSIBLE FOCUS FOR INVALID FIELDS */
+input[aria-invalid="true"]:focus-visible,
+select[aria-invalid="true"]:focus-visible,
+textarea[aria-invalid="true"]:focus-visible{
+  outline-color:#ffb0b0!important;
+}
