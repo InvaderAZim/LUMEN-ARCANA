@@ -711,3 +711,10 @@ dialog{
   max-height:88dvh;
   overflow:auto;
 }
+
+
+/* DIALOG BACKDROP CONSISTENCY */
+dialog::backdrop{
+  background:rgba(3,7,11,.72);
+  backdrop-filter:blur(3px);
+}
