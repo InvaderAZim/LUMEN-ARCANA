@@ -352,3 +352,15 @@ label{
 
 /* KEYBOARD FOCUS VISIBILITY */
 button:focus-visible,a:focus-visible,select:focus-visible,textarea:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:3px solid #8bc9ff!important;outline-offset:3px!important;box-shadow:0 0 0 2px #07111a,0 0 0 5px #68b8ff70!important}
+
+
+/* REDUCED MOTION ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce){
+  html:focus-within{scroll-behavior:auto!important}
+  *,*::before,*::after{
+    animation-duration:.01ms!important;
+    animation-iteration-count:1!important;
+    transition-duration:.01ms!important;
+    scroll-behavior:auto!important;
+  }
+}
