@@ -531,3 +531,18 @@ object{
     overflow-wrap:anywhere;
   }
 }
+
+
+/* MOBILE NAV LABEL RESILIENCE */
+@media(max-width:560px){
+  .nav-btn{
+    min-width:0;
+  }
+  .nav-btn span{
+    min-width:0;
+    max-width:100%;
+    text-align:center;
+    line-height:1.15;
+    overflow-wrap:anywhere;
+  }
+}
