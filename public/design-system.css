@@ -505,3 +505,17 @@ object{
 .journal-item h3{
   overflow-wrap:anywhere;
 }
+
+
+/* MOBILE ACTION WRAPPING */
+@media(max-width:560px){
+  .hero-actions,
+  .result-actions,
+  .panel-row{
+    flex-wrap:wrap;
+  }
+  .hero-actions>*,
+  .result-actions>*{
+    min-width:0;
+  }
+}
