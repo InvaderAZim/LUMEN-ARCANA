@@ -546,3 +546,9 @@ object{
     overflow-wrap:anywhere;
   }
 }
+
+
+/* READABLE LONG LINKS */
+a[href]{
+  overflow-wrap:anywhere;
+}
