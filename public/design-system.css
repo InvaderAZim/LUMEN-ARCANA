@@ -410,3 +410,24 @@ textarea:disabled,
   opacity:.55;
   filter:saturate(.65);
 }
+
+
+/* LONG TEXT RESILIENCE */
+.hero-copy,
+.profile-card,
+.settings-grid article,
+.reading-cards article,
+.journal-item,
+.lesson,
+.empty-state{
+  min-width:0;
+}
+.hero-copy p,
+.profile-card p,
+.settings-grid article p,
+.reading-cards article p,
+.journal-item p,
+.lesson p,
+.empty-state p{
+  overflow-wrap:anywhere;
+}
