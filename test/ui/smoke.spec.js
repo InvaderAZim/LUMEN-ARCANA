@@ -788,7 +788,7 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
 
   await page.locator('[data-go="moon"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Місячний календар");
-  await expect(page.locator(".badge")).toContainText("LUNAR · FALLBACK");
+  await expect(page.locator(".badge")).toContainText("МІСЯЦЬ · РЕЗЕРВНИЙ РЕЖИМ");
   await expect(page.locator(".settings-grid article")).toHaveCount(4);
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
 });
