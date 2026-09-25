@@ -772,3 +772,10 @@ legend{
   max-width:100%;
   overflow-wrap:anywhere;
 }
+
+
+/* READ-ONLY FIELD CLARITY */
+input:read-only,
+textarea:read-only{
+  cursor:default;
+}
