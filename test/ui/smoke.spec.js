@@ -735,7 +735,10 @@ test("Shared core helpers escape, parse, toast and shell safely", async ({ page 
       sealHtml: host.querySelector(".seal")?.innerHTML,
       contentIsReturned: content === host.querySelector("#content"),
       toastText: toast.textContent,
-      toastShown: toast.classList.contains("show")
+      toastShown: toast.classList.contains("show"),
+      toastRole: toast.getAttribute("role"),
+      toastLive: toast.getAttribute("aria-live"),
+      toastAtomic: toast.getAttribute("aria-atomic")
     };
 
     localStorage.removeItem("core_bad_json");
@@ -752,6 +755,9 @@ test("Shared core helpers escape, parse, toast and shell safely", async ({ page 
   expect(audit.contentIsReturned).toBe(true);
   expect(audit.toastText).toBe("Core toast");
   expect(audit.toastShown).toBe(true);
+  expect(audit.toastRole).toBe("status");
+  expect(audit.toastLive).toBe("polite");
+  expect(audit.toastAtomic).toBe("true");
 });
 
 
