@@ -399,3 +399,14 @@ select:disabled,
 [aria-disabled="true"]{
   cursor:not-allowed;
 }
+
+
+/* DISABLED CONTROL CLARITY */
+button:disabled,
+select:disabled,
+input:disabled,
+textarea:disabled,
+[aria-disabled="true"]{
+  opacity:.55;
+  filter:saturate(.65);
+}
