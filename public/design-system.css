@@ -614,3 +614,12 @@ select,
 textarea{
   color-scheme:dark;
 }
+
+
+/* FORM ERROR VISIBILITY */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"]{
+  border-color:#ff8d8d!important;
+  box-shadow:0 0 0 3px #ff6b6b18!important;
+}
