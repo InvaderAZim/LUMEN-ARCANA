@@ -244,7 +244,7 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
   );
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("library"));
-  await expect(page.locator(".premium-strip small")).toHaveText("BETA · PREMIUM");
+  await expect(page.locator(".premium-strip small")).toHaveText("БЕТА · ПРЕМІУМ");
   await page.locator("[data-topic]").first().click();
   await expect(page.locator(".premium-panel .badge").first()).toHaveText(
     "LIBRARY · BETA · PREMIUM"
