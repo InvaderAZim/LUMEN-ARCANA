@@ -886,3 +886,45 @@ input[type="search"]{
     padding-inline:1px!important;
   }
 }
+
+
+/* DAILY CARD MOBILE FIT */
+.day-card{
+  min-width:0!important;
+}
+.day-card>div{
+  min-width:0;
+  flex:1 1 auto;
+}
+.day-card .mini-card{
+  flex:0 0 auto;
+  max-width:34%;
+}
+@media(max-width:560px){
+  .day-card{
+    gap:12px!important;
+  }
+  .day-card h3{
+    font-size:clamp(1.45rem,7vw,1.8rem)!important;
+    line-height:1.08!important;
+  }
+  .day-card p{
+    overflow-wrap:anywhere;
+  }
+  .day-card .mini-card{
+    width:72px!important;
+    height:auto!important;
+    aspect-ratio:2/3;
+    padding:8px!important;
+  }
+}
+@media(max-width:360px){
+  .day-card{
+    flex-direction:column!important;
+  }
+  .day-card .mini-card{
+    width:min(92px,32vw)!important;
+    max-width:none;
+    align-self:center;
+  }
+}
