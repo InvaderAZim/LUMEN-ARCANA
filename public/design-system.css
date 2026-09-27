@@ -1475,3 +1475,48 @@ input[type="search"]{
     font-size:.62rem!important;
   }
 }
+
+
+/* JOURNAL CARD DENSITY + FAVORITE CONTROL */
+.journal-list{
+  min-width:0;
+}
+.journal-item{
+  min-width:0;
+}
+.journal-item h3,
+.journal-item p,
+.journal-item time{
+  overflow-wrap:anywhere;
+}
+.x-fav-button{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  flex:0 0 auto;
+}
+@media(max-width:560px){
+  .journal-list{
+    gap:8px!important;
+  }
+  .journal-item{
+    padding:14px!important;
+    border-radius:16px!important;
+  }
+  .journal-item h3{
+    font-size:1rem!important;
+    line-height:1.25!important;
+  }
+  .journal-item p{
+    font-size:.88rem!important;
+    line-height:1.45!important;
+  }
+  .x-fav-button{
+    padding:7px 9px!important;
+  }
+}
+@media(max-width:360px){
+  .journal-item{
+    padding:12px!important;
+  }
+}
