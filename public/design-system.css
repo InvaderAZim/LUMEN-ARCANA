@@ -1564,3 +1564,65 @@ input[type="search"]{
     min-width:590px!important;
   }
 }
+
+
+/* HERO MOBILE PROPORTIONS */
+.hero-premium,
+.hero-copy,
+.arcana-mark{
+  min-width:0;
+}
+.hero-copy h2,
+.hero-copy p,
+.arcana-mark small{
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .hero-premium{
+    gap:14px!important;
+    padding:17px!important;
+    border-radius:22px!important;
+  }
+  .hero-copy h2{
+    font-size:clamp(1.85rem,9vw,2.3rem)!important;
+    margin:10px 0!important;
+  }
+  .hero-copy p{
+    font-size:.9rem!important;
+    line-height:1.45!important;
+  }
+  .badge{
+    max-width:100%;
+    white-space:normal;
+    line-height:1.2;
+  }
+  .arcana-mark{
+    min-height:155px!important;
+    border-radius:20px!important;
+    gap:7px!important;
+  }
+  .arcana-mark strong{
+    font-size:3.6rem!important;
+  }
+  .arcana-mark span{
+    font-size:1.1rem!important;
+  }
+  .arcana-mark small{
+    max-width:90%;
+    letter-spacing:.12em!important;
+  }
+}
+@media(max-width:360px){
+  .hero-premium{
+    padding:14px!important;
+  }
+  .arcana-mark{
+    min-height:140px!important;
+  }
+  .arcana-mark:before{
+    inset:14px!important;
+  }
+  .arcana-mark:after{
+    inset:34px!important;
+  }
+}
