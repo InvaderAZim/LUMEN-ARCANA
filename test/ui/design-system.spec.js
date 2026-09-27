@@ -225,7 +225,7 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("natal"));
   await expect(page.locator(".premium-panel .badge").first()).toHaveText(
-    /(?:FULL )?NATAL · BETA · PREMIUM/
+    /(?:ПОВНА )?НАТАЛЬНА КАРТА · БЕТА · ПРЕМІУМ/
   );
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
@@ -240,7 +240,7 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("moon"));
   await expect(page.locator(".hero-premium .badge").first()).toHaveText(
-    /LUNAR · BETA · PREMIUM/
+    /МІСЯЦЬ · БЕТА · ПРЕМІУМ/
   );
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("library"));
