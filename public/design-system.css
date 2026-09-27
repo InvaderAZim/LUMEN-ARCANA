@@ -1705,3 +1705,32 @@ input[type="search"]{
     font-size:.82rem;
   }
 }
+
+
+/* HOME QUICK ACTION REGRESSION FIX */
+@media(max-width:560px){
+  .home-quick-grid button{
+    display:grid!important;
+    grid-template-columns:34px minmax(0,1fr)!important;
+    align-items:center!important;
+    justify-content:initial!important;
+    column-gap:10px!important;
+    min-height:88px!important;
+    height:auto!important;
+    padding:12px 13px!important;
+    border-radius:17px!important;
+    text-align:left!important;
+  }
+  .home-quick-grid button>b{
+    grid-column:1!important;
+    justify-self:center!important;
+    align-self:center!important;
+    margin:0!important;
+  }
+  .home-quick-grid button>span{
+    grid-column:2!important;
+    min-width:0!important;
+    margin:0!important;
+    text-align:left!important;
+  }
+}
