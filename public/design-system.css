@@ -1520,3 +1520,47 @@ input[type="search"]{
     padding:12px!important;
   }
 }
+
+
+/* CLASSIC NATAL TABLE + MATRIX MOBILE SCROLL */
+.classic-aspect-matrix,
+.classic-matrix-wrap{
+  max-width:100%;
+  box-sizing:border-box;
+}
+.classic-matrix-wrap,
+.classic-table-wrap{
+  scrollbar-width:thin;
+  overscroll-behavior-inline:contain;
+  -webkit-overflow-scrolling:touch;
+}
+@media(max-width:560px){
+  .classic-aspect-matrix{
+    padding:9px!important;
+    border-radius:14px!important;
+  }
+  .classic-natal-table{
+    min-width:450px!important;
+    font-size:.75rem!important;
+  }
+  .classic-natal-table th,
+  .classic-natal-table td{
+    padding:6px!important;
+  }
+  .classic-matrix-table{
+    min-width:620px!important;
+  }
+  .classic-matrix-table th,
+  .classic-matrix-table td{
+    width:50px!important;
+    height:48px!important;
+  }
+}
+@media(max-width:360px){
+  .classic-natal-table{
+    min-width:430px!important;
+  }
+  .classic-matrix-table{
+    min-width:590px!important;
+  }
+}
