@@ -1101,3 +1101,44 @@ input[type="search"]{
     min-height:76px!important;
   }
 }
+
+
+/* RESULT PANEL MOBILE RHYTHM */
+.result-head,
+.panel-row,
+.drawing,
+.synthesis{
+  min-width:0;
+}
+.result-head>*,
+.panel-row>*,
+.synthesis>*{
+  min-width:0;
+}
+@media(max-width:560px){
+  .result-head{
+    align-items:flex-start!important;
+    flex-wrap:wrap;
+  }
+  .result-head .mode-pill,
+  .result-head .premium-chip{
+    flex:0 0 auto;
+  }
+  .panel-row{
+    gap:8px!important;
+  }
+  .panel-row select{
+    width:100%!important;
+    min-width:0!important;
+  }
+  .drawing{
+    padding:16px!important;
+  }
+  .synthesis{
+    padding:14px!important;
+  }
+  .synthesis p,
+  .drawing>p{
+    overflow-wrap:anywhere;
+  }
+}
