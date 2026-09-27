@@ -1678,3 +1678,30 @@ input[type="search"]{
     font-size:.61rem!important;
   }
 }
+
+
+/* TOAST SAFE-AREA + LONG MESSAGE HANDLING */
+.toast{
+  width:max-content;
+  max-width:min(520px,calc(100vw - 24px));
+  box-sizing:border-box;
+  text-align:center;
+  line-height:1.35;
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .toast{
+    bottom:calc(86px + env(safe-area-inset-bottom))!important;
+    max-width:calc(100vw - 20px);
+    padding:10px 12px!important;
+    border-radius:11px!important;
+    font-size:.86rem;
+  }
+}
+@media(max-width:360px){
+  .toast{
+    bottom:calc(82px + env(safe-area-inset-bottom))!important;
+    max-width:calc(100vw - 14px);
+    font-size:.82rem;
+  }
+}
