@@ -409,7 +409,7 @@ async function buildNatalChart(page, calls) {
   await expect.poll(() => calls.ephemeris.length).toBe(1);
   await expect(page.locator("#xNatalWheel")).toBeVisible();
   await expect(
-    page.getByText("Astronomy Engine · true ecliptic of date", { exact: false }).first()
+    page.getByText("Astronomy Engine · точна екліптика дати", { exact: false }).first()
   ).toBeVisible();
 }
 
