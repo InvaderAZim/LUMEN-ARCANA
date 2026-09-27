@@ -1142,3 +1142,49 @@ input[type="search"]{
     overflow-wrap:anywhere;
   }
 }
+
+
+/* CLASSIC NATAL MOBILE READABILITY */
+.classic-chart-shell,
+.classic-positions{
+  max-width:100%;
+  box-sizing:border-box;
+}
+.classic-chart-meta,
+.classic-positions-head{
+  min-width:0;
+}
+.classic-chart-meta>*,
+.classic-positions-head>*{
+  min-width:0;
+}
+@media(max-width:560px){
+  .classic-chart-meta,
+  .classic-positions-head{
+    align-items:flex-start!important;
+    flex-direction:column!important;
+    gap:4px!important;
+  }
+  .classic-chart-meta span,
+  .classic-positions-head span,
+  .classic-positions-head small{
+    overflow-wrap:anywhere;
+  }
+  .classic-positions{
+    padding:10px!important;
+    border-radius:14px!important;
+  }
+  .classic-table-wrap{
+    max-width:100%;
+    overscroll-behavior-inline:contain;
+    -webkit-overflow-scrolling:touch;
+  }
+}
+@media(max-width:360px){
+  .classic-chart-shell{
+    padding:5px!important;
+  }
+  .classic-natal-svg{
+    min-width:300px!important;
+  }
+}
