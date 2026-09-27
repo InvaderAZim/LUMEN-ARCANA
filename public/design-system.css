@@ -928,3 +928,40 @@ input[type="search"]{
     align-self:center;
   }
 }
+
+
+/* DECK GRID CONSISTENCY */
+.deck-grid{
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  align-items:start;
+}
+.deck-grid>article{
+  min-width:0;
+}
+.deck-grid .deck-card{
+  width:100%;
+  max-width:100%;
+  box-sizing:border-box;
+}
+.deck-grid article h3,
+.deck-grid article p{
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .deck-grid{
+    gap:8px!important;
+  }
+  .deck-grid .deck-card{
+    border-radius:12px!important;
+    padding:6px!important;
+  }
+  .deck-grid article h3{
+    margin-top:7px!important;
+    font-size:clamp(.72rem,3.3vw,.82rem)!important;
+    line-height:1.15!important;
+  }
+  .deck-grid article p{
+    font-size:clamp(.62rem,2.8vw,.7rem)!important;
+    line-height:1.2!important;
+  }
+}
