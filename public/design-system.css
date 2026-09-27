@@ -1344,3 +1344,42 @@ input[type="search"]{
     padding:20px 12px!important;
   }
 }
+
+
+/* BOTTOM NAV LABEL READABILITY */
+.bottom-nav{
+  min-width:0;
+}
+.nav-btn{
+  min-width:0;
+  overflow:hidden;
+}
+.nav-btn b,
+.nav-btn span{
+  max-width:100%;
+}
+@media(max-width:560px){
+  .nav-btn b{
+    margin-bottom:3px!important;
+    font-size:.95rem!important;
+    line-height:1!important;
+  }
+  .nav-btn span{
+    font-size:clamp(.58rem,2.35vw,.66rem)!important;
+    line-height:1.08!important;
+    overflow-wrap:anywhere;
+    hyphens:auto;
+  }
+}
+@media(max-width:380px){
+  .bottom-nav{
+    gap:1px!important;
+  }
+  .nav-btn{
+    border-radius:11px!important;
+  }
+  .nav-btn span{
+    font-size:.57rem!important;
+    letter-spacing:-.01em;
+  }
+}
