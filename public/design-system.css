@@ -1002,3 +1002,56 @@ input[type="search"]{
     justify-self:start;
   }
 }
+
+
+/* JOURNAL + PREMIUM MOBILE FLOW */
+.x-history-head{
+  align-items:center;
+  min-width:0;
+}
+.x-history-head>*{
+  min-width:0;
+}
+.journal-item{
+  min-width:0;
+}
+.premium-strip{
+  min-width:0;
+}
+.premium-strip small{
+  min-width:0;
+  text-align:right;
+}
+@media(max-width:560px){
+  .x-history-head{
+    flex-wrap:wrap;
+    align-items:flex-start;
+  }
+  .x-history-head .x-fav-button{
+    flex:0 0 auto;
+  }
+  .premium-strip{
+    flex-wrap:wrap;
+    align-items:flex-start!important;
+  }
+  .premium-strip small{
+    width:100%;
+    margin-left:0!important;
+    text-align:left;
+  }
+  .lesson{
+    grid-template-columns:44px minmax(0,1fr)!important;
+    gap:11px!important;
+  }
+  .lesson-no{
+    font-size:1.7rem!important;
+  }
+}
+@media(max-width:360px){
+  .lesson{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .lesson-no{
+    font-size:1.45rem!important;
+  }
+}
