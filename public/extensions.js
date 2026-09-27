@@ -104,7 +104,7 @@ function wheelX(pos,asc=null){const rot=asc==null?0:asc;let marks='',labels='';f
 function mcX(jd,lon){const theta=normX(gmstX(jd)+lon)*R,eps=(23.439291-.0130042*((jd-2451545)/36525))*R;return normX(Math.atan2(Math.sin(theta)/Math.cos(eps),Math.cos(theta))*D)}
 const classicPlanetColorX=k=>({Sun:'#e02020',Moon:'#1d4ed8',Mercury:'#159447',Venus:'#159447',Mars:'#e02020',Jupiter:'#e02020',Saturn:'#222',Uranus:'#159447',Neptune:'#1d4ed8',Pluto:'#1d4ed8'}[k]||'#111');
 
-const HOUSE_SYSTEMS_X={equal:'Рівні будинки',placidus:'Плацидус'};
+const HOUSE_SYSTEMS_X={equal:'Рівні будинки',placidus:'Placidus'};
 const PLACIDUS_ENGINE_ENABLED_X=true;
 function equalHouseCuspsX(asc){return asc==null?[]:Array.from({length:12},(_,i)=>normX(asc+i*30))}
 function meanObliquityX(jd){
