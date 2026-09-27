@@ -1626,3 +1626,55 @@ input[type="search"]{
     inset:34px!important;
   }
 }
+
+
+/* DECK CARD VISUAL BALANCE */
+.deck-grid article{
+  min-width:0;
+}
+.deck-card{
+  overflow:hidden;
+}
+.deck-card b,
+.deck-card span{
+  max-width:100%;
+}
+.deck-card span{
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .deck-grid{
+    gap:7px!important;
+  }
+  .deck-card{
+    padding:7px!important;
+    border-radius:13px!important;
+  }
+  .deck-card b{
+    font-size:clamp(1.7rem,8vw,2.25rem)!important;
+    line-height:1!important;
+  }
+  .deck-card span{
+    font-size:.62rem!important;
+    line-height:1.15!important;
+  }
+  .deck-grid article h3{
+    min-height:2.3em;
+    display:flex;
+    align-items:flex-start;
+  }
+}
+@media(max-width:360px){
+  .deck-grid{
+    gap:5px!important;
+  }
+  .deck-card{
+    padding:6px!important;
+  }
+  .deck-grid article h3{
+    font-size:.7rem!important;
+  }
+  .deck-grid article p{
+    font-size:.61rem!important;
+  }
+}
