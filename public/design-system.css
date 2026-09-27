@@ -1188,3 +1188,59 @@ input[type="search"]{
     min-width:300px!important;
   }
 }
+
+
+/* APP HEADER MOBILE STABILITY */
+.top{
+  min-width:0;
+}
+.top>div{
+  min-width:0;
+}
+.brandline{
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .top{
+    gap:10px!important;
+    padding-bottom:14px!important;
+  }
+  .top h1{
+    font-size:clamp(2rem,11vw,2.5rem)!important;
+    line-height:1!important;
+    overflow-wrap:anywhere;
+  }
+  .top p{
+    font-size:.88rem!important;
+    line-height:1.35!important;
+  }
+  .brandline{
+    font-size:.62rem!important;
+    letter-spacing:.13em!important;
+  }
+  .brandline span{
+    margin-left:5px!important;
+  }
+  .seal{
+    width:48px!important;
+    height:48px!important;
+    min-width:48px!important;
+  }
+}
+@media(max-width:360px){
+  .top{
+    align-items:flex-start!important;
+  }
+  .seal{
+    width:42px!important;
+    height:42px!important;
+    min-width:42px!important;
+    font-size:1.35rem!important;
+  }
+  .brandline span{
+    display:block!important;
+    width:max-content;
+    max-width:100%;
+    margin:5px 0 0!important;
+  }
+}
