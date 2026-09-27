@@ -965,3 +965,40 @@ input[type="search"]{
     line-height:1.2!important;
   }
 }
+
+
+/* PROFILE HEADER RESPONSIVENESS */
+.profile-card{
+  min-width:0;
+}
+.profile-card>div:not(.avatar){
+  min-width:0;
+}
+.profile-card .premium-chip{
+  flex:0 0 auto;
+  white-space:nowrap;
+}
+@media(max-width:560px){
+  .profile-card{
+    display:grid!important;
+    grid-template-columns:auto minmax(0,1fr)!important;
+    align-items:center!important;
+    gap:12px!important;
+  }
+  .profile-card .premium-chip{
+    grid-column:1/-1;
+    justify-self:start;
+    margin-left:0!important;
+  }
+  .profile-card h2{
+    font-size:clamp(1.55rem,7vw,1.8rem)!important;
+  }
+}
+@media(max-width:360px){
+  .profile-card{
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  .profile-card .avatar{
+    justify-self:start;
+  }
+}
