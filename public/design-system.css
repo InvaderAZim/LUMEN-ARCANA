@@ -1244,3 +1244,50 @@ input[type="search"]{
     margin:5px 0 0!important;
   }
 }
+
+
+/* TAROT DRAW MOBILE GRID */
+.cards{
+  grid-template-columns:repeat(auto-fit,minmax(min(115px,100%),1fr))!important;
+  align-items:stretch;
+}
+.cards>.tarot{
+  min-width:0;
+  height:100%;
+}
+.tarot strong,
+.tarot span{
+  max-width:100%;
+  overflow-wrap:anywhere;
+}
+@media(max-width:560px){
+  .cards{
+    grid-template-columns:repeat(3,minmax(0,1fr))!important;
+    gap:7px!important;
+  }
+  .tarot{
+    min-height:180px!important;
+    padding:9px!important;
+    border-radius:14px!important;
+  }
+  .tarot b{
+    font-size:2.15rem!important;
+  }
+  .tarot strong{
+    font-size:clamp(.78rem,3.4vw,.95rem)!important;
+    line-height:1.15!important;
+  }
+  .tarot span{
+    font-size:.58rem!important;
+    letter-spacing:.08em!important;
+  }
+}
+@media(max-width:360px){
+  .cards{
+    gap:5px!important;
+  }
+  .tarot{
+    min-height:165px!important;
+    padding:7px!important;
+  }
+}
