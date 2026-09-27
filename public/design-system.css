@@ -1323,7 +1323,7 @@ input[type="search"]{
   }
   .sound-volume-head{
     flex-wrap:wrap;
-    gap:6px!important;
+    gap:12px!important;
   }
   .empty-state{
     padding:24px 16px!important;
