@@ -1383,3 +1383,47 @@ input[type="search"]{
     letter-spacing:-.01em;
   }
 }
+
+
+/* ACTION BUTTON CONTENT ALIGNMENT */
+.primary,
+.ghost,
+.hero-actions button,
+.result-actions button,
+.natal-view-switch button,
+.deck-filter-grid button,
+.academy-practice{
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+}
+.primary,
+.ghost,
+.hero-actions button,
+.result-actions button,
+.natal-view-switch button,
+.deck-filter-grid button{
+  text-align:center;
+}
+.primary>svg,
+.ghost>svg,
+.primary>span:first-child:not(:only-child),
+.ghost>span:first-child:not(:only-child){
+  flex:0 0 auto;
+}
+@media(max-width:560px){
+  .hero-actions{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:8px!important;
+  }
+  .hero-actions button{
+    width:100%;
+    min-width:0;
+  }
+}
+@media(max-width:360px){
+  .hero-actions{
+    grid-template-columns:minmax(0,1fr);
+  }
+}
