@@ -2133,3 +2133,89 @@ select{
     font-size:2.4rem!important;
   }
 }
+
+
+/* HOME DAILY CARD HERO */
+.home-day-card{
+  display:block!important;
+}
+.home-day-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:14px;
+}
+.home-day-head>small{
+  color:var(--ui-muted)!important;
+  font-family:var(--ui-font-sans)!important;
+}
+.home-day-layout{
+  display:grid;
+  grid-template-columns:minmax(120px,180px) minmax(0,1fr);
+  gap:20px;
+  align-items:center;
+}
+.home-day-visual{
+  min-width:0;
+}
+.home-day-visual img{
+  display:block;
+  width:100%;
+  max-width:180px;
+  aspect-ratio:2/3;
+  object-fit:cover;
+  border-radius:16px;
+  border:1px solid #e5c87d70;
+  box-shadow:0 16px 34px #0007,0 0 20px #42df7810;
+}
+.home-day-copy{
+  min-width:0;
+}
+.home-day-copy h2{
+  margin:0 0 7px!important;
+}
+.home-day-copy p{
+  margin:7px 0!important;
+}
+.home-day-keywords{
+  color:var(--ui-gold)!important;
+  font-weight:650!important;
+  text-transform:capitalize;
+}
+.home-day-copy .primary{
+  margin-top:10px;
+}
+@media(max-width:560px){
+  .home-day-layout{
+    grid-template-columns:108px minmax(0,1fr);
+    gap:13px;
+    align-items:start;
+  }
+  .home-day-visual img{
+    max-width:108px;
+    border-radius:13px;
+  }
+  .home-day-copy p{
+    font-size:.82rem!important;
+    line-height:1.4!important;
+  }
+  .home-day-copy .primary{
+    width:100%;
+    padding-inline:10px!important;
+  }
+}
+@media(max-width:360px){
+  .home-day-layout{
+    grid-template-columns:88px minmax(0,1fr);
+    gap:10px;
+  }
+  .home-day-visual img{
+    max-width:88px;
+  }
+  .home-day-head{
+    align-items:flex-start;
+    flex-direction:column;
+    gap:6px;
+  }
+}
