@@ -2532,3 +2532,15 @@ select{
     padding:6px 8px!important;
   }
 }
+
+
+/* NATAL PLACE ACTIONS — LARGER LABELS */
+.natal-form-panel .natal-place-card .natal-place-actions > button{
+  font-size:.92rem!important;
+  font-weight:700!important;
+}
+@media(max-width:560px){
+  .natal-form-panel .natal-place-card .natal-place-actions > button{
+    font-size:.88rem!important;
+  }
+}
