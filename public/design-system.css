@@ -1827,3 +1827,37 @@ input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):focus{
   border-color:var(--ui-green-border)!important;
   box-shadow:0 0 0 3px #42df7812!important;
 }
+
+
+/* DARK EMERALD SURFACE THEME */
+:root{
+  --ui-panel-a:#0c1b16f2;
+  --ui-panel-b:#07110dee;
+  --ui-card-a:#0d2019e8;
+  --ui-card-b:#081510e8;
+}
+body{
+  background-color:#040b08!important;
+  background-image:
+    radial-gradient(circle at 14% 8%,#1c8f4b18 0,transparent 30%),
+    radial-gradient(circle at 84% 14%,#68b8ff0a 0,transparent 30%),
+    linear-gradient(180deg,#06110c 0,#030806 58%,#020604 100%)!important;
+}
+.bottom-nav{
+  background:linear-gradient(180deg,#0b2119f7,#06110df5)!important;
+}
+.toast{
+  background:#0a1b15!important;
+}
+.ghost,
+.natal-view-switch button,
+.x-fav-button,
+.academy-practice{
+  background:#0d251db8!important;
+}
+.lumen-field,
+textarea,
+select,
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]){
+  background-color:#06100c!important;
+}
