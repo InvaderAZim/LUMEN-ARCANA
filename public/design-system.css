@@ -2219,3 +2219,24 @@ select{
     gap:6px;
   }
 }
+
+
+/* HOME MANTRA + PERSONALIZATION CONTROL */
+.home-mantra{
+  margin:0 0 10px!important;
+  padding:0 4px;
+  color:#f4ead4!important;
+  font-family:var(--ui-font-display)!important;
+  font-size:var(--ui-display-max)!important;
+  font-weight:600!important;
+  line-height:1.06!important;
+  letter-spacing:-.018em!important;
+}
+#personal78 #personalToggle78{
+  white-space:nowrap!important;
+  word-break:normal!important;
+  overflow-wrap:normal!important;
+  min-width:max-content!important;
+  width:auto!important;
+  flex:0 0 auto!important;
+}
