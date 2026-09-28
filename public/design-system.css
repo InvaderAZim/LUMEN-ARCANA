@@ -2477,3 +2477,37 @@ select{
 .natal-form-panel .natal-place-card.natal-single-row > small:first-child{
   color:#e5c87d!important;
 }
+
+
+/* NATAL PLACE ACTIONS — FULL CARD WIDTH, EQUAL BUTTONS */
+.natal-form-panel .natal-place-card .natal-place-actions{
+  grid-column:1 / -1!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  width:100%!important;
+  max-width:none!important;
+  gap:10px!important;
+  margin:0!important;
+}
+.natal-form-panel .natal-place-card .natal-place-actions > button{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  min-height:64px!important;
+  height:64px!important;
+  margin:0!important;
+  padding:10px 12px!important;
+  box-sizing:border-box!important;
+  justify-content:center!important;
+  text-align:center!important;
+}
+@media(max-width:560px){
+  .natal-form-panel .natal-place-card .natal-place-actions{
+    grid-column:1 / -1!important;
+    gap:8px!important;
+  }
+  .natal-form-panel .natal-place-card .natal-place-actions > button{
+    min-height:64px!important;
+    height:64px!important;
+  }
+}
