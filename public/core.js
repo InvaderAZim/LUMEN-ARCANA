@@ -27,6 +27,6 @@ export function flashToast(toast,text,duration=1700){
 
 export function pageShell(app,title,sub='',sealHtml='☾'){
   if(!app)throw new Error('LUMEN app root is unavailable');
-  app.innerHTML=`<main class="page"><header class="top"><div><div class="brandline">LUMEN ARCANA <span>BETA · PREMIUM</span></div><h1>${escapeHtml(title)}</h1>${sub?`<p>${escapeHtml(sub)}</p>`:''}</div><div class="seal">${sealHtml}</div></header><div id="content"></div></main>`;
+  app.innerHTML=`<main class="page"><header class="top"><div><div class="brandline"><span>BETA · PREMIUM</span></div><h1>${escapeHtml(title)}</h1>${sub?`<p>${escapeHtml(sub)}</p>`:''}</div><div class="seal">${sealHtml}</div></header><div id="content"></div></main>`;
   return app.querySelector('#content');
 }
