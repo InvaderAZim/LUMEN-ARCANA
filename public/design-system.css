@@ -2339,3 +2339,53 @@ select{
   left:6px;
   top:6px;
 }
+
+
+/* HOME DAILY CARD — SHOW THE COMPLETE TAROT ART */
+.home-day-visual{
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+.home-day-visual img{
+  width:auto!important;
+  height:auto!important;
+  max-width:100%!important;
+  max-height:none!important;
+  aspect-ratio:auto!important;
+  object-fit:contain!important;
+  object-position:center!important;
+}
+@media(max-width:560px){
+  .home-day-visual img{
+    width:108px!important;
+    max-width:108px!important;
+  }
+}
+@media(max-width:360px){
+  .home-day-visual img{
+    width:88px!important;
+    max-width:88px!important;
+  }
+}
+
+/* EMERALD ICON GLOW */
+.home-quick-grid button>b,
+.tarot-format-grid button>b{
+  color:#42df78!important;
+  text-shadow:
+    0 0 5px rgba(66,223,120,.92),
+    0 0 12px rgba(66,223,120,.62),
+    0 0 22px rgba(66,223,120,.30)!important;
+  filter:drop-shadow(0 0 5px rgba(66,223,120,.48));
+}
+@media(prefers-reduced-motion:no-preference){
+  .home-quick-grid button>b,
+  .tarot-format-grid button>b{
+    animation:lumenIconGlow 2.8s ease-in-out infinite alternate;
+  }
+}
+@keyframes lumenIconGlow{
+  from{filter:drop-shadow(0 0 3px rgba(66,223,120,.36))}
+  to{filter:drop-shadow(0 0 8px rgba(66,223,120,.72))}
+}
