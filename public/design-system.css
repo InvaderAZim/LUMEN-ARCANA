@@ -2257,3 +2257,9 @@ select{
   position:relative;
   z-index:2;
 }
+
+
+/* TAROT QUESTION FIELD SPACING */
+.tarot-format-grid + #q{
+  margin-top:14px!important;
+}
