@@ -2517,3 +2517,59 @@ select{
     margin-left:0;
   }
 }
+
+
+/* NATAL CORE DATA — ONE HORIZONTAL ROW */
+.natal-input-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(150px,1fr))!important;
+  gap:10px!important;
+  overflow-x:auto;
+  overscroll-behavior-inline:contain;
+  scrollbar-width:thin;
+  padding-bottom:3px;
+}
+.natal-date-time-pair,
+.natal-coords-pair{
+  display:contents!important;
+}
+.natal-date-time-pair .natal-inline-field:nth-child(1){grid-column:1;grid-row:1}
+.natal-date-time-pair .natal-inline-field:nth-child(2){grid-column:2;grid-row:1}
+.natal-inline-field.natal-inline-with-help:has(#xNOffset){grid-column:3;grid-row:1}
+.natal-coords-pair .natal-inline-field:nth-child(1){grid-column:4;grid-row:1}
+.natal-coords-pair .natal-inline-field:nth-child(2){grid-column:5;grid-row:1}
+.natal-place-card{
+  grid-column:1 / -1!important;
+  grid-row:2!important;
+}
+.natal-inline-field.natal-inline-with-help:has(#xNHouseSystem){
+  grid-column:1 / -1!important;
+  grid-row:3!important;
+}
+.natal-input-grid>.natal-inline-field,
+.natal-input-grid>.natal-pair>.natal-inline-field{
+  min-width:150px;
+}
+.natal-input-grid .natal-inline-field{
+  grid-template-columns:1fr!important;
+  gap:6px!important;
+  align-content:start!important;
+}
+.natal-input-grid .natal-inline-field>.lumen-help-copy{
+  grid-column:1!important;
+  margin:0!important;
+  font-size:.66rem!important;
+  line-height:1.25!important;
+}
+@media(max-width:560px){
+  .natal-input-grid{
+    grid-template-columns:repeat(5,155px)!important;
+  }
+  .natal-input-grid .natal-inline-field>small{
+    white-space:nowrap;
+  }
+  .natal-place-card,
+  .natal-inline-field.natal-inline-with-help:has(#xNHouseSystem){
+    min-width:calc(100vw - 76px)!important;
+  }
+}
