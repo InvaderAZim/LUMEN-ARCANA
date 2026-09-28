@@ -2457,3 +2457,17 @@ select{
     letter-spacing:.04em!important;
   }
 }
+
+
+/* NATAL PLACE — GOLD LABEL + FULL-WIDTH EQUAL ACTIONS */
+.natal-place-card>small{
+  color:#e5c87d!important;
+}
+.natal-place-actions{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  width:100%!important;
+}
+.natal-place-actions .ghost{
+  width:100%!important;
+  min-width:0!important;
+}
