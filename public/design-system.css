@@ -2289,3 +2289,25 @@ select{
 .tarot-format-grid .tarot-type-option[aria-pressed="true"] small{
   color:#c5d8cb!important;
 }
+
+
+/* NATAL PLACE SEARCH + MAP PICKER */
+.natal-place-card{position:relative;z-index:5}
+.natal-place-search{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center}
+.natal-place-search .ghost{height:var(--ui-control-height);white-space:nowrap}
+.natal-place-results{display:grid;gap:5px;margin-top:7px;max-height:220px;overflow:auto}
+.natal-place-result{
+  width:100%;padding:10px 12px;border:1px solid var(--ui-border-soft);border-radius:11px;
+  background:#071711;color:#e9f4ed;text-align:left;font:600 .78rem/1.35 var(--ui-font-sans);
+}
+.natal-place-result:active,.natal-place-result:hover{border-color:#38d77b;background:#0a2c1e}
+.natal-place-loading{padding:9px 4px;color:var(--ui-muted);font-size:.78rem}
+.natal-map-toggle{margin-top:9px}
+.natal-map-wrap{margin-top:10px}
+.natal-map{height:300px;width:100%;border:1px solid #38d77b66;border-radius:15px;overflow:hidden;background:#07110d;z-index:1}
+.natal-map .leaflet-control-attribution{font-size:9px}
+@media(max-width:560px){
+ .natal-place-search{grid-template-columns:1fr}
+ .natal-place-search .ghost{width:100%}
+ .natal-map{height:260px}
+}
