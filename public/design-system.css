@@ -2451,3 +2451,69 @@ select{
     gap:7px!important;
   }
 }
+
+
+/* NATAL FORM PAIRS */
+.natal-pair{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+  min-width:0;
+}
+.natal-pair .natal-inline-field{
+  grid-template-columns:auto minmax(0,1fr)!important;
+  gap:9px!important;
+}
+.natal-pair .natal-inline-field>small{
+  white-space:nowrap;
+}
+.natal-place-main{
+  grid-template-columns:132px minmax(0,1fr)!important;
+}
+.natal-place-search{
+  display:block!important;
+}
+.natal-place-search>#xNPlaceSearch{
+  display:none!important;
+}
+.natal-place-actions{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:8px;
+  margin-top:9px;
+}
+.natal-place-actions .ghost{
+  width:100%;
+  min-width:0;
+  white-space:nowrap;
+}
+@media(max-width:560px){
+  .natal-pair{
+    gap:8px;
+  }
+  .natal-pair .natal-inline-field{
+    grid-template-columns:1fr!important;
+    gap:5px!important;
+    align-content:center;
+  }
+  .natal-pair .natal-inline-field>small{
+    font-size:.68rem!important;
+  }
+  .natal-pair .lumen-field{
+    min-width:0!important;
+    width:100%!important;
+    padding-left:11px!important;
+    padding-right:11px!important;
+  }
+  .natal-place-main{
+    grid-template-columns:92px minmax(0,1fr)!important;
+  }
+  .natal-place-actions{
+    margin-left:101px;
+  }
+}
+@media(max-width:390px){
+  .natal-place-actions{
+    margin-left:0;
+  }
+}
