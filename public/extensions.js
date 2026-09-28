@@ -5,7 +5,7 @@ const nav=document.querySelector('#bottom-nav');
 const toast=document.querySelector('#toast');
 const HKEY='la_journal',FKEY='la_favorites',PKEY='la_profile_prefs',NKEY='la_natal_profile';
 const flashX=t=>flashToast(toast,t);
-const shellX=(title,sub,icon='☾')=>pageShell(app,title,sub,icon);
+const shellX=(title,sub,icon='☾')=>{const content=pageShell(app,title,sub,icon);requestAnimationFrame(()=>window.LUMEN_DECORATE?.());return content};
 function activeNav(route){nav?.querySelectorAll('.nav-btn').forEach(b=>b.classList.toggle('active',b.dataset.r===route))}
 function uidX(){return crypto?.randomUUID?.()||`la_${Date.now().toString(36)}_${Math.random().toString(36).slice(2,9)}`}
 function legacyHistoryIdX(x,i){return `${x?.createdAt||''}|${x?.title||''}|${x?.question||''}|${i}`}
