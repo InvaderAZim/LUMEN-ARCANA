@@ -2079,3 +2079,32 @@ select{
     font-size:1.55rem!important;
   }
 }
+
+
+/* STRICT DISPLAY CAP — personalization heading is the maximum */
+:root{
+  --ui-display-max:2.05rem;
+}
+.top h1,
+.hero-copy h2,
+.panel-row h2,
+.result-head h2,
+.drawing h2,
+.premium-panel>h2,
+.profile-card h2,
+.day-card h3,
+.reading-cards h3,
+.journal-item h3,
+.deck-grid article h3,
+.classic-positions h3,
+.classic-aspect-matrix h3,
+.classic-section-title{
+  font-size:var(--ui-display-max)!important;
+  line-height:1.06!important;
+}
+@media(max-width:560px){
+  :root{--ui-display-max:1.9rem}
+}
+@media(max-width:360px){
+  :root{--ui-display-max:1.55rem}
+}
