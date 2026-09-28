@@ -2605,3 +2605,13 @@ select{
     column-gap:10px!important;
   }
 }
+
+
+/* NATAL HOUSE SYSTEM — HELP COPY FULL ROW */
+.natal-form-panel .natal-inline-with-help:not(.natal-utc-row)>.lumen-help-copy{
+  grid-column:1 / -1!important;
+  width:100%!important;
+  max-width:none!important;
+  box-sizing:border-box!important;
+  margin:8px 0 0!important;
+}
