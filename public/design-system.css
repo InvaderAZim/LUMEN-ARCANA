@@ -2240,3 +2240,20 @@ select{
   width:auto!important;
   flex:0 0 auto!important;
 }
+
+
+/* DAILY DETAIL CTA — reliable touch target above hero decoration */
+.home-day-card:after{
+  pointer-events:none!important;
+}
+#dayDetail{
+  position:relative!important;
+  z-index:3!important;
+  pointer-events:auto!important;
+  touch-action:manipulation;
+  cursor:pointer!important;
+}
+.home-day-copy{
+  position:relative;
+  z-index:2;
+}
