@@ -1734,3 +1734,96 @@ input[type="search"]{
     text-align:left!important;
   }
 }
+
+
+/* BLUE + EMERALD ACCENT LAYER */
+:root{
+  --ui-green:#42df78;
+  --ui-green-soft:#42df7830;
+  --ui-green-border:#42df785c;
+  --ui-green-glow:#42df7838;
+}
+body{
+  background-image:
+    radial-gradient(circle at 12% 8%,#42df780b 0,transparent 28%),
+    radial-gradient(circle at 88% 16%,#68b8ff0d 0,transparent 30%)!important;
+}
+.top h1,
+.hero-copy h2{
+  text-shadow:0 0 26px #42df780d;
+}
+.primary{
+  background:linear-gradient(135deg,#54e987 0,#1ea957 100%)!important;
+  color:#04140a!important;
+  border:1px solid #65ef94!important;
+  box-shadow:0 8px 28px var(--ui-green-glow)!important;
+}
+.primary:hover{
+  filter:brightness(1.07);
+  box-shadow:0 10px 32px #42df7850!important;
+}
+.ghost:hover,
+.quick-grid button:hover,
+.spread:hover,
+.settings-grid article:hover{
+  border-color:var(--ui-green-border)!important;
+  box-shadow:0 0 22px #42df7814!important;
+}
+.nav-btn.active{
+  color:#f2fbff!important;
+  background:linear-gradient(135deg,#153650cc,#123826b8)!important;
+  box-shadow:inset 0 0 0 1px #68b8ff60,0 0 20px #58aaf526,0 0 18px #42df781d!important;
+}
+.nav-btn.active svg,
+.nav-btn.active b,
+.nav-btn.active strong{
+  color:var(--ui-green)!important;
+}
+.badge,
+.mode-pill,
+.premium-chip,
+.brandline span{
+  border-color:#e5c87d48!important;
+}
+.hero-premium,
+.day-card,
+.premium-panel,
+.result-premium,
+.drawing,
+.profile-card,
+.premium-strip,
+.empty-state,
+.lesson,
+.journal-item{
+  background:
+    radial-gradient(circle at 100% 0,#42df7808,transparent 34%),
+    linear-gradient(145deg,var(--ui-panel-a),var(--ui-panel-b))!important;
+}
+.quick-grid button,
+.reading-cards article,
+.spread,
+.library-grid article,
+.settings-grid article{
+  background:
+    linear-gradient(135deg,#42df7805,transparent 40%),
+    linear-gradient(145deg,var(--ui-card-a),var(--ui-card-b))!important;
+}
+.quick-grid button>b,
+.deck-filter-grid button[aria-pressed="true"],
+.natal-view-switch button[aria-pressed="true"],
+.x-fav-button[aria-pressed="true"]{
+  color:var(--ui-green)!important;
+}
+.deck-filter-grid button[aria-pressed="true"],
+.natal-view-switch button[aria-pressed="true"]{
+  border-color:var(--ui-green-border)!important;
+  background:#123826b8!important;
+  box-shadow:inset 0 0 0 1px #42df782e!important;
+}
+.lumen-field:focus,
+textarea:focus,
+select:focus,
+input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):focus{
+  border-color:var(--ui-green-border)!important;
+  box-shadow:0 0 0 3px #42df7812!important;
+}
