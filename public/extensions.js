@@ -382,7 +382,7 @@ function initNatalMapX(){
  const lat=Number(document.querySelector('#xNLat')?.value)||50.95,lon=Number(document.querySelector('#xNLon')?.value)||28.64;
  natalMapX=L.map(host,{zoomControl:true,attributionControl:true}).setView([lat,lon],9);
  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© OpenStreetMap'}).addTo(natalMapX);
- natalMarkerX=L.marker([lat,lon]).addTo(natalMapX);
+ const markerIcon=L.divIcon({className:'lumen-map-marker',html:'<span aria-hidden="true"></span>',iconSize:[30,38],iconAnchor:[15,36]});natalMarkerX=L.marker([lat,lon],{icon:markerIcon}).addTo(natalMapX);
  natalMapX.on('click',ev=>{const {lat,lng}=ev.latlng;natalMarkerX.setLatLng([lat,lng]);setNatalPlaceX(document.querySelector('#xNPlace')?.value?.trim()||'Вибрана точка',lat,lng)});
 }
 
