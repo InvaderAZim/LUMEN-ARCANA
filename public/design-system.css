@@ -2034,3 +2034,48 @@ select{
   .quick-grid span{font-size:.82rem!important}
   .quick-grid small{font-size:.64rem!important}
 }
+
+
+/* DISPLAY TYPE SCALE — one balanced maximum size */
+.top h1,
+.hero-copy h2,
+.panel-row h2,
+.result-head h2,
+.drawing h2,
+.premium-panel>h2,
+.profile-card h2,
+.day-card h3,
+.reading-cards h3,
+.journal-item h3{
+  font-size:clamp(1.55rem,4.8vw,2.05rem)!important;
+  line-height:1.06!important;
+}
+@media(max-width:560px){
+  .top h1,
+  .hero-copy h2,
+  .panel-row h2,
+  .result-head h2,
+  .drawing h2,
+  .premium-panel>h2,
+  .profile-card h2,
+  .day-card h3,
+  .reading-cards h3,
+  .journal-item h3{
+    font-size:clamp(1.55rem,7.2vw,1.9rem)!important;
+    line-height:1.07!important;
+  }
+}
+@media(max-width:360px){
+  .top h1,
+  .hero-copy h2,
+  .panel-row h2,
+  .result-head h2,
+  .drawing h2,
+  .premium-panel>h2,
+  .profile-card h2,
+  .day-card h3,
+  .reading-cards h3,
+  .journal-item h3{
+    font-size:1.55rem!important;
+  }
+}
