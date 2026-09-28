@@ -2108,3 +2108,28 @@ select{
 @media(max-width:360px){
   :root{--ui-display-max:1.55rem}
 }
+
+
+/* HEADER ANIMATED SEAL — 2x visual size */
+.top .seal{
+  width:96px!important;
+  height:96px!important;
+  min-width:96px!important;
+  font-size:2.7rem!important;
+}
+@media(max-width:560px){
+  .top .seal{
+    width:96px!important;
+    height:96px!important;
+    min-width:96px!important;
+    font-size:2.7rem!important;
+  }
+}
+@media(max-width:360px){
+  .top .seal{
+    width:84px!important;
+    height:84px!important;
+    min-width:84px!important;
+    font-size:2.4rem!important;
+  }
+}
