@@ -2311,3 +2311,31 @@ select{
  .natal-place-search .ghost{width:100%}
  .natal-map{height:260px}
 }
+
+
+/* NATAL MAP MARKER — self-contained, no external icon asset */
+.lumen-map-marker{
+  background:transparent!important;
+  border:0!important;
+}
+.lumen-map-marker span{
+  display:block;
+  width:26px;
+  height:26px;
+  border:3px solid #e9f7ee;
+  border-radius:50% 50% 50% 0;
+  background:#20c96b;
+  box-shadow:0 3px 12px rgba(0,0,0,.45),0 0 0 4px rgba(32,201,107,.2);
+  transform:rotate(-45deg);
+  position:relative;
+}
+.lumen-map-marker span:after{
+  content:"";
+  position:absolute;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f5ead0;
+  left:6px;
+  top:6px;
+}
