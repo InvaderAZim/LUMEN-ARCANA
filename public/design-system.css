@@ -2389,3 +2389,65 @@ select{
   from{filter:drop-shadow(0 0 3px rgba(66,223,120,.36))}
   to{filter:drop-shadow(0 0 8px rgba(66,223,120,.72))}
 }
+
+
+/* COMPACT NATAL FORM — LABELS BESIDE VALUES */
+.natal-form-panel{
+  padding-top:var(--ui-panel-pad)!important;
+}
+.natal-input-grid{
+  grid-template-columns:1fr!important;
+}
+.natal-inline-field,
+.natal-place-card{
+  min-width:0;
+}
+.natal-inline-field{
+  display:grid!important;
+  grid-template-columns:132px minmax(0,1fr)!important;
+  gap:14px!important;
+  align-items:center!important;
+}
+.natal-inline-field>small,
+.natal-place-main>small{
+  margin:0!important;
+  align-self:center;
+}
+.natal-inline-field>.lumen-help-copy{
+  grid-column:2!important;
+  margin-top:-4px!important;
+}
+.natal-place-main{
+  display:grid;
+  grid-template-columns:132px minmax(0,1fr);
+  gap:14px;
+  align-items:start;
+}
+.natal-place-main>small{
+  padding-top:14px;
+}
+.natal-place-main .natal-place-search{
+  min-width:0;
+}
+@media(max-width:560px){
+  .natal-inline-field,
+  .natal-place-main{
+    grid-template-columns:92px minmax(0,1fr)!important;
+    gap:9px!important;
+  }
+  .natal-inline-field>small,
+  .natal-place-main>small{
+    font-size:.72rem!important;
+    letter-spacing:.055em!important;
+  }
+  .natal-place-main>small{
+    padding-top:14px;
+  }
+}
+@media(max-width:360px){
+  .natal-inline-field,
+  .natal-place-main{
+    grid-template-columns:78px minmax(0,1fr)!important;
+    gap:7px!important;
+  }
+}
