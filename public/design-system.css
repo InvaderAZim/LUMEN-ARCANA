@@ -2615,3 +2615,56 @@ select{
   box-sizing:border-box!important;
   margin:8px 0 0!important;
 }
+
+
+/* NATAL POSITIONS — COMPACT SINGLE-LINE ROWS */
+.natal-position-list{
+  display:grid!important;
+  grid-template-columns:1fr!important;
+  gap:6px!important;
+}
+.natal-position-row{
+  display:flex!important;
+  align-items:center!important;
+  gap:10px!important;
+  min-width:0!important;
+  padding:10px 12px!important;
+  min-height:42px!important;
+  overflow:hidden!important;
+}
+.natal-position-key,
+.natal-position-value{
+  margin:0!important;
+  font-family:inherit!important;
+  font-size:.78rem!important;
+  line-height:1.2!important;
+  white-space:nowrap!important;
+}
+.natal-position-key{
+  flex:0 0 104px!important;
+  font-weight:800!important;
+  color:#e5c87d!important;
+}
+.natal-position-value{
+  flex:1 1 auto!important;
+  min-width:0!important;
+  font-weight:600!important;
+  color:var(--text,#f4f1e8)!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+@media(max-width:560px){
+  .natal-position-list{gap:5px!important}
+  .natal-position-row{
+    gap:7px!important;
+    min-height:38px!important;
+    padding:8px 10px!important;
+  }
+  .natal-position-key,
+  .natal-position-value{
+    font-size:.72rem!important;
+  }
+  .natal-position-key{
+    flex-basis:86px!important;
+  }
+}
