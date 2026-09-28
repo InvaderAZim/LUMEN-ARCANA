@@ -56,7 +56,7 @@ function personalApi78(){const p=personal78();return{enabled:p.enabled,historyCo
 function applyPersonalization78(){
  const root=document.querySelector('#app'),title=root?.querySelector('.top h1')?.textContent?.trim();if(!root||!title)return;const p=personal78(),old=root.querySelector('#personal78');if(old)old.remove();
  if(title.startsWith('Привіт,')){
-   const hero=root.querySelector('.hero-premium');if(!hero)return;const s=document.createElement('section');s.id='personal78';s.className='day-card';s.innerHTML=`<div><small>LUMEN PERSONAL · ${p.enabled?'ON':'OFF'}</small><h3>Персоналізація</h3><p>${tarotEsc(personalSummary78(p))}</p></div><button class="ghost" id="personalToggle78">${p.enabled?'Вимкнути':'Увімкнути'}</button>`;hero.insertAdjacentElement('afterend',s);
+   const hero=root.querySelector('.hero-premium');if(!hero)return;const s=document.createElement('section');s.id='personal78';s.className='day-card';s.innerHTML=`<div><h3>Персоналізація</h3><p>${tarotEsc(personalSummary78(p))}</p></div><button class="ghost" id="personalToggle78">${p.enabled?'Вимкнути':'Увімкнути'}</button>`;hero.insertAdjacentElement('afterend',s);
  }
  if(title==='Таро'){
    const c=root.querySelector('#content .premium-panel');if(!c)return;const s=document.createElement('div');s.id='personal78';s.className='synthesis';s.innerHTML=`<small>ПЕРСОНАЛЬНИЙ КОНТЕКСТ · ${p.enabled?'УВІМКНЕНО':'ВИМКНЕНО'}</small><p>${tarotEsc(personalSummary78(p))}</p><button class="text-btn" id="personalToggle78">${p.enabled?'Не використовувати в тлумаченні':'Використовувати в тлумаченні'}</button>`;const label=c.querySelector('label');label?c.insertBefore(s,label):c.prepend(s);
