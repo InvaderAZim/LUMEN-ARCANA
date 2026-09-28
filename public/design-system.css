@@ -2511,3 +2511,24 @@ select{
     height:64px!important;
   }
 }
+
+
+/* NATAL PLACE ACTIONS — COMPACT + CLOSER TO PLACE FIELD */
+.natal-form-panel .natal-place-card .natal-place-actions{
+  margin-top:-6px!important;
+}
+.natal-form-panel .natal-place-card .natal-place-actions > button{
+  min-height:48px!important;
+  height:48px!important;
+  padding:7px 10px!important;
+}
+@media(max-width:560px){
+  .natal-form-panel .natal-place-card .natal-place-actions{
+    margin-top:-8px!important;
+  }
+  .natal-form-panel .natal-place-card .natal-place-actions > button{
+    min-height:46px!important;
+    height:46px!important;
+    padding:6px 8px!important;
+  }
+}
