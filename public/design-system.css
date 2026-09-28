@@ -2263,3 +2263,29 @@ select{
 .tarot-format-grid + #q{
   margin-top:14px!important;
 }
+
+
+/* TAROT SELECTED SPREAD — clear emerald active state */
+.tarot-format-grid .tarot-type-option{
+  transition:border-color .18s ease,background .18s ease,box-shadow .18s ease,transform .18s ease!important;
+}
+.tarot-format-grid .tarot-type-option.tarot-type-selected,
+.tarot-format-grid .tarot-type-option[aria-pressed="true"]{
+  background:linear-gradient(145deg,rgba(11,75,49,.92),rgba(5,43,32,.96))!important;
+  border-color:#38d77b!important;
+  box-shadow:inset 0 0 0 1px rgba(76,232,139,.18),0 0 0 1px rgba(29,179,100,.14),0 10px 26px rgba(0,0,0,.22)!important;
+  transform:translateY(-1px);
+}
+.tarot-format-grid .tarot-type-option.tarot-type-selected b,
+.tarot-format-grid .tarot-type-option[aria-pressed="true"] b{
+  color:#54ed91!important;
+  filter:drop-shadow(0 0 8px rgba(62,222,127,.28));
+}
+.tarot-format-grid .tarot-type-option.tarot-type-selected span,
+.tarot-format-grid .tarot-type-option[aria-pressed="true"] span{
+  color:#fff4dc!important;
+}
+.tarot-format-grid .tarot-type-option.tarot-type-selected small,
+.tarot-format-grid .tarot-type-option[aria-pressed="true"] small{
+  color:#c5d8cb!important;
+}
