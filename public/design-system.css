@@ -2574,3 +2574,34 @@ select{
     letter-spacing:.04em!important;
   }
 }
+
+
+/* NATAL HOUSE SYSTEM — KEEP LABEL FULLY VISIBLE */
+.natal-form-panel .natal-inline-with-help:not(.natal-utc-row){
+  grid-template-columns:142px minmax(0,1fr)!important;
+  column-gap:14px!important;
+  align-items:center!important;
+}
+.natal-form-panel .natal-inline-with-help:not(.natal-utc-row)>small{
+  grid-column:1!important;
+  white-space:normal!important;
+  line-height:1.05!important;
+  position:relative!important;
+  z-index:2!important;
+}
+.natal-form-panel .natal-inline-with-help:not(.natal-utc-row)>.lumen-field{
+  grid-column:2!important;
+  width:100%!important;
+  min-width:0!important;
+}
+.natal-form-panel .natal-inline-with-help:not(.natal-utc-row)>.lumen-help-copy{
+  grid-column:2!important;
+  width:100%!important;
+  margin-top:4px!important;
+}
+@media(max-width:560px){
+  .natal-form-panel .natal-inline-with-help:not(.natal-utc-row){
+    grid-template-columns:128px minmax(0,1fr)!important;
+    column-gap:10px!important;
+  }
+}
