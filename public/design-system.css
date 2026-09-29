@@ -2922,3 +2922,10 @@ select{
 .zodiac-daily-mark .zodiac-art-daily{
   aspect-ratio:1/1!important;
 }
+
+/* DAILY FORECAST — current date emphasis */
+.top p.daily-date{
+  font-size:clamp(1.1rem,4.6vw,1.25rem)!important;
+  font-weight:600!important;
+  line-height:1.25!important;
+}
