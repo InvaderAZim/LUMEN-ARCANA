@@ -2891,7 +2891,9 @@ select{
 .zodiac-daily-mark .zodiac-art-daily{
   aspect-ratio:384/341!important;
   height:auto!important;
-  background-size:400% 300%!important;
+  background-size:contain!important;
+  background-position:center!important;
+  background-repeat:no-repeat!important;
 }
 
 /* INDIVIDUAL ZODIAC FILES — use the 12 dedicated high-quality assets */
