@@ -2820,3 +2820,36 @@ select{
     flex-basis:42px;
   }
 }
+
+/* USER-SELECTED ZODIAC ART SET — 4 × 3 SPRITE */
+.zodiac-user-art{
+  display:inline-block;
+  background-image:url("/assets/zodiac/zodiac-user-set.webp?v=1");
+  background-repeat:no-repeat;
+  background-size:400% 300%;
+  background-color:transparent;
+  overflow:hidden;
+}
+.zodiac-aries{background-position:0% 0%}
+.zodiac-taurus{background-position:33.333% 0%}
+.zodiac-gemini{background-position:66.667% 0%}
+.zodiac-cancer{background-position:100% 0%}
+.zodiac-leo{background-position:0% 50%}
+.zodiac-virgo{background-position:33.333% 50%}
+.zodiac-libra{background-position:66.667% 50%}
+.zodiac-scorpio{background-position:100% 50%}
+.zodiac-sagittarius{background-position:0% 100%}
+.zodiac-capricorn{background-position:33.333% 100%}
+.zodiac-aquarius{background-position:66.667% 100%}
+.zodiac-pisces{background-position:100% 100%}
+.zodiac-art-title{
+  width:68px!important;
+  height:60px!important;
+  flex:0 0 68px!important;
+  border-radius:12px!important;
+  filter:drop-shadow(0 0 10px rgba(244,215,127,.35));
+}
+.zodiac-art-profile,
+.zodiac-art-pair{
+  border-radius:14px!important;
+}
