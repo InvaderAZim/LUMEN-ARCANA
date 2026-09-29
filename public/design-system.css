@@ -2882,3 +2882,14 @@ select{
     height:min(76%,330px)!important;
   }
 }
+
+/* INDIVIDUAL HIGH-RES ZODIAC ASSETS */
+.zodiac-user-art{
+  background-repeat:no-repeat!important;
+  background-position:center!important;
+  background-size:contain!important;
+  background-color:transparent!important;
+}
+.zodiac-daily-mark .zodiac-user-art{
+  background-size:contain!important;
+}
