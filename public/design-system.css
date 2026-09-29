@@ -2893,3 +2893,17 @@ select{
   height:auto!important;
   background-size:400% 300%!important;
 }
+
+/* INDIVIDUAL ZODIAC FILES — sprite remains an automatic fallback until all files are present */
+.zodiac-aries{background-image:url("/assets/zodiac/aries.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,0% 0%!important}
+.zodiac-taurus{background-image:url("/assets/zodiac/taurus.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,33.333% 0%!important}
+.zodiac-gemini{background-image:url("/assets/zodiac/gemini.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,66.667% 0%!important}
+.zodiac-cancer{background-image:url("/assets/zodiac/cancer.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,100% 0%!important}
+.zodiac-leo{background-image:url("/assets/zodiac/leo.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,0% 50%!important}
+.zodiac-virgo{background-image:url("/assets/zodiac/virgo.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,33.333% 50%!important}
+.zodiac-libra{background-image:url("/assets/zodiac/libra.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,66.667% 50%!important}
+.zodiac-scorpio{background-image:url("/assets/zodiac/scorpio.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,100% 50%!important}
+.zodiac-sagittarius{background-image:url("/assets/zodiac/sagittarius.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,0% 100%!important}
+.zodiac-capricorn{background-image:url("/assets/zodiac/capricorn.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,33.333% 100%!important}
+.zodiac-aquarius{background-image:url("/assets/zodiac/aquarius.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,66.667% 100%!important}
+.zodiac-pisces{background-image:url("/assets/zodiac/pisces.png?v=3"),url("/assets/zodiac/zodiac-user-set.webp?v=1")!important;background-size:cover,400% 300%!important;background-position:center,100% 100%!important}
