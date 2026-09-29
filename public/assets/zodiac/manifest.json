@@ -1,0 +1,338 @@
+[
+  {
+    "file": "aries.png",
+    "source": "01_Aries.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      382
+    ],
+    "sha256": "293ed82f9a978e153217d3a506fcebdb2e6e8db99dac89ebce58ebd018ebf2d1",
+    "bytes": 263332
+  },
+  {
+    "file": "taurus.png",
+    "source": "02_Taurus.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      382
+    ],
+    "sha256": "a3f2d8ce63b5753593a5a10d34bde6d2903a4b786198739a7409180f8762ac64",
+    "bytes": 260317
+  },
+  {
+    "file": "gemini.png",
+    "source": "03_Gemini.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      423,
+      423
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      403,
+      382
+    ],
+    "sha256": "020334cebc6578f5e444b3047a96f7015e1412f8e8123ae565e1558b86c6038e",
+    "bytes": 278529
+  },
+  {
+    "file": "cancer.png",
+    "source": "04_Cancer.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      410,
+      410
+    ],
+    "placement": [
+      7,
+      7
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      27,
+      41,
+      397,
+      382
+    ],
+    "sha256": "cda9d5f510314d8f8db319dceb74bc9637211608640a8fd881675f4f8bd2de1d",
+    "bytes": 257145
+  },
+  {
+    "file": "leo.png",
+    "source": "05_Leo.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      383
+    ],
+    "sha256": "7c4f4d739f87a079eaad85623194b132559451de7b3574f23981bfc53f80ab89",
+    "bytes": 291923
+  },
+  {
+    "file": "virgo.png",
+    "source": "06_Virgo.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      383
+    ],
+    "sha256": "877c5b3b665ae80f5310d1d98fd050e8a3042da42d33ee1d3047dcf8cb1ec7d0",
+    "bytes": 288890
+  },
+  {
+    "file": "libra.png",
+    "source": "07_Libra.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      383
+    ],
+    "sha256": "6c348b6c4d6ef8888c0b179b6c82473613f2b36f4bc045424f574be9e44c7032",
+    "bytes": 256560
+  },
+  {
+    "file": "scorpio.png",
+    "source": "08_Scorpio.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      383
+    ],
+    "sha256": "5acf90bc993b3f459042b40988197ac69a0826d4ff6e0661fe9684fcf1386610",
+    "bytes": 251043
+  },
+  {
+    "file": "sagittarius.png",
+    "source": "09_Sagittarius.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      382
+    ],
+    "sha256": "771e9279e4e04caf0b26249c5446a26e289c111579d9f7e00f361ce8d0f21f22",
+    "bytes": 274606
+  },
+  {
+    "file": "capricorn.png",
+    "source": "10_Capricorn.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      423,
+      423
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      403,
+      382
+    ],
+    "sha256": "9dd7b675d90c7e5c2cfcaa4b59f26ec2d50af6e56075df51f7f478e631523dc2",
+    "bytes": 266114
+  },
+  {
+    "file": "aquarius.png",
+    "source": "11_Aquarius.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      424,
+      424
+    ],
+    "placement": [
+      0,
+      0
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      20,
+      41,
+      404,
+      382
+    ],
+    "sha256": "c88b7c67eba39beab98c34f8511cef4304973d997114121c4a14e340f6f7672c",
+    "bytes": 284639
+  },
+  {
+    "file": "pisces.png",
+    "source": "12_Pisces.png",
+    "size": [
+      424,
+      424
+    ],
+    "source_size": [
+      422,
+      422
+    ],
+    "placement": [
+      1,
+      1
+    ],
+    "alpha_extrema": [
+      0,
+      255
+    ],
+    "content_bbox": [
+      21,
+      41,
+      403,
+      382
+    ],
+    "sha256": "dc2d1a2215b219b341945484d82280e0d913f7547ba52e53c8457385469529eb",
+    "bytes": 274972
+  }
+]
