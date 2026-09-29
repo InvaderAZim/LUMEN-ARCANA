@@ -2907,4 +2907,4 @@ select{
 .zodiac-capricorn{background-image:url("/assets/zodiac/capricorn.png?v=4")!important}
 .zodiac-aquarius{background-image:url("/assets/zodiac/aquarius.png?v=4")!important}
 .zodiac-pisces{background-image:url("/assets/zodiac/pisces.png?v=4")!important}
-.zodiac-user-art{background-size:cover!important;background-position:center!important}
+.zodiac-user-art{background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
