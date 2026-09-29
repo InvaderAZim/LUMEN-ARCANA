@@ -2853,3 +2853,32 @@ select{
 .zodiac-art-pair{
   border-radius:14px!important;
 }
+
+/* DAILY ZODIAC ART — CENTERED IN THE LARGE VISUAL PANEL */
+.zodiac-daily-mark{
+  position:relative;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:18px!important;
+  background-position:center;
+}
+.zodiac-daily-mark .zodiac-art-daily{
+  display:block!important;
+  width:min(78%,430px)!important;
+  height:min(78%,430px)!important;
+  aspect-ratio:1/1;
+  flex:0 0 auto;
+  border-radius:24px!important;
+  background-size:400% 300%!important;
+  filter:drop-shadow(0 0 22px rgba(244,215,127,.32));
+}
+.zodiac-daily-mark>small{
+  bottom:12px!important;
+}
+@media(max-width:560px){
+  .zodiac-daily-mark .zodiac-art-daily{
+    width:min(76%,330px)!important;
+    height:min(76%,330px)!important;
+  }
+}
