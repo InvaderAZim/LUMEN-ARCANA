@@ -2786,3 +2786,37 @@ select{
 @media(max-width:360px){
   .zodiac-pair-art{width:120px}
 }
+
+/* ZODIAC ART — ACTIVE HOROSCOPE UI */
+.zodiac-daily-title{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.zodiac-daily-title>span{
+  min-width:0;
+}
+.zodiac-art-title{
+  width:46px;
+  height:46px;
+  flex:0 0 46px;
+  object-fit:contain;
+  border-radius:50%;
+  filter:drop-shadow(0 0 10px rgba(244,215,127,.45));
+}
+.zodiac-art-daily{
+  object-fit:contain!important;
+  background:transparent;
+}
+.zodiac-art-profile,
+.zodiac-art-pair{
+  object-fit:contain!important;
+  background:transparent;
+}
+@media(max-width:560px){
+  .zodiac-art-title{
+    width:42px;
+    height:42px;
+    flex-basis:42px;
+  }
+}
