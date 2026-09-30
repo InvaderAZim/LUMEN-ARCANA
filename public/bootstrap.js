@@ -21,10 +21,3 @@ if(failed.length){
   console.warn('LUMEN optional modules failed:',failed);
 }
 
-try{
-  await import('/day-card-visual.js');
-}catch(error){
-  window.LUMEN_BOOT_STATUS.failed.push('dayCardVisual');
-  window.LUMEN_BOOT_STATUS.ok=false;
-  console.warn('LUMEN day card visual failed',error);
-}
