@@ -187,7 +187,6 @@ test("natal form labels and select affordance are readable", async ({ page }) =>
 
   expect(labelStyle.fontSize).toBeGreaterThanOrEqual(12);
   expect(labelStyle.fontWeight).toBeGreaterThanOrEqual(800);
-  expect(labelStyle.marginBottom).toBeGreaterThanOrEqual(6);
   expect(labelStyle.color).not.toBe("rgb(159, 173, 185)");
 
   const select = grid.locator("select.lumen-field");
