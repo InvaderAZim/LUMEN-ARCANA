@@ -6,10 +6,14 @@
   --ui-gold:#e5c87d;
   --ui-gold-2:#c89e48;
   --ui-blue:#68b8ff;
-  --ui-panel-a:#151c24ee;
-  --ui-panel-b:#0c1117ee;
-  --ui-card-a:#111b25dd;
-  --ui-card-b:#0b1015dd;
+  --ui-green:#42df78;
+  --ui-green-soft:#42df7830;
+  --ui-green-border:#42df785c;
+  --ui-green-glow:#42df7838;
+  --ui-panel-a:#0c1b16f2;
+  --ui-panel-b:#07110dee;
+  --ui-card-a:#0d2019e8;
+  --ui-card-b:#081510e8;
   --ui-border:#68b8ff42;
   --ui-border-soft:#68b8ff30;
   --ui-border-hover:#68b8ff78;
@@ -20,6 +24,9 @@
   --ui-panel-pad:20px;
   --ui-gap:12px;
   --ui-shadow:0 18px 48px #0008,0 0 34px #2b8bd118;
+  --ui-font-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --ui-font-sans:Manrope,Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --ui-display-max:2.05rem;
 }
 body{
   color:var(--ui-text);
@@ -1698,12 +1705,6 @@ input[type="search"]{
 
 
 /* BLUE + EMERALD ACCENT LAYER */
-:root{
-  --ui-green:#42df78;
-  --ui-green-soft:#42df7830;
-  --ui-green-border:#42df785c;
-  --ui-green-glow:#42df7838;
-}
 body{
   background-image:
     radial-gradient(circle at 12% 8%,#42df780b 0,transparent 28%),
@@ -1788,12 +1789,6 @@ input:not([type="range"]):not([type="checkbox"]):not([type="radio"]):focus{
 
 
 /* DARK EMERALD SURFACE THEME */
-:root{
-  --ui-panel-a:#0c1b16f2;
-  --ui-panel-b:#07110dee;
-  --ui-card-a:#0d2019e8;
-  --ui-card-b:#081510e8;
-}
 body{
   background-color:#040b08!important;
   background-image:
@@ -1841,35 +1836,7 @@ input:not([type="range"]):not([type="checkbox"]):not([type="radio"]){
 }
 
 
-/* HOME HERO CTA — intentionally restrained */
-#start.primary{
-  background:#103326!important;
-  background-image:linear-gradient(180deg,#154431 0%,#0d2b20 100%)!important;
-  color:#d9eee1!important;
-  border:1px solid #2d8f5b!important;
-  box-shadow:inset 0 1px 0 #8ee6ad12,0 6px 16px #0006!important;
-  filter:none!important;
-}
-#start.primary:hover{
-  background:#15402f!important;
-  background-image:linear-gradient(180deg,#194b37 0%,#103326 100%)!important;
-  color:#e7f6eb!important;
-  border-color:#3ba76c!important;
-  box-shadow:inset 0 1px 0 #9af0b918,0 7px 18px #0006!important;
-  transform:none!important;
-}
-#start.primary:after{
-  display:none!important;
-  animation:none!important;
-  opacity:0!important;
-}
-
-
 /* TYPOGRAPHY v2 — Cormorant Garamond + Manrope */
-:root{
-  --ui-font-display:"Cormorant Garamond",Georgia,"Times New Roman",serif;
-  --ui-font-sans:Manrope,Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-}
 body,
 button,
 input,
@@ -2034,9 +2001,6 @@ select{
 
 
 /* STRICT DISPLAY CAP — personalization heading is the maximum */
-:root{
-  --ui-display-max:2.05rem;
-}
 .top h1,
 .hero-copy h2,
 .panel-row h2,
