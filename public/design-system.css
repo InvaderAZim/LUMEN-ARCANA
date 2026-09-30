@@ -2741,7 +2741,6 @@ select{
 }
 .zodiac-art-profile{
   width:min(150px,100%);
-  aspect-ratio:3/4;
   margin:10px auto 12px;
   box-shadow:0 0 28px rgba(233,201,120,.18);
 }
@@ -2775,7 +2774,6 @@ select{
   flex:0 0 auto;
 }
 .zodiac-art-pair{
-  aspect-ratio:3/4;
   border-radius:12px;
   box-shadow:0 0 20px rgba(233,201,120,.14);
 }
@@ -2821,27 +2819,11 @@ select{
   }
 }
 
-/* USER-SELECTED ZODIAC ART SET — 4 × 3 SPRITE */
+/* ZODIAC ART — CURRENT 12-FILE ASSET SET */
 .zodiac-user-art{
   display:inline-block;
-  background-image:url("/assets/zodiac/zodiac-user-set.webp?v=1");
-  background-repeat:no-repeat;
-  background-size:400% 300%;
-  background-color:transparent;
   overflow:hidden;
 }
-.zodiac-aries{background-position:0% 0%}
-.zodiac-taurus{background-position:33.333% 0%}
-.zodiac-gemini{background-position:66.667% 0%}
-.zodiac-cancer{background-position:100% 0%}
-.zodiac-leo{background-position:0% 50%}
-.zodiac-virgo{background-position:33.333% 50%}
-.zodiac-libra{background-position:66.667% 50%}
-.zodiac-scorpio{background-position:100% 50%}
-.zodiac-sagittarius{background-position:0% 100%}
-.zodiac-capricorn{background-position:33.333% 100%}
-.zodiac-aquarius{background-position:66.667% 100%}
-.zodiac-pisces{background-position:100% 100%}
 .zodiac-art-title{
   width:68px!important;
   height:60px!important;
@@ -2866,11 +2848,10 @@ select{
 .zodiac-daily-mark .zodiac-art-daily{
   display:block!important;
   width:min(78%,430px)!important;
-  height:min(78%,430px)!important;
-  aspect-ratio:1/1;
+  height:auto!important;
+  aspect-ratio:1/1!important;
   flex:0 0 auto;
   border-radius:24px!important;
-  background-size:400% 300%!important;
   filter:drop-shadow(0 0 22px rgba(244,215,127,.32));
 }
 .zodiac-daily-mark>small{
@@ -2879,24 +2860,11 @@ select{
 @media(max-width:560px){
   .zodiac-daily-mark .zodiac-art-daily{
     width:min(76%,330px)!important;
-    height:min(76%,330px)!important;
+    height:auto!important;
   }
 }
 
-/* ZODIAC SPRITE: show exactly one 4 × 3 cell */
-.zodiac-user-art{
-  background-repeat:no-repeat!important;
-  background-color:transparent!important;
-}
-.zodiac-daily-mark .zodiac-art-daily{
-  aspect-ratio:1/1!important;
-  height:auto!important;
-  background-size:contain!important;
-  background-position:center!important;
-  background-repeat:no-repeat!important;
-}
-
-/* INDIVIDUAL ZODIAC FILES — use the 12 dedicated high-quality assets */
+/* INDIVIDUAL ZODIAC FILES — production 424 × 424 transparent PNG */
 .zodiac-aries{background-image:url("/assets/zodiac/aries.png?v=5")!important}
 .zodiac-taurus{background-image:url("/assets/zodiac/taurus.png?v=5")!important}
 .zodiac-gemini{background-image:url("/assets/zodiac/gemini.png?v=5")!important}
@@ -2909,18 +2877,12 @@ select{
 .zodiac-capricorn{background-image:url("/assets/zodiac/capricorn.png?v=5")!important}
 .zodiac-aquarius{background-image:url("/assets/zodiac/aquarius.png?v=5")!important}
 .zodiac-pisces{background-image:url("/assets/zodiac/pisces.png?v=5")!important}
-.zodiac-user-art{background-size:contain!important;background-position:center!important;background-repeat:no-repeat!important}
-
-/* ZODIAC TRANSPARENT SQUARE ASSETS — production 424×424 */
 .zodiac-user-art{
   aspect-ratio:1/1!important;
   background-size:contain!important;
   background-position:center!important;
   background-repeat:no-repeat!important;
   background-color:transparent!important;
-}
-.zodiac-daily-mark .zodiac-art-daily{
-  aspect-ratio:1/1!important;
 }
 
 /* DAILY FORECAST — current date emphasis */
