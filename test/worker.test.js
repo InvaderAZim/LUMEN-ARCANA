@@ -26,6 +26,8 @@ test("static assets use matching report-only and enforced CSP", async () => {
   assert.match(p, /script-src 'self' https:\/\/telegram\.org/);
   assert.match(p, /script-src-attr 'none'/);
   assert.match(p, /style-src 'self'/);
+  assert.match(p, /https:\/\/fonts\.googleapis\.com/);
+  assert.match(p, /font-src 'self' https:\/\/fonts\.gstatic\.com/);
   assert.match(p, /style-src-attr 'none'/);
   assert.match(p, /connect-src 'self'/);
   assert.match(p, /img-src 'self' blob: data:/);
