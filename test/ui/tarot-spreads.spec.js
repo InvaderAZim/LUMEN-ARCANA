@@ -31,13 +31,12 @@ async function openApp(page, requests) {
   );
 }
 
-async function draw(page, requests, type, question, spread = null, mode = null) {
+async function draw(page, requests, type, question, spread = null) {
   const before = requests.length;
   await page.evaluate(() => window.LUMEN_NAVIGATE?.("reading"));
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
   await page.locator(`[data-type="${type}"]`).click();
   if (spread) await page.locator(`[data-s="${spread}"]`).click();
-  if (mode) await page.locator("#mode").selectOption(mode);
   await page.locator("#q").fill(question);
   await page.locator("#draw").click();
   await expect(page.locator(".result-premium")).toBeVisible();
@@ -119,6 +118,7 @@ for (const [spread, count, positions] of THEMED_CASES) {
 
 test("themed Tarot journal keeps spread mode positions and orientation", async ({ page }) => {
   const requests = [];
+  await page.addInitScript(() => localStorage.setItem("la_mode", "pro"));
   await openApp(page, requests);
 
   const request = await draw(
@@ -126,8 +126,7 @@ test("themed Tarot journal keeps spread mode positions and orientation", async (
     requests,
     "themed",
     "Regression themed journal",
-    "career_choice",
-    "pro"
+    "career_choice"
   );
 
   expect(request.spread).toBe("career_choice");

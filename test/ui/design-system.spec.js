@@ -76,7 +76,7 @@ test("headings controls and fields use consistent sizing", async ({ page }) => {
     return { fontSize: css.fontSize, fontFamily: css.fontFamily, lineHeight: css.lineHeight };
   });
 
-  const homeButtons = await page.locator(".hero-actions button").evaluateAll(nodes =>
+  const homeButtons = await page.locator(".home-quick-grid button").evaluateAll(nodes =>
     nodes.map(node => {
       const css = getComputedStyle(node);
       return { minHeight: css.minHeight, borderRadius: css.borderRadius, fontSize: css.fontSize };
@@ -93,7 +93,7 @@ test("headings controls and fields use consistent sizing", async ({ page }) => {
   });
   expect(tarotTitle).toEqual(homeTitle);
 
-  const fieldStyle = await page.locator("#mode").evaluate(node => {
+  const fieldStyle = await page.locator("#q").evaluate(node => {
     const css = getComputedStyle(node);
     return {
       borderRadius: css.borderRadius,
@@ -117,7 +117,7 @@ test("headings controls and fields use consistent sizing", async ({ page }) => {
 
   expect(profileFieldStyle).toEqual(fieldStyle);
   expect(fieldStyle.borderRadius).toBe("14px");
-  expect(fieldStyle.background).toBe("rgb(9, 9, 9)");
+  expect(fieldStyle.background).toBe("rgb(6, 16, 12)");
   expect(fieldStyle.paddingTop).toBe("13px");
 });
 
@@ -208,7 +208,7 @@ test("natal form labels and select affordance are readable", async ({ page }) =>
 });
 
 
-test("beta premium branding uses one canonical badge order", async ({ page }) => {
+test("current route labels and premium branding stay consistent", async ({ page }) => {
   await page.route("**/api/interpret", route =>
     route.fulfill({
       status: 503,
@@ -218,20 +218,18 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
   );
   await openApp(page);
 
-  await expect(page.locator(".home-hero .badge")).toHaveText("БЕТА · ПРЕМІУМ");
+  await expect(page.locator(".home-hero .badge")).toHaveText("КАРТА ДНЯ");
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("profile"));
   await expect(page.locator(".profile-card .premium-chip")).toHaveText("БЕТА · ПРЕМІУМ");
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("natal"));
-  await expect(page.locator(".premium-panel .badge").first()).toHaveText(
-    /(?:ПОВНА )?НАТАЛЬНА КАРТА · БЕТА · ПРЕМІУМ/
-  );
+  await expect(page.locator("#app .top h1")).toHaveText("Натальна карта");
+  await expect(page.locator(".natal-form-panel .badge")).toHaveCount(0);
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
-  await expect(page.locator(".hero-premium .badge").first()).toHaveText(
-    "ЩОДЕННИЙ · БЕТА · ПРЕМІУМ"
-  );
+  await expect(page.locator("#app .top h1")).toHaveText("Щоденний прогноз");
+  await expect(page.locator(".hero-premium .badge")).toHaveCount(0);
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("compatibility"));
   await expect(page.locator(".premium-panel .badge").first()).toHaveText(
@@ -259,8 +257,6 @@ test("beta premium branding uses one canonical badge order", async ({ page }) =>
     "TAROT · BETA · PREMIUM · 78"
   );
 });
-
-
 test("quick-grid buttons safely wrap very long localized labels", async ({ page }) => {
   await openApp(page);
 

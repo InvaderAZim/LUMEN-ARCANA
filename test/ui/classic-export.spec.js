@@ -89,7 +89,6 @@ async function buildClassicNatal(page, calls) {
     window.LUMEN_NATAL_EXPORT_DATA?.engineLabel?.startsWith("Astronomy Engine")
   );
 
-  await page.locator("#xNatalClassic").click();
   await expect(page.locator(".classic-chart-shell")).toBeVisible();
   await expect(page.locator(".classic-natal-table")).toBeVisible();
   await expect(page.locator(".classic-aspect-matrix")).toBeVisible();

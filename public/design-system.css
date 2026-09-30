@@ -288,7 +288,7 @@ label{
 
 
 /* NATAL FORM READABILITY */
-.natal-input-grid>article>small{
+.natal-input-grid article>small{
   display:block!important;
   margin-bottom:7px!important;
   color:#dcecff!important;
@@ -317,7 +317,7 @@ label{
     linear-gradient(135deg,#f5dc98 50%,transparent 50%)!important;
 }
 @media(max-width:560px){
-  .natal-input-grid>article>small{
+  .natal-input-grid article>small{
     font-size:.76rem!important;
     margin-bottom:6px!important;
   }

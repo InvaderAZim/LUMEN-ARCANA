@@ -453,53 +453,40 @@ test("Natal saves profile and renders precise 10-body ephemeris", async ({ page 
   }
 
   for (const planet of [
-    "СОНЦЕ",
-    "МІСЯЦЬ",
-    "МЕРКУРІЙ",
-    "ВЕНЕРА",
-    "МАРС",
-    "ЮПІТЕР",
-    "САТУРН",
-    "УРАН",
-    "НЕПТУН",
-    "ПЛУТОН"
+    "Сонце",
+    "Місяць",
+    "Меркурій",
+    "Венера",
+    "Марс",
+    "Юпітер",
+    "Сатурн",
+    "Уран",
+    "Нептун",
+    "Плутон"
   ]) {
     await expect(
-      page.locator(".settings-grid article small").filter({ hasText: planet })
+      page.locator(".natal-position-list .natal-position-key").filter({
+        hasText: new RegExp(planet, "i")
+      })
     ).toHaveCount(1);
   }
 });
 
-test("Natal switches between LUMEN and Classic chart views", async ({ page }) => {
+test("Natal renders the canonical Classic chart view", async ({ page }) => {
   const calls = { timezone: [], ephemeris: [] };
   await installNatalMocks(page, calls);
   await openApp(page);
   await buildNatalChart(page, calls);
 
-  await expect(page.locator("#xNatalLumen")).toHaveClass(/primary/);
-  await expect(page.locator("#xNatalWheel")).not.toHaveClass(/classic-natal-svg/);
-
-  await page.locator("#xNatalClassic").click();
-
-  await expect(page.locator("#xNatalClassic")).toHaveClass(/primary/);
   await expect(page.locator(".classic-chart-shell")).toBeVisible();
   await expect(page.locator(".classic-natal-table")).toBeVisible();
   await expect(page.locator(".classic-aspect-matrix")).toBeVisible();
   await expect(page.locator("#xNatalWheel")).toHaveClass(/classic-natal-svg/);
-  expect(
-    await page.evaluate(() => localStorage.getItem("la_natal_view"))
-  ).toBe("classic");
-
-  await page.locator("#xNatalLumen").click();
-
-  await expect(page.locator("#xNatalLumen")).toHaveClass(/primary/);
-  await expect(page.locator(".classic-chart-shell")).toHaveCount(0);
-  await expect(page.locator("#xNatalWheel")).not.toHaveClass(/classic-natal-svg/);
-  expect(
-    await page.evaluate(() => localStorage.getItem("la_natal_view"))
-  ).toBe("lumen");
+  await expect(page.locator("#xPng")).toBeVisible();
+  await expect(page.locator("#xPrint")).toBeVisible();
+  await expect(page.locator("#xNatalLumen")).toHaveCount(0);
+  await expect(page.locator("#xNatalClassic")).toHaveCount(0);
 });
-
 test("Profile clear removes all local app data including sound keys", async ({ page }) => {
   await openApp(page);
 
@@ -634,56 +621,46 @@ test("Corrupt localStorage does not break core app screens", async ({ page }) =>
 test("Day card artwork is fully visible without cropping", async ({ page }) => {
   await openApp(page);
 
-  const card = page.locator(".day-card .mini-card.day-card-art");
+  const card = page.locator(".home-day-card");
   await expect(card).toBeVisible();
 
-  const image = card.locator("img");
+  const frame = card.locator(".home-day-visual");
+  const image = frame.locator("img");
   await expect(image).toHaveCount(1);
   await expect.poll(() =>
     image.evaluate(node => node.complete && node.naturalWidth > 0 && node.naturalHeight > 0)
   ).toBe(true);
 
-  const audit = await card.evaluate(node => {
-    const img = node.querySelector("img");
-    const cardCss = getComputedStyle(node);
-    const imageCss = getComputedStyle(img);
+  const audit = await image.evaluate(node => {
+    const css = getComputedStyle(node);
     const rect = node.getBoundingClientRect();
-    const imgRect = img.getBoundingClientRect();
-    const host = node.closest(".day-card");
-    const hostCss = getComputedStyle(host);
+    const frameRect = node.closest(".home-day-visual").getBoundingClientRect();
     return {
-      objectFit: imageCss.objectFit,
-      objectPosition: imageCss.objectPosition,
-      naturalRatio: img.naturalWidth / img.naturalHeight,
-      renderedRatio: imgRect.width / imgRect.height,
-      frameWidthDelta: rect.width - imgRect.width,
-      frameHeightDelta: rect.height - imgRect.height,
-      borderWidth: parseFloat(cardCss.borderLeftWidth) || 0,
-      borderRadius: cardCss.borderRadius,
-      overflow: cardCss.overflow,
-      enhanced: host.classList.contains("day-card-enhanced"),
-      hostDisplay: hostCss.display,
-      hasOverlayLabel: !!node.querySelector(".day-card-art-label"),
-      rightEdge: rect.right,
+      objectFit: css.objectFit,
+      objectPosition: css.objectPosition,
+      naturalRatio: node.naturalWidth / node.naturalHeight,
+      renderedRatio: rect.width / rect.height,
+      left: rect.left,
+      right: rect.right,
+      top: rect.top,
+      bottom: rect.bottom,
+      frameLeft: frameRect.left,
+      frameRight: frameRect.right,
+      frameTop: frameRect.top,
+      frameBottom: frameRect.bottom,
       viewportWidth: window.innerWidth
     };
   });
 
   expect(audit.objectFit).toBe("contain");
   expect(audit.objectPosition).toContain("50%");
-  expect(audit.overflow).toBe("hidden");
   expect(audit.naturalRatio).toBeGreaterThan(0);
   expect(Math.abs(audit.renderedRatio - audit.naturalRatio)).toBeLessThan(0.01);
-  expect(Math.abs(audit.frameWidthDelta - audit.borderWidth * 2)).toBeLessThan(1.5);
-  expect(Math.abs(audit.frameHeightDelta - audit.borderWidth * 2)).toBeLessThan(1.5);
-  expect(audit.borderRadius).toBe("6px");
-  expect(audit.enhanced).toBe(true);
-  expect(audit.hostDisplay).toBe("grid");
-  expect(audit.hasOverlayLabel).toBe(false);
-  expect(audit.rightEdge).toBeLessThanOrEqual(audit.viewportWidth);
+  expect(audit.left).toBeGreaterThanOrEqual(audit.frameLeft - 1);
+  expect(audit.right).toBeLessThanOrEqual(audit.frameRight + 1);
+  expect(audit.top).toBeGreaterThanOrEqual(audit.frameTop - 1);
+  expect(audit.right).toBeLessThanOrEqual(audit.viewportWidth);
 });
-
-
 test("Optional module failure does not block app startup", async ({ page }) => {
   await page.route("**/background.js*", route =>
     route.fulfill({
@@ -1000,7 +977,7 @@ test("app.js has no inline style attributes and fallback UI keeps styling", asyn
   });
 
   expect(fieldAudit.styleAttr).toBeNull();
-  expect(fieldAudit.background).toBe("rgb(9, 9, 9)");
+  expect(fieldAudit.background).toBe("rgb(6, 16, 12)");
   expect(fieldAudit.color).toBe("rgb(255, 255, 255)");
   expect(fieldAudit.borderRadius).toBe("14px");
   expect(fieldAudit.paddingTop).toBe("13px");
@@ -1054,7 +1031,7 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
     };
   });
   expect(profileCss.styleAttr).toBeNull();
-  expect(profileCss.background).toBe("rgb(9, 9, 9)");
+  expect(profileCss.background).toBe("rgb(6, 16, 12)");
   expect(profileCss.color).toBe("rgb(255, 255, 255)");
   expect(profileCss.borderRadius).toBe("14px");
   expect(profileCss.paddingTop).toBe("13px");
