@@ -5,11 +5,8 @@
   --ui-muted:#9fadb9;
   --ui-gold:#e5c87d;
   --ui-gold-2:#c89e48;
-  --ui-blue:#68b8ff;
   --ui-green:#42df78;
-  --ui-green-soft:#42df7830;
   --ui-green-border:#42df785c;
-  --ui-green-glow:#42df7838;
   --ui-panel-a:#0c1b16f2;
   --ui-panel-b:#07110dee;
   --ui-card-a:#0d2019e8;
@@ -132,12 +129,6 @@ body{
   font-size:.92rem!important;
   line-height:1.15!important;
   font-weight:800!important;
-}
-.primary{
-  background:linear-gradient(135deg,#edd99f 0,var(--ui-gold-2) 100%)!important;
-  color:#181109!important;
-  border-color:transparent!important;
-  box-shadow:0 8px 28px #d7ad4c24!important;
 }
 .ghost,
 .x-fav-button,
@@ -1705,24 +1696,9 @@ input[type="search"]{
 
 
 /* BLUE + EMERALD ACCENT LAYER */
-body{
-  background-image:
-    radial-gradient(circle at 12% 8%,#42df780b 0,transparent 28%),
-    radial-gradient(circle at 88% 16%,#68b8ff0d 0,transparent 30%)!important;
-}
 .top h1,
 .hero-copy h2{
   text-shadow:0 0 26px #42df780d;
-}
-.primary{
-  background:linear-gradient(135deg,#54e987 0,#1ea957 100%)!important;
-  color:#04140a!important;
-  border:1px solid #65ef94!important;
-  box-shadow:0 8px 28px var(--ui-green-glow)!important;
-}
-.primary:hover{
-  filter:brightness(1.07);
-  box-shadow:0 10px 32px #42df7850!important;
 }
 .ghost:hover,
 .quick-grid button:hover,
