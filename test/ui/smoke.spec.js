@@ -1049,7 +1049,6 @@ test("extensions.js has no inline style attributes and keeps computed styling", 
       timezoneToken: "2000-01-15|12:30|50.4501|30.5234",
       houseSystem: "equal"
     }));
-    localStorage.setItem("la_natal_view", "classic");
     window.LUMEN_NAVIGATE("natal");
   });
 

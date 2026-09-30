@@ -73,7 +73,6 @@ test("production enforced CSP audit covers primary UI and exports", async ({ pag
       houseSystem: "equal"
     };
     localStorage.setItem("la_natal_profile", JSON.stringify(profile));
-    localStorage.setItem("la_natal_view", "classic");
     window.LUMEN_NAVIGATE?.("natal");
   });
 
