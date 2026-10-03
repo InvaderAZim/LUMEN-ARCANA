@@ -1154,7 +1154,13 @@ test("Tarot and sound settings have no inline style attributes", async ({ page }
   expect(soundAudit.rangeMarginTop).toBe("8px");
 
   await page.locator('#bottom-nav [data-r="deck"]').click();
-  await expect(page.locator("#app .top h1")).toHaveText("Колода");
+  await expect(page.locator("#app .top h1")).toHaveText("Карти");
+  await expect(page.locator("#app .top .brandline")).toHaveCount(0);
+  await expect(page.locator("#app .top p")).toHaveCount(0);
+  await expect(page.locator(".deck-intro .badge")).toHaveCount(0);
+  await expect(page.locator(".deck-intro h2")).toHaveCount(0);
+  await expect(page.locator(".deck-intro .deck-source-note")).toHaveCount(0);
+  await expect(page.locator(".deck-filter-grid")).toBeVisible();
   await expect(page.locator(".classic-deck.lumen-mt-14")).toBeVisible();
 });
 
