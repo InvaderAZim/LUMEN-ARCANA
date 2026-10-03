@@ -2107,6 +2107,12 @@ select{
 }
 
 
+/* TAROT PAGE TITLE — stronger hierarchy */
+.top h1.tarot-page-title{
+  font-size:clamp(3.1rem,12vw,4.8rem)!important;
+  line-height:.9!important;
+}
+
 /* TAROT QUESTION FIELD SPACING */
 .tarot-format-grid + #q{
   margin-top:14px!important;
