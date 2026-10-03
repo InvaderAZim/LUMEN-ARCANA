@@ -919,8 +919,6 @@ input[type="search"]{
   }
   .deck-grid article h3{
     margin-top:7px!important;
-    font-size:clamp(.72rem,3.3vw,.82rem)!important;
-    line-height:1.15!important;
   }
   .deck-grid article p{
     font-size:clamp(.62rem,2.8vw,.7rem)!important;
@@ -928,6 +926,13 @@ input[type="search"]{
   }
 }
 
+
+/* DECK CARD TITLES — compact and readable */
+.deck-grid article h3{
+  font-size:clamp(.9rem,3.7vw,1.05rem)!important;
+  line-height:1.08!important;
+  margin-bottom:5px!important;
+}
 
 /* PROFILE HEADER RESPONSIVENESS */
 .profile-card{
@@ -1959,7 +1964,6 @@ select{
 .day-card h3,
 .reading-cards h3,
 .journal-item h3,
-.deck-grid article h3,
 .classic-positions h3,
 .classic-aspect-matrix h3,
 .classic-section-title{
