@@ -87,7 +87,9 @@ async function drawTarot(page, requests, type, expectedCount, question) {
 test("navigation opens Tarot and Profile", async ({ page }) => {
   await openApp(page);
 
-  await expect(page.locator("#bottom-nav .nav-btn")).toHaveCount(6);
+  await expect(page.locator("#bottom-nav .nav-btn")).toHaveCount(5);
+  await expect(page.locator('#bottom-nav [data-r="library"]')).toHaveCount(0);
+  await expect(page.locator('[data-go="library"]')).toHaveCount(0);
 
   await page.locator('#bottom-nav [data-r="reading"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
@@ -768,84 +770,6 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".badge")).toContainText("МІСЯЦЬ · РЕЗЕРВНИЙ РЕЖИМ");
   await expect(page.locator(".settings-grid article")).toHaveCount(4);
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
-});
-
-
-test("Library section labels are semantic and clean", async ({ page }) => {
-  await openApp(page);
-
-  await page.locator('[data-go="library"]').click();
-  await expect(page.locator("#app .top h1")).toHaveText("Бібліотека знань");
-
-  const labels = await page.locator(".library-section-label").allTextContents();
-  expect(labels).toEqual([
-    "ОСНОВИ",
-    "СТАРШІ АРКАНИ",
-    "ПИТАННЯ",
-    "РОЗКЛАДИ",
-    "СИМВОЛИ",
-    "БЕЗПЕКА"
-  ]);
-
-  const libraryText = await page.locator(".library-grid").innerText();
-  expect(libraryText).not.toContain("? РОЗДІЛ");
-  expect(libraryText).not.toContain("◇ РОЗДІЛ");
-  expect(libraryText).not.toContain("◌ РОЗДІЛ");
-});
-
-
-test("Academy lessons have distinct relevant practices", async ({ page }) => {
-  await openApp(page);
-
-  await page.locator('[data-go="library"]').click();
-  await expect(page.locator("#app .top h1")).toHaveText("Бібліотека знань");
-  await page.locator("#openAcademy").click();
-  await expect(page.locator("#app .top h1")).toHaveText("Академія");
-
-  const lessons = page.locator(".lesson");
-  await expect(lessons).toHaveCount(6);
-
-  const practices = await page.locator(".academy-practice").allTextContents();
-  expect(practices).toHaveLength(6);
-  expect(new Set(practices).size).toBe(6);
-
-  const expectedFragments = [
-    "що станеться",
-    "три конкретні деталі",
-    "ресурс",
-    "повторюваний мотив",
-    "Через три дні",
-    "профільного фахівця"
-  ];
-
-  expectedFragments.forEach((fragment, index) => {
-    expect(practices[index]).toContain(fragment);
-  });
-
-  for (let i = 0; i < 6; i++) {
-    const button = lessons.nth(i).locator("[data-academy-practice]");
-    const panel = lessons.nth(i).locator(".extra");
-
-    await expect(button).not.toHaveAttribute("onclick");
-    await expect(button).toHaveAttribute("aria-expanded", "false");
-    const controls = await button.getAttribute("aria-controls");
-    expect(controls).toBeTruthy();
-    await expect(panel).toHaveAttribute("id", controls);
-    await expect(panel).toHaveAttribute("aria-hidden", "true");
-
-    await button.click();
-    await expect(button).toHaveAttribute("aria-expanded", "true");
-    await expect(panel).toHaveAttribute("aria-hidden", "false");
-    await expect(panel).toHaveClass(/open/);
-    await expect(lessons.nth(i).locator(".academy-practice")).toBeVisible();
-  }
-
-  const firstButton = lessons.first().locator("[data-academy-practice]");
-  const firstPanel = lessons.first().locator(".extra");
-  await firstButton.click();
-  await expect(firstButton).toHaveAttribute("aria-expanded", "false");
-  await expect(firstPanel).toHaveAttribute("aria-hidden", "true");
-  await expect(firstPanel).not.toHaveClass(/open/);
 });
 
 

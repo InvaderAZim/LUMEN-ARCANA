@@ -12,7 +12,7 @@ body:before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;bac
 .brandline{font-size:.72rem!important;letter-spacing:.23em!important;color:#e7d3a0!important}.brandline span{background:linear-gradient(135deg,rgba(239,212,139,.20),rgba(184,137,50,.08))!important;border-color:rgba(239,212,139,.42)!important}
 .top h1{font-size:clamp(2.7rem,9vw,5.4rem)!important;line-height:.96!important;color:#fff5dc!important;text-shadow:0 0 36px rgba(239,212,139,.10)}
 .seal{width:68px!important;height:68px!important;min-width:68px!important;font-size:2rem!important;border-color:rgba(239,212,139,.58)!important;background:radial-gradient(circle,#40331a 0,#17130d 48%,#080808 78%)!important;box-shadow:0 0 70px rgba(239,212,139,.14),inset 0 0 28px rgba(239,212,139,.08)!important}
-.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item{border:1px solid var(--lux-line)!important;background:linear-gradient(145deg,rgba(29,26,19,.97),rgba(9,9,8,.98))!important;box-shadow:0 28px 90px rgba(0,0,0,.68),inset 0 1px 0 rgba(255,244,210,.05)!important;backdrop-filter:blur(18px)}
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.journal-item{border:1px solid var(--lux-line)!important;background:linear-gradient(145deg,rgba(29,26,19,.97),rgba(9,9,8,.98))!important;box-shadow:0 28px 90px rgba(0,0,0,.68),inset 0 1px 0 rgba(255,244,210,.05)!important;backdrop-filter:blur(18px)}
 .hero-premium{padding:30px!important;border-radius:32px!important;grid-template-columns:1.45fr .75fr!important;min-height:410px;position:relative;overflow:hidden;isolation:isolate}.hero-premium:before{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(125deg,rgba(239,212,139,.09),transparent 32%,transparent 68%,rgba(184,137,50,.06))}.hero-premium:after{width:470px!important;height:470px!important;right:-150px!important;top:-180px!important;background:radial-gradient(circle,rgba(239,212,139,.24),transparent 67%)!important}
 .hero-copy{align-self:center}.hero-copy h2{font-size:clamp(2.5rem,6vw,4.6rem)!important;line-height:.98!important;color:#fff7e6!important;max-width:680px}.hero-copy p{font-size:1.02rem!important;color:#c9bea7!important}
 .arcana-mark{min-height:320px!important;border-radius:28px!important;border-color:rgba(239,212,139,.40)!important;background:radial-gradient(circle at 50% 34%,#5a431f 0,#241b0d 34%,#0a0907 74%)!important;box-shadow:inset 0 0 72px rgba(239,212,139,.08),0 30px 80px rgba(0,0,0,.55)!important}.arcana-mark:before,.arcana-mark:after{border-color:rgba(239,212,139,.34)!important}.arcana-mark strong{font-size:6rem!important;color:#f4dc98!important;filter:drop-shadow(0 0 26px rgba(239,212,139,.34));animation:moonPulse 4.5s ease-in-out infinite}.arcana-mark small{color:#d8c28c!important;letter-spacing:.22em!important}
@@ -567,7 +567,7 @@ body:before{
   inherits:false;
   initial-value:0deg;
 }
-.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item,.quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav,.arcana-mark{
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.journal-item,.quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav,.arcana-mark{
   position:relative!important;
 }
 .lumen-orbit{
@@ -838,7 +838,7 @@ body:before{
 
 
 /* PERFORMANCE v18 — Telegram WebView optimization */
-.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.lesson,.journal-item,
+.hero-premium,.day-card,.premium-panel,.result-premium,.drawing,.profile-card,.premium-strip,.empty-state,.journal-item,
 .quick-grid button,.settings-grid article,.reading-cards article,.bottom-nav{
   -webkit-backdrop-filter:none!important;
   backdrop-filter:none!important;
@@ -874,7 +874,6 @@ body:before{
 .quick-grid button>.lumen-orbit,
 .settings-grid article>.lumen-orbit,
 .reading-cards article>.lumen-orbit,
-.lesson>.lumen-orbit,
 .journal-item>.lumen-orbit,
 .empty-state>.lumen-orbit,
 .arcana-mark>.lumen-orbit,
@@ -882,7 +881,6 @@ body:before{
   display:none!important;
 }
 .deck-grid>article,
-.lesson,
 .journal-item,
 .reading-cards article{
   content-visibility:auto;

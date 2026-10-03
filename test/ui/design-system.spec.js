@@ -242,13 +242,6 @@ test("current route labels and premium branding stay consistent", async ({ page 
     /МІСЯЦЬ · БЕТА · ПРЕМІУМ/
   );
 
-  await page.evaluate(() => window.LUMEN_NAVIGATE("library"));
-  await expect(page.locator(".premium-strip small")).toHaveText("БЕТА · ПРЕМІУМ");
-  await page.locator("[data-topic]").first().click();
-  await expect(page.locator(".premium-panel .badge").first()).toHaveText(
-    "БІБЛІОТЕКА · БЕТА · ПРЕМІУМ"
-  );
-
   await page.evaluate(() => window.LUMEN_NAVIGATE("reading"));
   await page.locator('[data-type="single"]').click();
   await page.locator("#q").fill("Branding regression");
@@ -262,7 +255,7 @@ test("quick-grid buttons safely wrap very long localized labels", async ({ page 
   await openApp(page);
 
   const buttons = page.locator(".home-quick-grid button");
-  await expect(buttons).toHaveCount(6);
+  await expect(buttons).toHaveCount(5);
 
   await buttons.first().evaluate(button => {
     const span = button.querySelector("span");

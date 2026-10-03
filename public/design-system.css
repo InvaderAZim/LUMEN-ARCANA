@@ -42,7 +42,6 @@ body{
 .lumen-help-copy,
 .settings-grid p,
 .journal-item p,
-.lesson p,
 .reading-cards p{
   color:var(--ui-muted)!important;
 }
@@ -60,7 +59,6 @@ body{
 }
 .settings-grid h3,
 .reading-cards h3,
-.lesson h3,
 .journal-item h3,
 .quick-grid span,
 .spread strong{
@@ -82,7 +80,6 @@ body{
 .profile-card,
 .premium-strip,
 .empty-state,
-.lesson,
 .journal-item{
   border:1px solid var(--ui-border)!important;
   border-radius:var(--ui-radius-panel)!important;
@@ -95,15 +92,13 @@ body{
 .profile-card,
 .day-card,
 .empty-state,
-.lesson,
 .journal-item{
   padding:var(--ui-panel-pad)!important;
 }
 .settings-grid article,
 .quick-grid button,
 .reading-cards article,
-.spread,
-.library-grid article{
+.spread{
   border:1px solid var(--ui-border-soft)!important;
   border-radius:var(--ui-radius-card)!important;
   color:var(--ui-text)!important;
@@ -113,8 +108,7 @@ body{
 .ghost,
 .result-actions button,
 .deck-filter-grid button,
-.x-fav-button,
-.academy-practice{
+.x-fav-button{
   min-height:var(--ui-control-height)!important;
   border-radius:var(--ui-radius-control)!important;
   padding:11px 15px!important;
@@ -123,8 +117,7 @@ body{
   font-weight:800!important;
 }
 .ghost,
-.x-fav-button,
-.academy-practice{
+.x-fav-button{
   border:1px solid var(--ui-border)!important;
   color:#e8f4ff!important;
   box-shadow:none!important;
@@ -386,7 +379,6 @@ textarea:disabled,
 .settings-grid article,
 .reading-cards article,
 .journal-item,
-.lesson,
 .empty-state{
   min-width:0;
 }
@@ -395,7 +387,6 @@ textarea:disabled,
 .settings-grid article p,
 .reading-cards article p,
 .journal-item p,
-.lesson p,
 .empty-state p{
   overflow-wrap:anywhere;
 }
@@ -469,7 +460,6 @@ object{
 .profile-card h2,
 .settings-grid h3,
 .reading-cards h3,
-.lesson h3,
 .journal-item h3{
   overflow-wrap:anywhere;
 }
@@ -1006,24 +996,7 @@ input[type="search"]{
     margin-left:0!important;
     text-align:left;
   }
-  .lesson{
-    grid-template-columns:44px minmax(0,1fr)!important;
-    gap:11px!important;
-  }
-  .lesson-no{
-    font-size:1.7rem!important;
-  }
 }
-@media(max-width:360px){
-  .lesson{
-    grid-template-columns:minmax(0,1fr)!important;
-  }
-  .lesson-no{
-    font-size:1.45rem!important;
-  }
-}
-
-
 /* QUICK ACTION + SPREAD MOBILE CONSISTENCY */
 .quick-grid>button,
 .spread-list>.spread,
@@ -1355,8 +1328,7 @@ input[type="search"]{
 .primary,
 .ghost,
 .result-actions button,
-.deck-filter-grid button,
-.academy-practice{
+.deck-filter-grid button{
   align-items:center;
   justify-content:center;
   gap:7px;
@@ -1707,7 +1679,6 @@ input[type="search"]{
 .profile-card,
 .premium-strip,
 .empty-state,
-.lesson,
 .journal-item{
   background:
     radial-gradient(circle at 100% 0,#42df7808,transparent 34%),
@@ -1716,7 +1687,6 @@ input[type="search"]{
 .quick-grid button,
 .reading-cards article,
 .spread,
-.library-grid article,
 .settings-grid article{
   background:
     linear-gradient(135deg,#42df7805,transparent 40%),
@@ -1756,8 +1726,7 @@ body{
   background:#0a1b15!important;
 }
 .ghost,
-.x-fav-button,
-.academy-practice{
+.x-fav-button{
   background:#0d251db8!important;
 }
 .lumen-field,
@@ -1843,8 +1812,7 @@ select{
 .primary,
 .ghost,
 .nav-btn,
-.deck-filter-grid button,
-.academy-practice{
+.deck-filter-grid button{
   font-family:var(--ui-font-sans)!important;
   font-weight:700!important;
   letter-spacing:-.008em!important;
@@ -1854,7 +1822,6 @@ select{
 .quick-grid small,
 .settings-grid p,
 .journal-item p,
-.lesson p,
 .reading-cards p{
   font-family:var(--ui-font-sans)!important;
   font-weight:450!important;
