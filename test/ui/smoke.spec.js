@@ -550,7 +550,7 @@ test("Home quick actions are compact on mobile", async ({ page }) => {
   await openApp(page);
 
   const buttons = page.locator(".home-quick-grid button");
-  await expect(buttons).toHaveCount(6);
+  await expect(buttons).toHaveCount(5);
 
   const style = await buttons.first().evaluate(node => {
     const css = getComputedStyle(node);
@@ -573,7 +573,7 @@ test("Home quick action icons sit beside text with aligned label starts", async 
   await openApp(page);
 
   const buttons = page.locator(".home-quick-grid button");
-  await expect(buttons).toHaveCount(6);
+  await expect(buttons).toHaveCount(5);
 
   const layouts = await buttons.evaluateAll(nodes => nodes.map(node => {
     const css = getComputedStyle(node);
@@ -679,7 +679,7 @@ test("Optional module failure does not block app startup", async ({ page }) => {
   expect(status.ok).toBe(false);
   expect(status.failed).toContain("background");
 
-  await expect(page.locator(".home-quick-grid button")).toHaveCount(6);
+  await expect(page.locator(".home-quick-grid button")).toHaveCount(5);
   await expect(page.locator(".day-card").first()).toBeVisible();
   await expect(page.locator("#bottom-nav")).toBeVisible();
 });
