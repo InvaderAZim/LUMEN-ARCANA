@@ -218,8 +218,7 @@ label{
   .ghost,
   .result-actions button,
   .deck-filter-grid button,
-  .x-fav-button,
-  .academy-practice{
+  .x-fav-button{
     min-height:46px!important;
     padding:10px 13px!important;
     font-size:.88rem!important;
