@@ -91,7 +91,9 @@ test("headings controls and fields use consistent sizing", async ({ page }) => {
     const css = getComputedStyle(node);
     return { fontSize: css.fontSize, fontFamily: css.fontFamily, lineHeight: css.lineHeight };
   });
-  expect(tarotTitle).toEqual(homeTitle);
+  expect(tarotTitle.fontFamily).toBe(homeTitle.fontFamily);
+  expect(parseFloat(tarotTitle.fontSize)).toBeGreaterThan(parseFloat(homeTitle.fontSize));
+  await expect(page.locator(".top h1")).toHaveClass(/tarot-page-title/);
 
   const fieldStyle = await page.locator("#q").evaluate(node => {
     const css = getComputedStyle(node);
