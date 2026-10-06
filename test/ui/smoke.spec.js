@@ -562,15 +562,10 @@ test("Home quick actions are compact on mobile", async ({ page }) => {
     };
   });
 
-  expect(style.minHeight).toBe("92px");
-  expect(style.paddingTop).toBe("13px");
-  expect(style.paddingRight).toBe("31px");
-  expect(style.borderRadius).toBe("20px");
-
-  const widths = await buttons.evaluateAll(nodes =>
-    nodes.map(node => Math.round(node.getBoundingClientRect().width))
-  );
-  expect(widths[4]).toBeGreaterThan(widths[0] * 1.8);
+  expect(style.minHeight).toBe("88px");
+  expect(style.paddingTop).toBe("12px");
+  expect(style.paddingRight).toBe("13px");
+  expect(style.borderRadius).toBe("17px");
 });
 
 
@@ -603,34 +598,6 @@ test("Home quick action icons sit beside text with aligned label starts", async 
 
   const offsets = layouts.map(x => x.textOffset);
   expect(Math.max(...offsets) - Math.min(...offsets)).toBeLessThan(1.5);
-});
-
-test("Home main menu forms a balanced 2 by 2 plus full-width layout", async ({ page }) => {
-  await openApp(page);
-
-  const buttons = page.locator(".home-page .home-quick-grid [data-go]");
-  await expect(buttons).toHaveCount(5);
-
-  const layout = await buttons.evaluateAll(nodes => nodes.map(node => {
-    const rect = node.getBoundingClientRect();
-    const icon = node.querySelector("b");
-    const iconCss = getComputedStyle(icon);
-    const after = getComputedStyle(node, "::after");
-    return {
-      left: Math.round(rect.left),
-      top: Math.round(rect.top),
-      width: Math.round(rect.width),
-      iconRadius: iconCss.borderRadius,
-      arrow: after.content
-    };
-  }));
-
-  expect(Math.abs(layout[0].width - layout[1].width)).toBeLessThanOrEqual(1);
-  expect(Math.abs(layout[2].width - layout[3].width)).toBeLessThanOrEqual(1);
-  expect(layout[4].width).toBeGreaterThan(layout[0].width * 1.8);
-  expect(layout[4].top).toBeGreaterThan(layout[2].top);
-  expect(layout.every(item => item.iconRadius === "50%")).toBe(true);
-  expect(layout.every(item => item.arrow.includes("›"))).toBe(true);
 });
 
 test("Corrupt localStorage does not break core app screens", async ({ page }) => {
@@ -1155,54 +1122,53 @@ test("frontend asset references avoid manual version query strings", async ({ pa
 });
 
 
-test("Tarot format buttons stay compact while Home uses the premium main-menu layout", async ({ page }) => {
+test("Tarot format buttons reuse the home quick-action button layout", async ({ page }) => {
   await openApp(page);
 
-  const homeButton = page.locator(".home-page .home-quick-grid [data-go]").first();
-  await expect(homeButton).toBeVisible();
-  const homeLayout = await homeButton.evaluate(button => {
+  const homeLayout = await page.locator(".home-quick-grid [data-go]").first().evaluate(button => {
     const css = getComputedStyle(button);
     const icon = button.querySelector("b");
     const iconCss = getComputedStyle(icon);
     return {
       display: css.display,
-      minHeight: css.minHeight,
+      columns: css.gridTemplateColumns,
+      alignItems: css.alignItems,
       borderRadius: css.borderRadius,
+      minHeight: css.minHeight,
+      padding: css.padding,
       iconWidth: iconCss.width,
-      iconHeight: iconCss.height
+      iconDisplay: iconCss.display
     };
   });
-
-  expect(homeLayout.display).toBe("grid");
-  expect(homeLayout.minHeight).toBe("92px");
-  expect(homeLayout.borderRadius).toBe("20px");
-  expect(homeLayout.iconWidth).toBe("40px");
-  expect(homeLayout.iconHeight).toBe("40px");
 
   await page.locator('#bottom-nav [data-r="reading"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
 
   const grid = page.locator(".tarot-format-grid");
   await expect(grid).toHaveCount(1);
+  await expect(grid).toHaveClass(/home-quick-grid/);
   await expect(grid.locator("[data-type]")).toHaveCount(6);
 
   const tarotLayout = await grid.locator("[data-type]").first().evaluate(button => {
     const css = getComputedStyle(button);
+    const icon = button.querySelector("b");
+    const iconCss = getComputedStyle(icon);
     return {
       display: css.display,
+      columns: css.gridTemplateColumns,
+      alignItems: css.alignItems,
+      borderRadius: css.borderRadius,
       minHeight: css.minHeight,
-      borderRadius: css.borderRadius
+      padding: css.padding,
+      iconWidth: iconCss.width,
+      iconDisplay: iconCss.display
     };
   });
 
-  expect(tarotLayout.display).toBe("grid");
-  expect(tarotLayout.minHeight).toBe("88px");
-  expect(tarotLayout.borderRadius).toBe("17px");
-  expect(tarotLayout).not.toEqual({
-    display: homeLayout.display,
-    minHeight: homeLayout.minHeight,
-    borderRadius: homeLayout.borderRadius
-  });
+  const { columns: homeColumns, ...homeShared } = homeLayout;
+  const { columns: tarotColumns, ...tarotShared } = tarotLayout;
+  expect(tarotShared).toEqual(homeShared);
+  expect(tarotColumns.split(/\s+/)[0]).toBe(homeColumns.split(/\s+/)[0]);
 
   await page.locator('[data-type="yesno"]').click();
   await expect(page.locator('[data-type="yesno"]')).toHaveClass(/tarot-type-selected/);

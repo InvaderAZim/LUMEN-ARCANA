@@ -63,10 +63,9 @@ test("primary panels share one visual system across routes", async ({ page }) =>
   await expect(page.locator("#app .top h1")).toHaveText("Профіль");
   const profile = await panelStyle(page.locator(".profile-card").first());
 
-  expect(profile).toEqual(tarot);
-  expect(tarot.borderRadius).toBe("22px");
-  expect(home.borderRadius).toBe("23px");
-  expect(home).not.toEqual(tarot);
+  expect(tarot).toEqual(home);
+  expect(profile).toEqual(home);
+  expect(home.borderRadius).toBe("22px");
 });
 
 test("headings controls and fields use consistent sizing", async ({ page }) => {
