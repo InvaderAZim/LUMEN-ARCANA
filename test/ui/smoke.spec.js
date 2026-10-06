@@ -91,6 +91,25 @@ test("navigation opens Tarot and Profile", async ({ page }) => {
   await expect(page.locator('#bottom-nav [data-r="library"]')).toHaveCount(0);
   await expect(page.locator('[data-go="library"]')).toHaveCount(0);
 
+  const navAudit = await page.locator("#bottom-nav").evaluate(nav => {
+    const navCss = getComputedStyle(nav);
+    const buttons = [...nav.querySelectorAll(".nav-btn")];
+    const widths = buttons.map(button => Math.round(button.getBoundingClientRect().width));
+    const navRect = nav.getBoundingClientRect();
+    const first = buttons[0].getBoundingClientRect();
+    const last = buttons.at(-1).getBoundingClientRect();
+    return {
+      columns: navCss.gridTemplateColumns.split(/\s+/).filter(Boolean).length,
+      widths,
+      leftGap: Math.round(first.left - navRect.left),
+      rightGap: Math.round(navRect.right - last.right)
+    };
+  });
+
+  expect(navAudit.columns).toBe(5);
+  expect(Math.max(...navAudit.widths) - Math.min(...navAudit.widths)).toBeLessThanOrEqual(1);
+  expect(Math.abs(navAudit.leftGap - navAudit.rightGap)).toBeLessThanOrEqual(4);
+
   await page.locator('#bottom-nav [data-r="reading"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
 
