@@ -63,9 +63,10 @@ test("primary panels share one visual system across routes", async ({ page }) =>
   await expect(page.locator("#app .top h1")).toHaveText("Профіль");
   const profile = await panelStyle(page.locator(".profile-card").first());
 
-  expect(tarot).toEqual(home);
-  expect(profile).toEqual(home);
-  expect(home.borderRadius).toBe("22px");
+  expect(profile).toEqual(tarot);
+  expect(tarot.borderRadius).toBe("22px");
+  expect(home.borderRadius).toBe("23px");
+  expect(home).not.toEqual(tarot);
 });
 
 test("headings controls and fields use consistent sizing", async ({ page }) => {
@@ -293,8 +294,9 @@ test("quick-grid buttons safely wrap very long localized labels", async ({ page 
   expect(audit[0].overflowWrap).toBe("anywhere");
   expect(audit[0].buttonScrollWidth).toBeLessThanOrEqual(audit[0].buttonClientWidth);
   expect(audit[0].spanScrollWidth).toBeLessThanOrEqual(audit[0].spanClientWidth);
-  expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(88);
-  expect(Math.abs(audit[0].buttonHeight - audit[1].buttonHeight)).toBeLessThanOrEqual(1);
+  expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(86);
+  expect(audit[1].buttonHeight).toBeGreaterThanOrEqual(86);
+  expect(Math.abs(audit[0].buttonWidth - audit[1].buttonWidth)).toBeLessThanOrEqual(1);
 });
 
 

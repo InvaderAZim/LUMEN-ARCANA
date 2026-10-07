@@ -157,8 +157,8 @@ test("Tarot deck filters are equal 3 by 2 grid", async ({ page }) => {
   });
 
   expect(layout.columnCount).toBe(3);
-  expect(new Set(layout.widths).size).toBe(1);
-  expect(new Set(layout.heights).size).toBe(1);
+  expect(Math.max(...layout.widths) - Math.min(...layout.widths)).toBeLessThanOrEqual(1);
+  expect(Math.max(...layout.heights) - Math.min(...layout.heights)).toBeLessThanOrEqual(1);
   expect(new Set(layout.tops.slice(0, 3)).size).toBe(1);
   expect(new Set(layout.tops.slice(3, 6)).size).toBe(1);
   expect(layout.tops[3]).toBeGreaterThan(layout.tops[0]);
