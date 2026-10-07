@@ -646,6 +646,40 @@ test("Home primary actions are one full-width vertical column", async ({ page })
   }
 });
 
+test("Horoscope exposes four forecast periods in one vertical menu", async ({ page }) => {
+  await openApp(page);
+  await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
+
+  await expect(page.locator("#app .top h1")).toHaveText("Гороскоп");
+  const buttons=page.locator(".horoscope-period-menu [data-forecast-period]");
+  await expect(buttons).toHaveCount(4);
+  await expect(buttons).toHaveText([
+    "Щоденний прогноз",
+    "Прогноз на завтра",
+    "Прогноз на тиждень",
+    "Прогноз на місяць"
+  ]);
+
+  const initialSubtitle=await page.locator(".top p.daily-date").textContent();
+  await page.locator('[data-forecast-period="tomorrow"]').click();
+  await expect(page.locator('[data-forecast-period="tomorrow"]')).toHaveAttribute("aria-pressed","true");
+  await expect(page.locator(".top p.daily-date")).not.toHaveText(initialSubtitle);
+
+  await page.locator('[data-forecast-period="week"]').click();
+  await expect(page.locator('[data-forecast-period="week"]')).toHaveAttribute("aria-pressed","true");
+
+  await page.locator('[data-forecast-period="month"]').click();
+  await expect(page.locator('[data-forecast-period="month"]')).toHaveAttribute("aria-pressed","true");
+
+  const geometry=await buttons.evaluateAll(nodes=>nodes.map(node=>{
+    const rect=node.getBoundingClientRect();
+    return {left:Math.round(rect.left),width:Math.round(rect.width),top:Math.round(rect.top)};
+  }));
+  expect(Math.max(...geometry.map(x=>x.left))-Math.min(...geometry.map(x=>x.left))).toBeLessThanOrEqual(1);
+  expect(Math.max(...geometry.map(x=>x.width))-Math.min(...geometry.map(x=>x.width))).toBeLessThanOrEqual(1);
+  for(let i=1;i<geometry.length;i+=1) expect(geometry[i].top).toBeGreaterThan(geometry[i-1].top);
+});
+
 test("Corrupt localStorage does not break core app screens", async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem("la_profile_prefs", "{");
