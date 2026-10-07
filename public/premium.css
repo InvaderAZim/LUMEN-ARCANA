@@ -1110,33 +1110,33 @@ body:before{
 
 
 
-/* DECK FILTER MENU — vertical */
+/* DECK FILTER GRID — 3 × 2 equal buttons */
 .deck-filter-grid{
   display:grid!important;
-  grid-template-columns:minmax(0,1fr)!important;
-  gap:9px!important;
-  margin-top:14px!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
+  gap:10px!important;
+  margin-top:18px!important;
 }
 .deck-filter-grid button{
   width:100%!important;
   min-width:0!important;
-  min-height:54px!important;
-  padding:11px 14px!important;
+  min-height:56px!important;
+  padding:12px 8px!important;
   display:flex!important;
   align-items:center!important;
-  justify-content:flex-start!important;
-  text-align:left!important;
-  white-space:normal!important;
-  border-radius:16px!important;
+  justify-content:center!important;
+  text-align:center!important;
+  white-space:nowrap!important;
 }
 @media(max-width:560px){
   .deck-filter-grid{
     gap:8px!important;
-    margin-top:13px!important;
+    margin-top:14px!important;
   }
   .deck-filter-grid button{
     min-height:52px!important;
-    padding:10px 13px!important;
+    padding:10px 6px!important;
     font-size:.9rem!important;
+    border-radius:16px!important;
   }
 }
