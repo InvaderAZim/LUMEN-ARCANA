@@ -230,7 +230,7 @@ test("current route labels and premium branding stay consistent", async ({ page 
   await expect(page.locator(".natal-form-panel .badge")).toHaveCount(0);
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("daily"));
-  await expect(page.locator("#app .top h1")).toHaveText("Щоденний прогноз");
+  await expect(page.locator("#app .top h1")).toHaveText("Гороскоп");
   await expect(page.locator(".hero-premium .badge")).toHaveCount(0);
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("compatibility"));
