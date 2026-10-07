@@ -244,6 +244,7 @@ test("current route labels and premium branding stay consistent", async ({ page 
   );
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  await expect(page.locator(".moon-main-art > img")).toHaveAttribute("src", "/assets/moon/moon-phases-v2.webp");
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 
