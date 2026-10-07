@@ -48,7 +48,7 @@ export function renderDaily(shell){
   const saved=safeParseLocal('la_natal_profile',{});
   const sign=sunSign(saved.date);
   const birthDate=saved.date?String(saved.date).split('-').reverse().join('.'):'';
-  const c=shell('Гороскоп','');
+  const c=shell('Гороскоп',periodLabel(now,'daily'));
   const page=c.closest('.page');
   const subtitle=page?.querySelector('.top p');
   subtitle?.classList.add('daily-date');
