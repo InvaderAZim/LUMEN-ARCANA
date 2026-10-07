@@ -853,6 +853,10 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
+  const moonBg = await page.locator(".moon-main-art").evaluate(node => getComputedStyle(node).backgroundImage);
+  expect(moonBg).toContain("/assets/moon/moon-sprite.webp");
+  const spriteResponse = await page.request.get("/assets/moon/moon-sprite.webp");
+  expect(spriteResponse.ok()).toBe(true);
 });
 
 
