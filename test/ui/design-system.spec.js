@@ -242,6 +242,10 @@ test("current route labels and premium branding stay consistent", async ({ page 
   await expect(page.locator(".hero-premium .badge").first()).toHaveText(
     /МІСЯЦЬ · БЕТА · ПРЕМІУМ/
   );
+  await expect(page.locator(".moon-main-art")).toBeVisible();
+  await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
+  await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 
   await page.evaluate(() => window.LUMEN_NAVIGATE("reading"));
   await page.locator('[data-type="single"]').click();

@@ -850,6 +850,9 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".badge")).toContainText("МІСЯЦЬ · РЕЗЕРВНИЙ РЕЖИМ");
   await expect(page.locator(".settings-grid article")).toHaveCount(4);
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
+  await expect(page.locator(".moon-main-art")).toBeVisible();
+  await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
 });
 
 
