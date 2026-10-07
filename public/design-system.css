@@ -2968,3 +2968,56 @@ select{
     font-size:1.38rem!important;
   }
 }
+
+
+/* TAROT FORMAT MENU — VERTICAL v25 */
+.tarot-format-grid{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  gap:9px!important;
+}
+.tarot-format-grid .tarot-type-option{
+  width:100%!important;
+  min-width:0!important;
+  min-height:86px!important;
+  display:grid!important;
+  grid-template-columns:40px minmax(0,1fr)!important;
+  align-items:center!important;
+  column-gap:12px!important;
+  padding:12px 14px!important;
+  border-radius:18px!important;
+  text-align:left!important;
+}
+.tarot-format-grid .tarot-type-option>b{
+  width:40px!important;
+  min-width:40px!important;
+  margin:0!important;
+  text-align:center!important;
+  font-size:1.5rem!important;
+}
+.tarot-format-grid .tarot-type-option>span{
+  min-width:0!important;
+  margin:0!important;
+  text-align:left!important;
+  font-size:.96rem!important;
+  line-height:1.16!important;
+}
+.tarot-format-grid .tarot-type-option small{
+  display:inline-block;
+  margin-top:5px;
+  font-size:.72rem!important;
+  line-height:1.28!important;
+}
+@media(max-width:370px){
+  .tarot-format-grid .tarot-type-option{
+    min-height:82px!important;
+    grid-template-columns:36px minmax(0,1fr)!important;
+    column-gap:10px!important;
+    padding:11px 12px!important;
+  }
+  .tarot-format-grid .tarot-type-option>b{
+    width:36px!important;
+    min-width:36px!important;
+    font-size:1.38rem!important;
+  }
+}

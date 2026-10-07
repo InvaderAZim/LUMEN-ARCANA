@@ -1168,26 +1168,32 @@ test("frontend asset references avoid manual version query strings", async ({ pa
 });
 
 
-test("Tarot format grid stays separate from the vertical Home menu", async ({ page }) => {
+test("Tarot format menu is one full-width vertical column", async ({ page }) => {
   await openApp(page);
-
-  const homeGrid = page.locator(".home-page .home-quick-grid");
-  const homeColumns = await homeGrid.evaluate(node =>
-    getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
-  );
-  expect(homeColumns).toBe(1);
-
   await page.locator('#bottom-nav [data-r="reading"]').click();
   await expect(page.locator("#app .top h1")).toHaveText("Таро");
 
   const grid = page.locator(".tarot-format-grid");
-  await expect(grid).toHaveCount(1);
-  await expect(grid.locator("[data-type]")).toHaveCount(6);
+  const buttons = grid.locator("[data-type]");
+  await expect(buttons).toHaveCount(6);
 
-  const tarotColumns = await grid.evaluate(node =>
-    getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length
-  );
-  expect(tarotColumns).toBeGreaterThanOrEqual(2);
+  const audit = await grid.evaluate(node => {
+    const rects = [...node.querySelectorAll("[data-type]")].map(button => button.getBoundingClientRect());
+    const columns = getComputedStyle(node).gridTemplateColumns.trim().split(/\s+/).filter(Boolean);
+    return {
+      columns: columns.length,
+      widths: rects.map(rect => Math.round(rect.width)),
+      lefts: rects.map(rect => Math.round(rect.left)),
+      tops: rects.map(rect => Math.round(rect.top))
+    };
+  });
+
+  expect(audit.columns).toBe(1);
+  expect(Math.max(...audit.widths) - Math.min(...audit.widths)).toBeLessThanOrEqual(1);
+  expect(Math.max(...audit.lefts) - Math.min(...audit.lefts)).toBeLessThanOrEqual(1);
+  for (let i = 1; i < audit.tops.length; i += 1) {
+    expect(audit.tops[i]).toBeGreaterThan(audit.tops[i - 1]);
+  }
 
   await page.locator('[data-type="yesno"]').click();
   await expect(page.locator('[data-type="yesno"]')).toHaveClass(/tarot-type-selected/);

@@ -133,7 +133,7 @@ test("Tarot deck keeps three cards per row on mobile", async ({ page }) => {
 });
 
 
-test("Tarot deck filters are equal 3 by 2 grid", async ({ page }) => {
+test("Tarot deck filters are one full-width vertical column", async ({ page }) => {
   await openApp(page);
   await page.evaluate(() => window.LUMEN_RENDER_DECK78?.("all"));
 
@@ -141,25 +141,20 @@ test("Tarot deck filters are equal 3 by 2 grid", async ({ page }) => {
   await expect(filters).toHaveCount(6);
 
   const layout = await page.locator(".deck-filter-grid").evaluate(grid => {
-    const buttons = [...grid.querySelectorAll("[data-deck-filter]")];
-    const rects = buttons.map(button => button.getBoundingClientRect());
-    const columns = getComputedStyle(grid).gridTemplateColumns
-      .trim()
-      .split(/\s+/)
-      .filter(Boolean);
-
+    const rects = [...grid.querySelectorAll("[data-deck-filter]")].map(button => button.getBoundingClientRect());
+    const columns = getComputedStyle(grid).gridTemplateColumns.trim().split(/\s+/).filter(Boolean);
     return {
       columnCount: columns.length,
       widths: rects.map(rect => Math.round(rect.width)),
-      heights: rects.map(rect => Math.round(rect.height)),
+      lefts: rects.map(rect => Math.round(rect.left)),
       tops: rects.map(rect => Math.round(rect.top))
     };
   });
 
-  expect(layout.columnCount).toBe(3);
+  expect(layout.columnCount).toBe(1);
   expect(Math.max(...layout.widths) - Math.min(...layout.widths)).toBeLessThanOrEqual(1);
-  expect(Math.max(...layout.heights) - Math.min(...layout.heights)).toBeLessThanOrEqual(1);
-  expect(new Set(layout.tops.slice(0, 3)).size).toBe(1);
-  expect(new Set(layout.tops.slice(3, 6)).size).toBe(1);
-  expect(layout.tops[3]).toBeGreaterThan(layout.tops[0]);
+  expect(Math.max(...layout.lefts) - Math.min(...layout.lefts)).toBeLessThanOrEqual(1);
+  for (let i = 1; i < layout.tops.length; i += 1) {
+    expect(layout.tops[i]).toBeGreaterThan(layout.tops[i - 1]);
+  }
 });
