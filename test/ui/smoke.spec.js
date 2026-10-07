@@ -629,12 +629,11 @@ test("Home primary actions are one full-width vertical column", async ({ page })
   const audit = await grid.evaluate(node => {
     const css = getComputedStyle(node);
     const buttons = [...node.querySelectorAll("[data-go]")];
-    const rects = buttons.map(button => button.getBoundingClientRect());
     return {
       columns: css.gridTemplateColumns.trim().split(/\s+/).filter(Boolean).length,
-      widths: rects.map(rect => Math.round(rect.width)),
-      lefts: rects.map(rect => Math.round(rect.left)),
-      tops: rects.map(rect => Math.round(rect.top))
+      widths: buttons.map(button => button.offsetWidth),
+      lefts: buttons.map(button => button.offsetLeft),
+      tops: buttons.map(button => button.offsetTop)
     };
   });
 
@@ -852,6 +851,17 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  const moonFallback = await page.locator(".moon-main-art").evaluate(node => {
+    const before = getComputedStyle(node, "::before");
+    return {
+      radius: getComputedStyle(node).borderRadius,
+      background: before.backgroundImage,
+      clip: before.clipPath
+    };
+  });
+  expect(moonFallback.radius).toBe("50%");
+  expect(moonFallback.background).toContain("radial-gradient");
+  expect(moonFallback.clip).not.toBe("none");
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   const moonImg = page.locator(".moon-main-art > img");
   await expect(moonImg).toHaveAttribute("src", "/assets/moon/moon-phases-v2.webp");
