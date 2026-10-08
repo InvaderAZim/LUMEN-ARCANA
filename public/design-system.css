@@ -3060,36 +3060,29 @@ select{
 }
 
 
-/* REALISTIC MOON PHASE SPRITE v2 — img crop for Telegram WebView */
+/* REALISTIC MOON PHASE SPRITE v3 — native background crop */
 .moon-sprite{
   display:inline-block;
   position:relative;
-  overflow:hidden;
   flex:0 0 auto;
   aspect-ratio:1;
+  border-radius:50%;
+  background-image:url("/assets/moon/moon-sprite.webp");
+  background-repeat:no-repeat;
+  background-size:1100% 100%;
+  background-position-y:50%;
 }
-.moon-sprite>img{
-  position:absolute;
-  top:0;
-  left:0;
-  width:1100%;
-  height:100%;
-  max-width:none!important;
-  object-fit:fill;
-  display:block;
-  pointer-events:none;
-}
-.moon-p-0>img{left:0}
-.moon-p-10>img{left:-100%}
-.moon-p-20>img{left:-200%}
-.moon-p-30>img{left:-300%}
-.moon-p-40>img{left:-400%}
-.moon-p-50>img{left:-500%}
-.moon-p-60>img{left:-600%}
-.moon-p-70>img{left:-700%}
-.moon-p-80>img{left:-800%}
-.moon-p-90>img{left:-900%}
-.moon-p-100>img{left:-1000%}
+.moon-p-0{background-position-x:0%}
+.moon-p-10{background-position-x:10%}
+.moon-p-20{background-position-x:20%}
+.moon-p-30{background-position-x:30%}
+.moon-p-40{background-position-x:40%}
+.moon-p-50{background-position-x:50%}
+.moon-p-60{background-position-x:60%}
+.moon-p-70{background-position-x:70%}
+.moon-p-80{background-position-x:80%}
+.moon-p-90{background-position-x:90%}
+.moon-p-100{background-position-x:100%}
 .moon-waning{transform:scaleX(-1)}
 .moon-image-wrap{
   display:grid!important;
@@ -3125,5 +3118,3 @@ select{
   .moon-image-wrap{min-height:82px}
   .moon-phase-icon{width:18px;height:18px}
 }
-
-

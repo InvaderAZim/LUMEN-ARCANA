@@ -851,26 +851,21 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
-  const moonFallback = await page.locator(".moon-main-art").evaluate(node => {
-    const before = getComputedStyle(node, "::before");
+  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
+    const css = getComputedStyle(node);
     return {
-      radius: getComputedStyle(node).borderRadius,
-      background: before.backgroundImage,
-      clip: before.clipPath
+      radius: css.borderRadius,
+      background: css.backgroundImage,
+      size: css.backgroundSize,
+      position: css.backgroundPositionX
     };
   });
-  expect(moonFallback.radius).toBe("50%");
-  expect(moonFallback.background).toContain("radial-gradient");
-  expect(moonFallback.clip).not.toBe("none");
+  expect(moonArtwork.radius).toBe("50%");
+  expect(moonArtwork.background).toContain("/assets/moon/moon-sprite.webp");
+  expect(moonArtwork.size).toBe("1100% 100%");
+  expect(moonArtwork.position).not.toBe("");
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
-  const moonImg = page.locator(".moon-main-art > img");
-  await expect(moonImg).toHaveAttribute("src", "/assets/moon/moon-phases-v2.webp");
-  await expect.poll(async () => moonImg.evaluate(img => ({
-    complete: img.complete,
-    width: img.naturalWidth,
-    height: img.naturalHeight
-  }))).toEqual({ complete: true, width: 1408, height: 128 });
-  const spriteResponse = await page.request.get("/assets/moon/moon-phases-v2.webp");
+  const spriteResponse = await page.request.get("/assets/moon/moon-sprite.webp");
   expect(spriteResponse.ok()).toBe(true);
 });
 

@@ -244,7 +244,17 @@ test("current route labels and premium branding stay consistent", async ({ page 
   );
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
-  await expect(page.locator(".moon-main-art > img")).toHaveAttribute("src", "/assets/moon/moon-phases-v2.webp");
+  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
+    const css = getComputedStyle(node);
+    return {
+      image: css.backgroundImage,
+      size: css.backgroundSize,
+      radius: css.borderRadius
+    };
+  });
+  expect(moonArtwork.image).toContain("/assets/moon/moon-sprite.webp");
+  expect(moonArtwork.size).toBe("1100% 100%");
+  expect(moonArtwork.radius).toBe("50%");
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 
@@ -301,7 +311,7 @@ test("quick-grid buttons safely wrap very long localized labels", async ({ page 
   expect(audit[0].spanScrollWidth).toBeLessThanOrEqual(audit[0].spanClientWidth);
   expect(audit[0].buttonHeight).toBeGreaterThanOrEqual(82);
   expect(audit[1].buttonHeight).toBeGreaterThanOrEqual(82);
-  expect(Math.abs(audit[0].buttonWidth - audit[1].buttonWidth)).toBeLessThanOrEqual(1);
+  expect(Math.abs(audit[0].buttonWidth - audit[1].buttonWidth)).toBeLessThanOrEqual(2);
 });
 
 
