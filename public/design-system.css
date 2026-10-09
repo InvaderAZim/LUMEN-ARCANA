@@ -3060,30 +3060,20 @@ select{
 }
 
 
-/* REALISTIC MOON PHASE SPRITE v3 — native background crop */
+/* REALISTIC MOON PHASE SPRITE v4 — exact SVG crop for Telegram WebView */
 .moon-sprite{
-  display:inline-block;
-  position:relative;
+  display:block;
   flex:0 0 auto;
   aspect-ratio:1;
-  border-radius:50%;
-  background-image:url("/assets/moon/moon-sprite.webp");
-  background-repeat:no-repeat;
-  background-size:1100% 100%;
-  background-position-y:50%;
+  overflow:visible;
 }
-.moon-p-0{background-position-x:0%}
-.moon-p-10{background-position-x:10%}
-.moon-p-20{background-position-x:20%}
-.moon-p-30{background-position-x:30%}
-.moon-p-40{background-position-x:40%}
-.moon-p-50{background-position-x:50%}
-.moon-p-60{background-position-x:60%}
-.moon-p-70{background-position-x:70%}
-.moon-p-80{background-position-x:80%}
-.moon-p-90{background-position-x:90%}
-.moon-p-100{background-position-x:100%}
-.moon-waning{transform:scaleX(-1)}
+.moon-sprite image{
+  pointer-events:none;
+}
+.moon-waning{
+  transform:scaleX(-1);
+  transform-origin:center;
+}
 .moon-image-wrap{
   display:grid!important;
   place-items:center!important;

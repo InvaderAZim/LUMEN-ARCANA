@@ -245,16 +245,20 @@ test("current route labels and premium branding stay consistent", async ({ page 
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
   const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const css = getComputedStyle(node);
+    const image = node.querySelector("image");
     return {
-      image: css.backgroundImage,
-      size: css.backgroundSize,
-      radius: css.borderRadius
+      tag: node.tagName.toLowerCase(),
+      href: image?.getAttribute("href") || "",
+      x: image?.getAttribute("x") || "",
+      width: image?.getAttribute("width") || "",
+      viewBox: node.getAttribute("viewBox") || ""
     };
   });
-  expect(moonArtwork.image).toContain("/assets/moon/moon-sprite.webp");
-  expect(moonArtwork.size).toBe("1100% 100%");
-  expect(moonArtwork.radius).toBe("50%");
+  expect(moonArtwork.tag).toBe("svg");
+  expect(moonArtwork.href).toBe("/assets/moon/moon-sprite.webp");
+  expect(moonArtwork.width).toBe("1408");
+  expect(moonArtwork.viewBox).toBe("0 0 128 128");
+  expect(Number(moonArtwork.x)).toBeLessThanOrEqual(0);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 

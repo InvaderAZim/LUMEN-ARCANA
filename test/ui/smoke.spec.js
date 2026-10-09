@@ -852,18 +852,26 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
   const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const css = getComputedStyle(node);
+    const image = node.querySelector("image");
     return {
-      radius: css.borderRadius,
-      background: css.backgroundImage,
-      size: css.backgroundSize,
-      position: css.backgroundPositionX
+      tag: node.tagName.toLowerCase(),
+      href: image?.getAttribute("href") || "",
+      x: Number(image?.getAttribute("x") || 0),
+      width: Number(image?.getAttribute("width") || 0),
+      viewBox: node.getAttribute("viewBox") || ""
     };
   });
-  expect(moonArtwork.radius).toBe("50%");
-  expect(moonArtwork.background).toContain("/assets/moon/moon-sprite.webp");
-  expect(moonArtwork.size).toBe("1100% 100%");
-  expect(moonArtwork.position).not.toBe("");
+  expect(moonArtwork.tag).toBe("svg");
+  expect(moonArtwork.href).toBe("/assets/moon/moon-sprite.webp");
+  expect(moonArtwork.width).toBe(1408);
+  expect(moonArtwork.viewBox).toBe("0 0 128 128");
+
+  const phaseXs = await page.locator(".moon-phase-icon").evaluateAll(nodes =>
+    nodes.map(node => Number(node.querySelector("image")?.getAttribute("x") || 0))
+  );
+  expect(phaseXs).toEqual([0,-640,-1280,-640]);
+
+  await expect(page.locator(".moon-phase-icon.moon-waning")).toHaveCount(1);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   const spriteResponse = await page.request.get("/assets/moon/moon-sprite.webp");
   expect(spriteResponse.ok()).toBe(true);
