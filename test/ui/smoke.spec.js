@@ -851,25 +851,33 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  await expect.poll(async () =>
+    page.locator(".moon-main-art").getAttribute("data-moon-painted")
+  ).toBe("1");
+
   const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const image = node.querySelector("image");
+    const ctx = node.getContext("2d");
+    const pixels = ctx.getImageData(0, 0, 128, 128).data;
+    let alpha = 0;
+    for (let i = 3; i < pixels.length; i += 4) alpha += pixels[i];
     return {
       tag: node.tagName.toLowerCase(),
-      href: image?.getAttribute("href") || "",
-      x: Number(image?.getAttribute("x") || 0),
-      width: Number(image?.getAttribute("width") || 0),
-      viewBox: node.getAttribute("viewBox") || ""
+      frame: Number(node.dataset.moonFrame || 0),
+      alpha
     };
   });
-  expect(moonArtwork.tag).toBe("svg");
-  expect(moonArtwork.href).toBe("/assets/moon/moon-sprite.webp");
-  expect(moonArtwork.width).toBe(1408);
-  expect(moonArtwork.viewBox).toBe("0 0 128 128");
+  expect(moonArtwork.tag).toBe("canvas");
+  expect(moonArtwork.alpha).toBeGreaterThan(0);
 
-  const phaseXs = await page.locator(".moon-phase-icon").evaluateAll(nodes =>
-    nodes.map(node => Number(node.querySelector("image")?.getAttribute("x") || 0))
+  const phaseFrames = await page.locator(".moon-phase-icon").evaluateAll(nodes =>
+    nodes.map(node => Number(node.dataset.moonFrame || 0))
   );
-  expect(phaseXs).toEqual([0,-640,-1280,-640]);
+  expect(phaseFrames).toEqual([0,5,10,5]);
+  await expect.poll(async () =>
+    page.locator(".moon-phase-icon").evaluateAll(nodes =>
+      nodes.every(node => node.dataset.moonPainted === "1")
+    )
+  ).toBe(true);
 
   await expect(page.locator(".moon-phase-icon.moon-waning")).toHaveCount(1);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);

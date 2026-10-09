@@ -3060,15 +3060,12 @@ select{
 }
 
 
-/* REALISTIC MOON PHASE SPRITE v4 — exact SVG crop for Telegram WebView */
+/* REALISTIC MOON PHASE SPRITE v5 — canvas render for Telegram WebView */
 .moon-sprite{
   display:block;
   flex:0 0 auto;
   aspect-ratio:1;
-  overflow:visible;
-}
-.moon-sprite image{
-  pointer-events:none;
+  background:transparent!important;
 }
 .moon-waning{
   transform:scaleX(-1);

@@ -244,21 +244,27 @@ test("current route labels and premium branding stay consistent", async ({ page 
   );
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
+  await expect.poll(async () =>
+    page.locator(".moon-main-art").getAttribute("data-moon-painted")
+  ).toBe("1");
   const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const image = node.querySelector("image");
+    const ctx = node.getContext("2d");
+    const pixels = ctx.getImageData(0, 0, 128, 128).data;
+    let alpha = 0;
+    for (let i = 3; i < pixels.length; i += 4) alpha += pixels[i];
     return {
       tag: node.tagName.toLowerCase(),
-      href: image?.getAttribute("href") || "",
-      x: image?.getAttribute("x") || "",
-      width: image?.getAttribute("width") || "",
-      viewBox: node.getAttribute("viewBox") || ""
+      frame: node.getAttribute("data-moon-frame"),
+      width: node.width,
+      height: node.height,
+      alpha
     };
   });
-  expect(moonArtwork.tag).toBe("svg");
-  expect(moonArtwork.href).toBe("/assets/moon/moon-sprite.webp");
-  expect(moonArtwork.width).toBe("1408");
-  expect(moonArtwork.viewBox).toBe("0 0 128 128");
-  expect(Number(moonArtwork.x)).toBeLessThanOrEqual(0);
+  expect(moonArtwork.tag).toBe("canvas");
+  expect(moonArtwork.width).toBe(128);
+  expect(moonArtwork.height).toBe(128);
+  expect(Number(moonArtwork.frame)).toBeGreaterThanOrEqual(0);
+  expect(moonArtwork.alpha).toBeGreaterThan(0);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 
