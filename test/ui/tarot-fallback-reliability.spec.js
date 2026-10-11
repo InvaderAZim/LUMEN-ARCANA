@@ -244,3 +244,26 @@ test("rapid duplicate Draw signals create only one interpretation request", asyn
   await expect(page.locator(".result-premium")).toBeVisible();
   await expect.poll(() => requestCount).toBe(1);
 });
+
+test("Tarot offline interpretation explains cards and remains available in journal", async ({ page }) => {
+  await page.route("**/api/interpret",route=>route.fulfill({
+    status:503,contentType:"application/json",body:JSON.stringify({error:"offline"})
+  }));
+  await openTarot(page);
+  await page.locator('[data-type="three"]').click();
+  await page.locator("#q").fill("Як краще підготуватися до нового етапу?");
+  await page.locator("#draw").click();
+  await expect(page.locator(".result-premium")).toBeVisible();
+  await expect(page.locator(".reading-card-classic")).toHaveCount(3);
+  await expect(page.locator(".reading-card-classic").first()).toContainText("Роль у розкладі:");
+  await expect(page.locator(".reading-card-classic").first()).toContainText("Практична дія:");
+  await expect(page.locator(".reading-card-classic").first()).toContainText("Зв’язок із питанням:");
+  await page.locator("#save78").click();
+  const entry=await page.evaluate(()=>JSON.parse(localStorage.getItem("la_journal")||"[]")[0]);
+  expect(entry.interpretation.cards).toHaveLength(3);
+  expect(entry.interpretation.cards[0].positionMeaning.length).toBeGreaterThan(25);
+  await page.evaluate(()=>window.LUMEN_NAVIGATE("journal"));
+  await expect(page.locator(".tarot-journal-details")).toHaveCount(1);
+  await page.locator(".tarot-journal-details summary").click();
+  await expect(page.locator(".tarot-journal-details")).toContainText("Практична дія:");
+});

@@ -3108,3 +3108,14 @@ select{
   .moon-image-wrap{min-height:82px}
   .moon-phase-icon{width:18px;height:18px!important}
 }
+
+/* Detailed Tarot interpretations and saved journal entries */
+.reading-card-classic .tarot-orientation{font-size:.8rem;opacity:.78;font-weight:700}
+.reading-card-classic p{overflow-wrap:anywhere}
+.tarot-caution{margin:12px 0;color:var(--muted,#a6b1a5);font-size:.86rem;line-height:1.5}
+.tarot-journal-details{margin-top:14px;padding:12px;border:1px solid rgba(183,209,185,.24);border-radius:12px}
+.tarot-journal-details summary{cursor:pointer;font-weight:700}
+.tarot-journal-card{padding:12px 0;border-bottom:1px solid rgba(183,209,185,.15)}
+.tarot-journal-card:last-of-type{border-bottom:0}
+.tarot-journal-card h3{margin:0 0 8px}
+.tarot-journal-card p{margin:6px 0;overflow-wrap:anywhere}

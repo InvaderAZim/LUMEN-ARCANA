@@ -74,6 +74,33 @@ test("local interpretation works without OpenAI", async () => {
   assert.equal(b.cards.length, 1);
 });
 
+test("local Tarot interpretation explains each position, orientation and individual card", async () => {
+  const cards=[
+    {name:"Маг",position:"Минуле",orientation:"upright",keywords:["воля","дія"]},
+    {name:"Вежа",position:"Головний ризик",orientation:"reversed",keywords:["руйнування","перебудова"]},
+    {name:"Паж Мечі",position:"Наступний крок",orientation:"upright",keywords:["навчання","думки"]}
+  ];
+  const response=await worker.fetch(new Request("https://example.workers.dev/api/interpret",{
+    method:"POST",body:JSON.stringify({language:"uk",question:"Як підготуватися до зміни?",spread:"three",cards})
+  }),env);
+  assert.equal(response.status,200);
+  const result=await response.json();
+  assert.equal(result.source,"local");
+  assert.equal(result.cards.length,3);
+  assert.match(result.cards[0].symbolism,/ініціатива/i);
+  assert.match(result.cards[1].symbolism,/Перевернуте положення/);
+  assert.match(result.cards[1].positionMeaning,/ризик/i);
+  assert.match(result.cards[2].symbolism,/навчання/i);
+  assert.notEqual(result.cards[0].symbolism,result.cards[1].symbolism);
+  for(const card of result.cards){
+    for(const key of ["observation","symbolism","positionMeaning","context","practice"])
+      assert.ok(typeof card[key]==="string"&&card[key].length>30,key+" must be detailed");
+  }
+  assert.match(result.synthesis,/Маг/);
+  assert.match(result.synthesis,/Паж Мечі/);
+  assert.match(result.synthesis,/реалістичний крок/);
+});
+
 test("yes-no local interpretation can lean yes without claiming certainty", async () => {
   const r = await worker.fetch(new Request("https://example.workers.dev/api/interpret", {
     method: "POST",
