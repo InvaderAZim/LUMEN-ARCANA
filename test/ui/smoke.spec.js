@@ -851,38 +851,35 @@ test("Moon falls back when extensions module fails", async ({ page }) => {
   await expect(page.locator(".day-card")).toContainText("Базове астрономічне наближення");
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
-  await expect.poll(async () =>
-    page.locator(".moon-main-art").getAttribute("data-moon-painted")
-  ).toBe("1");
+  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => ({
+    tag: node.tagName.toLowerCase(),
+    src: node.getAttribute("src"),
+    complete: node.complete,
+    naturalWidth: node.naturalWidth,
+    naturalHeight: node.naturalHeight
+  }));
+  expect(moonArtwork.tag).toBe("img");
+  expect(moonArtwork.src).toMatch(/^\/assets\/moon\/moon-(?:0|10|20|30|40|50|60|70|80|90|100)\.png$/);
+  expect(moonArtwork.complete).toBe(true);
+  expect(moonArtwork.naturalWidth).toBeGreaterThan(0);
+  expect(moonArtwork.naturalHeight).toBeGreaterThan(0);
 
-  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const ctx = node.getContext("2d");
-    const pixels = ctx.getImageData(0, 0, 128, 128).data;
-    let alpha = 0;
-    for (let i = 3; i < pixels.length; i += 4) alpha += pixels[i];
-    return {
-      tag: node.tagName.toLowerCase(),
-      frame: Number(node.dataset.moonFrame || 0),
-      alpha
-    };
-  });
-  expect(moonArtwork.tag).toBe("canvas");
-  expect(moonArtwork.alpha).toBeGreaterThan(0);
-
-  const phaseFrames = await page.locator(".moon-phase-icon").evaluateAll(nodes =>
-    nodes.map(node => Number(node.dataset.moonFrame || 0))
+  const phaseSources = await page.locator(".moon-phase-icon").evaluateAll(nodes =>
+    nodes.map(node => node.getAttribute("src"))
   );
-  expect(phaseFrames).toEqual([0,5,10,5]);
-  await expect.poll(async () =>
-    page.locator(".moon-phase-icon").evaluateAll(nodes =>
-      nodes.every(node => node.dataset.moonPainted === "1")
-    )
-  ).toBe(true);
-
+  expect(phaseSources).toEqual([
+    "/assets/moon/moon-0.png",
+    "/assets/moon/moon-50.png",
+    "/assets/moon/moon-100.png",
+    "/assets/moon/moon-50.png"
+  ]);
   await expect(page.locator(".moon-phase-icon.moon-waning")).toHaveCount(1);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
-  const spriteResponse = await page.request.get("/assets/moon/moon-sprite.webp");
-  expect(spriteResponse.ok()).toBe(true);
+
+  for (const pct of [0,10,20,30,40,50,60,70,80,90,100]) {
+    const response = await page.request.get(`/assets/moon/moon-${pct}.png`);
+    expect(response.ok()).toBe(true);
+  }
 });
 
 

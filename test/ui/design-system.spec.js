@@ -247,24 +247,18 @@ test("current route labels and premium branding stay consistent", async ({ page 
   await expect.poll(async () =>
     page.locator(".moon-main-art").getAttribute("data-moon-painted")
   ).toBe("1");
-  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => {
-    const ctx = node.getContext("2d");
-    const pixels = ctx.getImageData(0, 0, 128, 128).data;
-    let alpha = 0;
-    for (let i = 3; i < pixels.length; i += 4) alpha += pixels[i];
-    return {
-      tag: node.tagName.toLowerCase(),
-      frame: node.getAttribute("data-moon-frame"),
-      width: node.width,
-      height: node.height,
-      alpha
-    };
-  });
-  expect(moonArtwork.tag).toBe("canvas");
-  expect(moonArtwork.width).toBe(128);
-  expect(moonArtwork.height).toBe(128);
-  expect(Number(moonArtwork.frame)).toBeGreaterThanOrEqual(0);
-  expect(moonArtwork.alpha).toBeGreaterThan(0);
+  const moonArtwork = await page.locator(".moon-main-art").evaluate(node => ({
+    tag: node.tagName.toLowerCase(),
+    src: node.getAttribute("src"),
+    complete: node.complete,
+    naturalWidth: node.naturalWidth,
+    naturalHeight: node.naturalHeight
+  }));
+  expect(moonArtwork.tag).toBe("img");
+  expect(moonArtwork.src).toMatch(/^\/assets\/moon\/moon-(?:0|10|20|30|40|50|60|70|80|90|100)\.png$/);
+  expect(moonArtwork.complete).toBe(true);
+  expect(moonArtwork.naturalWidth).toBeGreaterThan(0);
+  expect(moonArtwork.naturalHeight).toBeGreaterThan(0);
   await expect(page.locator(".moon-accuracy-card .mini-card")).toHaveCount(0);
   await expect(page.locator(".moon-hero .hero-copy h2")).not.toContainText(/[🌑🌒🌓🌔🌕🌖🌗🌘]/);
 

@@ -3060,11 +3060,12 @@ select{
 }
 
 
-/* REALISTIC MOON PHASE SPRITE v5 — canvas render for Telegram WebView */
+/* REALISTIC MOON PHASE PNG ASSETS v6 */
 .moon-sprite{
   display:block;
   flex:0 0 auto;
   aspect-ratio:1;
+  object-fit:contain;
   background:transparent!important;
 }
 .moon-waning{
@@ -3081,7 +3082,8 @@ select{
 }
 .moon-main-art{
   width:112px;
-  height:112px;
+  height:112px!important;
+  max-width:none!important;
   filter:drop-shadow(0 10px 18px rgba(0,0,0,.46));
 }
 .moon-phase-label{
@@ -3091,7 +3093,8 @@ select{
 }
 .moon-phase-icon{
   width:20px;
-  height:20px;
+  height:20px!important;
+  max-width:none!important;
 }
 .moon-accuracy-card{
   display:block!important;
@@ -3101,7 +3104,7 @@ select{
   max-width:none!important;
 }
 @media(max-width:560px){
-  .moon-main-art{width:92px;height:92px}
+  .moon-main-art{width:92px;height:92px!important}
   .moon-image-wrap{min-height:82px}
-  .moon-phase-icon{width:18px;height:18px}
+  .moon-phase-icon{width:18px;height:18px!important}
 }
