@@ -244,9 +244,14 @@ test("current route labels and premium branding stay consistent", async ({ page 
   );
   await expect(page.locator(".moon-main-art")).toBeVisible();
   await expect(page.locator(".moon-phase-icon")).toHaveCount(4);
-  await expect.poll(async () =>
-    page.locator(".moon-main-art").getAttribute("data-moon-painted")
-  ).toBe("1");
+  await expect.poll(() =>
+    page.locator(".moon-main-art").evaluate(node =>
+      node instanceof HTMLImageElement &&
+      node.complete &&
+      node.naturalWidth > 0 &&
+      node.naturalHeight > 0
+    )
+  ).toBe(true);
   const moonArtwork = await page.locator(".moon-main-art").evaluate(node => ({
     tag: node.tagName.toLowerCase(),
     src: node.getAttribute("src"),
