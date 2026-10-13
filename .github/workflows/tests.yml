@@ -104,3 +104,84 @@ jobs:
           LUMEN_LIVE_URL: https://lumen-arcana.kraplenii.workers.dev
         run: npx playwright test --config=playwright.integration.config.js
 
+  deploy_production:
+    name: Deploy to Cloudflare Workers
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [test, ui, production_smoke, live_integration]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: production
+    concurrency:
+      group: lumen-arcana-production
+      cancel-in-progress: false
+    steps:
+      - name: Check Cloudflare deployment credentials
+        id: credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        shell: bash
+        run: |
+          if [[ -n "$CLOUDFLARE_API_TOKEN" && -n "$CLOUDFLARE_ACCOUNT_ID" ]]; then
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo '::warning::Deployment not configured. Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to GitHub Actions secrets (or the production environment).'
+            {
+              echo '### Cloudflare deploy not activated'
+              echo 'Add CLOUDFLARE_API_TOKEN and CLOUDFLARE_ACCOUNT_ID to GitHub Actions secrets to enable automatic deployments.'
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: Checkout release
+        if: steps.credentials.outputs.ready == 'true'
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        if: steps.credentials.outputs.ready == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+
+      - name: Install dependencies
+        if: steps.credentials.outputs.ready == 'true'
+        run: npm ci --no-audit --no-fund
+
+      - name: Embed release commit metadata into Worker assets
+        if: steps.credentials.outputs.ready == 'true'
+        run: |
+          node --input-type=module <<'NODE'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const { version } = JSON.parse(readFileSync('package.json', 'utf8'));
+          const meta = {
+            sha: process.env.GITHUB_SHA,
+            version,
+            deployedAt: new Date().toISOString()
+          };
+          writeFileSync('public/build-meta.json', JSON.stringify(meta) + '\n');
+          NODE
+
+      - name: Deploy verified release (preserve existing Worker variables)
+        if: steps.credentials.outputs.ready == 'true'
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx wrangler deploy --keep-vars
+
+      - name: Verify actual live release SHA and API health
+        if: steps.credentials.outputs.ready == 'true'
+        env:
+          LUMEN_PRODUCTION_URL: https://lumen-arcana.kraplenii.workers.dev
+        run: node scripts/verify-deployment.mjs
+
+      - name: Record verified deployment
+        if: steps.credentials.outputs.ready == 'true'
+        run: |
+          {
+            echo '### Cloudflare deployment verified'
+            echo "Deployed commit: $GITHUB_SHA"
+            echo 'Production: https://lumen-arcana.kraplenii.workers.dev'
+            echo 'For rollback, use the manual Rollback Cloudflare Worker workflow with an explicit previous Cloudflare version ID.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
