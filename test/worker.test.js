@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import worker from "../worker.js";
+import { interpretNatalChart, natalHouseAt } from "../public/natal-interpretation.js";
 
 const env = {
   BETA_CODES: "LUMEN-BETA,TEST-2026",
@@ -420,4 +421,46 @@ test("natal timezone rejects the repeated Kyiv local time during the autumn DST 
   }), env);
   assert.equal(r.status, 400);
   assert.deepEqual(await r.json(), { error: "local_time_ambiguous" });
+});
+
+test("natal interpretation covers ten planets, twelve houses, aspects and important angles", () => {
+  const cusps=Array.from({length:12},(_,i)=>(121+i*30)%360);
+  const positions={Sun:134,Moon:188,Mercury:138,Venus:120,Mars:309,Jupiter:19,Saturn:270,Uranus:257,Neptune:266,Pluto:200};
+  const reading=interpretNatalChart({positions,asc:121,mc:53,cusps,aspects:[{a:'Sun',b:'Mercury',name:'З’єднання',orb:4}],houseMeta:{used:'equal'},engineLabel:'Astronomy Engine'});
+  assert.equal(reading.planets.length,10);
+  assert.equal(reading.houses.length,12);
+  assert.equal(reading.aspects.length,1);
+  assert.equal(reading.planets[0].sign,'Лев');
+  assert.equal(reading.planets[0].house,1);
+  assert.match(reading.planets[0].meaning,/Сонце/);
+  assert.match(reading.planets[0].houseMeaning,/1-му домі/);
+  assert.match(reading.angles.asc.title,/Лев/);
+  assert.match(reading.angles.mc.title,/Середина неба/);
+  assert.match(reading.aspects[0].meaning,/Сонце|самовираження/);
+  assert.match(reading.summary.methodology,/символічн/);
+  assert.equal(natalHouseAt(151,cusps),2);
+  assert.equal(natalHouseAt(120,cusps),12);
+});
+
+test("natal reading does not invent houses without reliable cusps and discloses house fallback", () => {
+  const positions={Sun:134,Moon:188};
+  const missing=interpretNatalChart({positions,asc:null,mc:null,cusps:[]});
+  assert.equal(missing.houses.length,0);
+  assert.equal(missing.planets[0].house,null);
+  assert.equal(missing.angles.asc,null);
+  assert.match(missing.houseNote,/координати/);
+  const cusps=Array.from({length:12},(_,i)=>(121+i*30)%360);
+  const fallback=interpretNatalChart({positions,asc:121,cusps,houseMeta:{fallback:true}});
+  assert.match(fallback.houseNote,/Плацидус недоступний/);
+});
+
+test("natal AI analysis is optional but protected by Telegram authentication", async () => {
+ const payload={positions:{Sun:134,Moon:188,Mercury:138,Venus:120,Mars:309,Jupiter:19,Saturn:270,Uranus:257,Neptune:266,Pluto:200}};
+ const request=()=>new Request("https://example.workers.dev/api/natal/interpret",{method:"POST",body:JSON.stringify(payload)});
+ const unavailable=await worker.fetch(request(),env);
+ assert.equal(unavailable.status,503);
+ assert.deepEqual(await unavailable.json(),{error:"ai_unavailable"});
+ const denied=await worker.fetch(request(),{...env,OPENAI_API_KEY:"mock-key",TELEGRAM_BOT_TOKEN:"mock-token"});
+ assert.equal(denied.status,401);
+ assert.deepEqual(await denied.json(),{error:"telegram_auth_required"});
 });

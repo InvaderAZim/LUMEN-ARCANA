@@ -280,3 +280,39 @@ test("Natal shows an explicit message for an ambiguous DST local time", async ({
     "Цей місцевий час повторюється через переведення годинника"
   );
 });
+
+test("Natal provides detailed symbolic explanations for planets, houses, aspects and ASC", async ({ page }) => {
+  await installNatalMocks(page, {
+    utc:"2000-01-15T10:30:00.000Z",timeZone:"Europe/Kyiv",offsetHours:2
+  });
+  await openApp(page);
+  await buildNatal(page,{
+    date:"2000-01-15",time:"12:30",place:"Kyiv Natal Reading",
+    lat:50.4501,lon:30.5234,houseSystem:"equal"
+  });
+  await expect(page.locator(".natal-interpretation")).toBeVisible();
+  await expect(page.locator(".natal-interp-planet")).toHaveCount(10);
+  await expect(page.locator(".natal-interp-house")).toHaveCount(12);
+  expect(await page.locator(".natal-interp-aspect").count()).toBeGreaterThan(0);
+  await expect(page.locator(".natal-interp-summary")).toContainText("Сонце");
+  await expect(page.locator(".natal-interp-summary")).toContainText("Місяць");
+  await expect(page.locator(".natal-interp-angles")).toContainText("Асцендент");
+  await page.locator(".natal-interp-planet").first().locator("summary").click();
+  await expect(page.locator(".natal-interp-planet").first()).toContainText("Практичний висновок");
+  await page.locator(".natal-interp-house").first().locator("summary").click();
+  await expect(page.locator(".natal-interp-house").first()).toContainText("Традиційна тема дому");
+});
+
+test("Natal AI enhancement is optional and base reading remains visible without Telegram", async ({ page }) => {
+  await installNatalMocks(page,{
+    utc:"2000-01-15T10:30:00.000Z",timeZone:"Europe/Kyiv",offsetHours:2
+  });
+  await openApp(page);
+  await buildNatal(page,{
+    date:"2000-01-15",time:"12:30",place:"Kyiv Natal AI",
+    lat:50.4501,lon:30.5234,houseSystem:"equal"
+  });
+  await page.locator("#xNatalAi").click();
+  await expect(page.locator("#xNatalAiResult")).toContainText("Telegram");
+  await expect(page.locator(".natal-interp-planet")).toHaveCount(10);
+});

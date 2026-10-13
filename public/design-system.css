@@ -3119,3 +3119,24 @@ select{
 .tarot-journal-card:last-of-type{border-bottom:0}
 .tarot-journal-card h3{margin:0 0 8px}
 .tarot-journal-card p{margin:6px 0;overflow-wrap:anywhere}
+
+/* Expanded natal chart interpretation */
+.natal-interpretation{overflow-wrap:anywhere}
+.natal-interpretation h2,.natal-interpretation h3{margin:14px 0 8px}
+.natal-interp-source,.natal-interp-help,.natal-interp-disclaimer{font-size:.86rem;line-height:1.55;opacity:.8}
+.natal-interp-summary{padding:14px;border:1px solid rgba(132,194,150,.28);border-radius:16px;background:rgba(10,41,30,.38)}
+.natal-interp-summary p,.natal-interp-angles p{line-height:1.6}
+.natal-interp-angles{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:10px;margin:12px 0}
+.natal-interp-angles article{border:1px solid rgba(132,194,150,.2);border-radius:12px;padding:12px}
+.natal-interp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,275px),1fr));gap:10px}
+.natal-interp-grid details{min-width:0;border:1px solid rgba(132,194,150,.25);border-radius:12px;background:rgba(4,23,17,.55)}
+.natal-interp-grid summary{cursor:pointer;padding:12px 14px;line-height:1.45;font-weight:700}
+.natal-interp-grid details[open] summary{border-bottom:1px solid rgba(132,194,150,.2)}
+.natal-interp-grid details>div{padding:9px 14px 12px}
+.natal-interp-grid details p{line-height:1.55;margin:8px 0}
+.natal-interp-ai-controls{margin-top:18px}
+.natal-interp-ai-controls button{max-width:100%;white-space:normal}
+.natal-interp-ai-result{border:1px solid rgba(132,194,150,.25);padding:12px;margin-top:12px;border-radius:14px;overflow-wrap:anywhere}
+.natal-interp-ai-result[hidden]{display:none}
+.natal-interp-disclaimer{margin-top:18px}
+@media(max-width:560px){.natal-interp-grid{grid-template-columns:minmax(0,1fr)}.natal-interpretation{padding:12px}}
